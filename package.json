@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "dev": "npx --max_old_space_size=4096 vitepress",
+    "build": "npx --max_old_space_size=4096 vitepress build"
+  },
+  "dependencies": {
+    "vitepress": "^0.1.1"
+  }
+}
