@@ -41,6 +41,8 @@ module.exports = {
       '/': { nav, sidebar },
     },
 
+    isProd: process.env.NODE_ENV === 'production',
+
     // algolia: {
     //   apiKey: '07ed552fc16926cc57c9eb0862c1a7f9',
     //   indexName: 'next_router_vuejs',

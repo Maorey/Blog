@@ -102,7 +102,8 @@ index: 0
 
 ## TODO
 
-- 全站搜索: 拟使用[algoliasearch](https://www.algolia.com)
-- 文章评论: 拟对接 github issue
+- 文章评论: 拟使用 [vssue](https://github.com/meteorlxy/vssue)
+- 全站搜索: 拟使用 [algoliasearch](https://www.algolia.com)
+- 标签/归档
 - 换肤/背景
-- 美化
+- UI

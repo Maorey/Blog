@@ -17,7 +17,7 @@
   },
   "scripts": {
     "dev": "npx --max_old_space_size=4096 vitepress dev docs",
-    "build": "npx --max_old_space_size=4096 vitepress build docs"
+    "build": "npx --max_old_space_size=4096 vitepress build docs ../dist"
   },
   "devDependencies": {
     "t-rex-runner": "^1.0.6",

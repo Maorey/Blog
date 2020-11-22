@@ -1,5 +1,5 @@
 ---
-sidebar: auto
+sidebar: false
 ---
 
 # 俺的博客上线啦！
@@ -14,4 +14,4 @@ export default interface Hello {
 
 <Menu />
 
-要玩玩[小恐龙](/404.html)么?
+要来只[小恐龙](/404.html)么?

@@ -165,7 +165,7 @@ module.exports = function getNav(noFile, pathRelativeToDocs = './', rootPath = '
         dir = (info && info.title) || name
         nav.push({
           i: (info && info.index) || dir, // 排序
-          l: link, // 标记链接
+          l: link, // 标记目录 (链接)
           text: dir,
           link: info ? link : undefined,
           children: children.length ? children : undefined,

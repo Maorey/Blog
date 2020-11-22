@@ -14,13 +14,14 @@
 
 <script>
 import { onMounted } from 'vue'
+import { useSiteData } from 'vitepress'
 // import { initRunner as tRexRunner } from 't-rex-runner/dist/runner'
 import tRexRunner from './libs/tRexRunner.min'
 
 export default {
   setup() {
     onMounted(() => {
-      tRexRunner('#t')
+      tRexRunner(useSiteData().value.themeConfig.isProd)('#t')
     })
   },
 }
