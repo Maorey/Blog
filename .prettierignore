@@ -1,0 +1,9 @@
+node_modules
+.vscode
+dist
+coverage
+compile
+*.min.js
+*.d.ts
+*.md
+*.json

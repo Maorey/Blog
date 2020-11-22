@@ -1,9 +1,33 @@
 {
-  "scripts": {
-    "dev": "npx --max_old_space_size=4096 vitepress",
-    "build": "npx --max_old_space_size=4096 vitepress build"
+  "name": "blog",
+  "description": "毛瑞的个人博客",
+  "homepage": "https://maorey.github.io",
+  "author": {
+    "name": "毛瑞",
+    "email": "Maorey@Foxmail.com"
   },
-  "dependencies": {
-    "vitepress": "^0.1.1"
+  "keywords": [
+    "blog",
+    "tech"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Maorey/Blog.git"
+  },
+  "scripts": {
+    "dev": "npx --max_old_space_size=4096 vitepress dev docs",
+    "build": "npx --max_old_space_size=4096 vitepress build docs & cd docs/.vitepress/dist & touch .nojekyll"
+  },
+  "devDependencies": {
+    "t-rex-runner": "^1.0.6",
+    "typescript": "^4.1.2",
+    "vitepress": "^0.8.1"
+  },
+  "resolutions": {
+    "@rollup/plugin-commonjs": "^16.0.0",
+    "@rollup/plugin-node-resolve": "^10.0.0",
+    "rollup": "^2.33.3",
+    "vue": "^3.0.2"
   }
 }
