@@ -133,7 +133,7 @@ module.exports = function getNav(noFile, pathRelativeToDocs = './', rootPath = '
     name = dir.name
 
     if (dir.isFile()) {
-      if (name.endsWith(ext) && !(isRoot ? name.endsWith(index) : noFile)) {
+      if (name.endsWith(ext) && !name.endsWith(index) && (!noFile || isRoot)) {
         name = path.basename(name)
         info = extractInfo(path.join(absolutePath, name))
         if (info && !info.hide) {

@@ -2,7 +2,7 @@
 sidebar: false
 ---
 
-# 俺的博客上线啦！
+# 俺的博客重新上线啦！
 
 ```TypeScript
 export default interface Hello {
@@ -14,4 +14,4 @@ export default interface Hello {
 
 <Menu />
 
-要来只[小恐龙](/404.html)么?
+要来只[小恐龙](/404.html)([源码](https://www.cnblogs.com/undefined000/p/trex_1.html))么?

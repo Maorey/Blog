@@ -1,5 +1,5 @@
 import Layout from './Layout.vue'
-import NotFound from './NotFound.vue'
+import NotFound from './components/NotFound.vue'
 import Menu from './components/Menu.vue'
 
 export default {
