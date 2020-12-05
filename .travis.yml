@@ -8,7 +8,7 @@ script:
 deploy:
   provider: pages:git
   edge: true
-  cleanup: true
+  cleanup: false
   keep_history: true
   repo: Maorey/Maorey.github.io
   token: $GITHUB_TOKEN
