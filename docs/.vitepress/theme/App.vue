@@ -1,13 +1,13 @@
 <template>
   <Layout />
 
-  <Comment ref="c" />
+  <Comment ref="c" style="margin-top: 2rem" />
 
   <footer class="b">Copyright © 2020-2021 毛瑞</footer>
 </template>
 
 <script lang="ts">
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useSiteData, usePageData } from 'vitepress'
 import DefaultTheme from 'vitepress/dist/client/theme-default'
 import lozad from 'lozad'
@@ -75,6 +75,7 @@ function getDom(query) {
 
 let siteData
 let pageData
+let resizeECharts
 const REG_MD = /(?:(\/)index)?\.md$/
 const lazyLoadImgs =
   'undefined' !== typeof HTMLImageElement && 'loading' in HTMLImageElement.prototype
@@ -115,10 +116,28 @@ function initPage() {
         try {
           options = eval(`(${element.textContent})`)
           echarts.init(element).setOption(options)
-          element.className = ''
+          element.className = 'graph'
         } catch (e) {
           element.outerHTML = `<pre class="language-jsstacktrace">图表异常: ${e.stack}</pre>`
         }
+      }
+
+      if (!resizeECharts) {
+        resizeECharts = () => {
+          for (
+            let i = 0,
+              blocks = getDom('[_echarts_instance_]'),
+              len = blocks.length,
+              chart;
+            i < len;
+            i++
+          ) {
+            chart = echarts.getInstanceByDom(blocks[i])
+            chart && chart.resize()
+          }
+        }
+
+        window.addEventListener('resize', resizeECharts)
       }
     })
 
@@ -133,7 +152,8 @@ function initPage() {
 
         try {
           chart = flowchart.parse(element.textContent)
-          element.className = element.innerHTML = ''
+          element.innerHTML = ''
+          element.className = 'graph'
           chart.drawSVG(element)
         } catch (e) {
           element.outerHTML = `<pre class="language-jsstacktrace">流程图异常: ${e.stack}</pre>`
@@ -148,7 +168,7 @@ function initPage() {
       mermaid = mermaid.default || mermaid
 
       for (let i = 0, len = mermaidBlocks.length; i < len; i++) {
-        mermaidBlocks[i].className = ''
+        mermaidBlocks[i].className = 'graph'
       }
 
       mermaid.init(undefined, mermaidBlocks)
@@ -168,6 +188,10 @@ export default {
       initPage()
     })
 
+    onUnmounted(() => {
+      window.removeEventListener('resize', resizeECharts)
+    })
+
     watch(pageData || (pageData = usePageData()), () => {
       nextTick(initPage)
     })
@@ -180,6 +204,7 @@ export default {
 <style>
 .loading {
   position: relative;
+  max-width: 100%;
   min-width: 400px;
   min-height: 300px;
 }
@@ -195,6 +220,12 @@ export default {
   z-index: val(--z-index-sidebar);
   background: url('./assets/loading.jpg') center center no-repeat #062734;
   background-size: contain;
+}
+
+.graph {
+  text-align: center;
+  box-sizing: border-box;
+  overflow: auto hidden;
 }
 
 .b {

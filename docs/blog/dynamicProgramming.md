@@ -31,8 +31,6 @@ index: 3
 
 ```echarts
 {
-  width: 500,
-  height: 400,
   xAxis: {
       type: 'category',
       data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']

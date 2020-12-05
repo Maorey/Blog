@@ -10,15 +10,17 @@ module.exports = md => {
       try {
         const options = eval(`(${code})`)
 
-        return `<div class="echarts loading" style="width:${
+        return `<pre class="echarts loading" style="${
           typeof options.width === 'string'
-            ? options.width
-            : `${options.width || 500}px`
-        };height:${
+            ? `width:${options.width};`
+            : options.width
+              ? `width:${options.width}px;`
+              : ''
+        }height:${
           typeof options.height === 'string'
             ? options.height
-            : `${options.height || 400}px`
-        }">${code}</div>`
+            : `${options.height || 250}px`
+        }">${code}</pre>`
       } catch (e) {
         return `<pre class="language-jsstacktrace">${e.stack}</pre>`
       }

@@ -88,8 +88,8 @@ yarn build
 
   ```echarts
   {
-    width: 500,
-    height: 400,
+    width: '100%',
+    height: 250,
     xAxis: {
         type: 'category',
         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']

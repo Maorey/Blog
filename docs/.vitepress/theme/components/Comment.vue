@@ -28,7 +28,7 @@ const options: VssueAPI.Options = {
 }
 
 export default {
-  props: { title: { type: String } },
+  props: { title: String, class: String, style: String },
   setup(props) {
     const pageData = usePageData()
 
@@ -50,6 +50,8 @@ export default {
             h('keep-alive', [
               h('vssue', {
                 key: reactiveData.k,
+                class: props.class,
+                style: props.style,
                 props: { title: reactiveData.t, options },
               }),
             ]),
