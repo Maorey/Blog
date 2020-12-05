@@ -73,8 +73,11 @@ function getDom(query) {
   return document.querySelectorAll(query)
 }
 
+let siteData
+let pageData
+const REG_MD = /(?:(\/)index)?\.md$/
 const lazyLoadImgs =
-  'loading' in HTMLImageElement.prototype
+  'undefined' !== typeof HTMLImageElement && 'loading' in HTMLImageElement.prototype
     ? () => {
         for (
           let i = 0, lazyImgs = getDom('.lazy'), len = lazyImgs.length, element;
@@ -89,95 +92,84 @@ const lazyLoadImgs =
     : () => {
         lozad('.lazy').observe()
       }
+function initPage() {
+  const page = pageData.value
 
-let pageData
-let siteData
+  page.title ||
+    (page.title = getTitle(
+      (siteData || (siteData = useSiteData())).value,
+      page.relativePath.replace(REG_MD, '$1')
+    ))
+
+  lazyLoadImgs()
+
+  const echartsBlocks = getDom('.echarts')
+  echartsBlocks &&
+    echartsBlocks.length &&
+    import('echarts').then(echarts => {
+      echarts = echarts.default || echarts
+
+      for (let i = 0, len = echartsBlocks.length, element, options; i < len; i++) {
+        element = echartsBlocks[i]
+
+        try {
+          options = eval(`(${element.textContent})`)
+          echarts.init(element).setOption(options)
+          element.className = ''
+        } catch (e) {
+          element.outerHTML = `<pre class="language-jsstacktrace">图表异常: ${e.stack}</pre>`
+        }
+      }
+    })
+
+  const flowchartBlocks = getDom('.flowchart')
+  flowchartBlocks &&
+    flowchartBlocks.length &&
+    import('./libs/flowchart.min').then(flowchart => {
+      flowchart = flowchart.default || flowchart
+
+      for (let i = 0, len = flowchartBlocks.length, element, chart; i < len; i++) {
+        element = flowchartBlocks[i]
+
+        try {
+          chart = flowchart.parse(element.textContent)
+          element.className = element.innerHTML = ''
+          chart.drawSVG(element)
+        } catch (e) {
+          element.outerHTML = `<pre class="language-jsstacktrace">流程图异常: ${e.stack}</pre>`
+        }
+      }
+    })
+
+  const mermaidBlocks = getDom('.mermaid')
+  mermaidBlocks &&
+    mermaidBlocks.length &&
+    import('./libs/mermaid.min').then(mermaid => {
+      mermaid = mermaid.default || mermaid
+
+      for (let i = 0, len = mermaidBlocks.length; i < len; i++) {
+        mermaidBlocks[i].className = ''
+      }
+
+      mermaid.init(undefined, mermaidBlocks)
+    })
+}
+
 export default {
   components: {
     Layout: DefaultTheme.Layout,
     Comment,
   },
   setup() {
-    const REG_MD = /(?:(\/)index)?\.md$/
-    const initPage = () => {
-      const page = pageData.value
-
-      page.title ||
-        (page.title = getTitle(
-          (siteData || (siteData = useSiteData())).value,
-          page.relativePath.replace(REG_MD, '$1')
-        ))
-
-      lazyLoadImgs()
-
-      const echartsBlocks = getDom('.echarts')
-      echartsBlocks &&
-        echartsBlocks.length &&
-        import('echarts').then(echarts => {
-          echarts = echarts.default || echarts
-
-          for (
-            let i = 0, len = echartsBlocks.length, element, options;
-            i < len;
-            i++
-          ) {
-            element = echartsBlocks[i]
-
-            try {
-              options = eval(`(${element.textContent})`)
-              echarts.init(element).setOption(options)
-              element.className = ''
-            } catch (e) {
-              element.outerHTML = `<pre class="language-jsstacktrace">图表异常: ${e.stack}</pre>`
-            }
-          }
-        })
-
-      const flowchartBlocks = getDom('.flowchart')
-      flowchartBlocks &&
-        flowchartBlocks.length &&
-        import('./libs/flowchart.min').then(flowchart => {
-          flowchart = flowchart.default || flowchart
-
-          for (
-            let i = 0, len = flowchartBlocks.length, element, chart;
-            i < len;
-            i++
-          ) {
-            element = flowchartBlocks[i]
-
-            try {
-              chart = flowchart.parse(element.textContent)
-              element.className = element.innerHTML = ''
-              chart.drawSVG(element)
-            } catch (e) {
-              element.outerHTML = `<pre class="language-jsstacktrace">流程图异常: ${e.stack}</pre>`
-            }
-          }
-        })
-
-      const mermaidBlocks = getDom('.mermaid')
-      mermaidBlocks &&
-        mermaidBlocks.length &&
-        import('./libs/mermaid.min').then(mermaid => {
-          mermaid = mermaid.default || mermaid
-
-          for (let i = 0, len = mermaidBlocks.length; i < len; i++) {
-            mermaidBlocks[i].className = ''
-          }
-
-          mermaid.init(undefined, mermaidBlocks)
-        })
-    }
-
-    watch(pageData || (pageData = usePageData()), () => {
-      nextTick(initPage)
-    })
-
     const comment = ref(null)
+
     onMounted(() => {
       document.querySelector('.page>.container').appendChild(comment.value.$el)
       initPage()
+    })
+
+    watch(pageData || (pageData = usePageData()), () => {
+      nextTick(initPage)
     })
 
     return { c: comment }
