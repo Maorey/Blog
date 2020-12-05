@@ -1,5 +1,5 @@
 ---
-# 第二篇JavaScript笔记
+title: 第二篇JavaScript笔记
 index: 2
 ---
 

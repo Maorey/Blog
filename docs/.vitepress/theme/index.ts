@@ -1,4 +1,4 @@
-import Layout from './Layout.vue'
+import Layout from './App.vue'
 import NotFound from './components/NotFound.vue'
 import Menu from './components/Menu.vue'
 

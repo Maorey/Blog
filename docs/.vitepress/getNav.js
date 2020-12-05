@@ -71,13 +71,14 @@ function commonExec(reg, content) {
 
 const REG_OPTIONS = /---\s*\n([\d\D]+)\n\s*---/
 
-const REG_TITLE = /(?<!#)# +(.*)/
+const REG_TITLE = /(?<!\w)title *: *(.+)/
+const REG_MD_TITLE = /(?<!#)# +(.*)/
 const REG_HIDE = /(?<!\w)hide *: *(\w+)/
 const REG_INDEX = /(?<!\w)index *: *(\d+)/
 const parsers = {
   title(optionsContent, info, content) {
     info.title =
-      commonExec(REG_TITLE, optionsContent) || commonExec(REG_TITLE, content)
+      commonExec(REG_TITLE, optionsContent) || commonExec(REG_MD_TITLE, content)
   },
   hide(optionsContent, info) {
     info.hide = commonExec(REG_HIDE, optionsContent) === 'true'

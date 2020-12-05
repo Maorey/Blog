@@ -1,5 +1,5 @@
 ---
-# JavaScript笔记
+title: JavaScript笔记
 index: 10
 ---
 

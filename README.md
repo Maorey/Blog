@@ -66,6 +66,75 @@ yarn build
 └── dist # 生成的静态网站
 ```
 
+## 支持markdown语法
+
+插件列表如下
+
+- [markdown-it-sub](https://github.com/markdown-it/markdown-it-sub)
+- [markdown-it-sup](https://github.com/markdown-it/markdown-it-sup)
+- [markdown-it-ins](https://github.com/markdown-it/markdown-it-ins)
+- [markdown-it-abbr](https://github.com/markdown-it/markdown-it-abbr)
+- [markdown-it-mark](https://github.com/markdown-it/markdown-it-mark)
+- [markdown-it-katex](https://github.com/waylonflinn/markdown-it-katex)
+- [markdown-it-latex](https://github.com/tylingsoft/markdown-it-latex)
+- [markdown-it-deflist](https://github.com/markdown-it/markdown-it-deflist)
+- [markdown-it-footnote](https://github.com/markdown-it/markdown-it-footnote)
+- [markdown-it-task-lists](https://github.com/revin/markdown-it-task-lists)
+- [markdown-it-link-attributes](https://github.com/crookedneighbor/markdown-it-link-attributes)
+- markdown-it-plugin-[echarts](https://github.com/apache/incubator-echarts):
+
+  width/height: 指定容器宽高, 数字单位为`px`, 其他单位使用字符串
+
+  ```echarts
+  {
+    width: 500,
+    height: 400,
+    xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+      {
+        data: [820, 932, 901, 934, 1290, 1330, 1320],
+        type: 'line'
+      }
+    ]
+  }
+  ```
+
+- markdown-it-plugin-[flowchart](https://github.com/adrai/flowchart.js):
+
+  ```flowchart
+  st=>start: Start:>http://www.google.com[blank]
+  e=>end:>http://www.google.com
+  op1=>operation: My Operation
+  sub1=>subroutine: My Subroutine
+  cond=>condition: Yes
+  or No?:>http://www.google.com
+  io=>inputoutput: catch something...
+  para=>parallel: parallel tasks
+
+  st->op1->cond
+  cond(yes)->io->e
+  cond(no)->para
+  para(path1, bottom)->sub1(right)->op1
+  para(path2, top)->op1
+  ```
+
+- markdown-it-plugin-[mermaid](https://github.com/mermaid-js/mermaid):
+
+
+  ```mermaid
+  graph TD
+  A[Hard] -->|Text| B(Round)
+  B --> C{Decision}
+  C -->|One| D[Result 1]
+  C -->|Two| E[Result 2]
+  ```
+
 ## 使用说明
 
 在每个 `.md` 文件中可以使用如下宏:
@@ -74,7 +143,7 @@ yarn build
 // 顶部注释区域, 不显示在正文中
 ---
 // 指定文章标题
-# 文章标题
+title: 文章标题
 
 // 可以通过链接访问, 但不出现在导航链接中 true/false
 hide: true
@@ -100,10 +169,13 @@ index: 0
 <Menu />
 ```
 
+更多请参考: [vitepress](https://vitepress.vuejs.org/guide/frontmatter.html)
+
 ## TODO
 
-- CI/CD
-- 全站搜索: 拟使用 [algoliasearch](https://www.algolia.com)
+- markdown 插件(参考: [markdown-it-vue](https://github.com/ravenq/markdown-it-vue)):
+  - 图片查看
+  - 字体图标
 - 标签/归档
 - 换肤/背景
 - UI

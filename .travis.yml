@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - lts/*
+install:
+  - yarn
+script:
+  - yarn build
+deploy:
+  provider: pages
+  local_dir: docs/.vitepress/dist
+  skip_cleanup: true
+  keep_history: true
+  repo: Maorey/Maorey.github.io
+  target_branch: deploy
+  github_token: $DEPLOY_TOKEN
+  on:
+    branch: master

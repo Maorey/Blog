@@ -1,5 +1,5 @@
 ---
-# 第一篇JavaScript笔记
+title: 第一篇JavaScript笔记
 index: 1
 ---
 

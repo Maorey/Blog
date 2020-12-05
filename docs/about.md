@@ -1,5 +1,5 @@
 ---
-# 关于
+title: 关于
 index: 8
 sidebar: auto
 ---
