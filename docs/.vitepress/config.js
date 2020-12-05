@@ -63,6 +63,7 @@ module.exports = {
       md.use(require('markdown-it-latex').default)
       md.use(require('markdown-it-deflist'))
       md.use(require('markdown-it-footnote'))
+      md.use(require('markdown-it-img-lazy'))
       md.use(require('markdown-it-task-lists'))
       md.use(require('markdown-it-link-attributes'))
 

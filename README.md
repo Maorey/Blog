@@ -79,6 +79,7 @@ yarn build
 - [markdown-it-latex](https://github.com/tylingsoft/markdown-it-latex)
 - [markdown-it-deflist](https://github.com/markdown-it/markdown-it-deflist)
 - [markdown-it-footnote](https://github.com/markdown-it/markdown-it-footnote)
+- [markdown-it-img-lazy](https://github.com/tolking/markdown-it-img-lazy)
 - [markdown-it-task-lists](https://github.com/revin/markdown-it-task-lists)
 - [markdown-it-link-attributes](https://github.com/crookedneighbor/markdown-it-link-attributes)
 - markdown-it-plugin-[echarts](https://github.com/apache/incubator-echarts):

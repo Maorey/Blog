@@ -1,29 +1,16 @@
 <template>
-  <Layout>
-    <!--
-      <template #navbar-search></template>
-      <template #sidebar-top></template>
-      <template #sidebar-bottom></template>
-      <template #home-hero></template>
-      <template #home-features></template>
-      <template #home-footer></template>
-      <template #page-top-ads></template>
-      <template #page-top></template>
-      <template #page-bottom></template>
-      <template #page-bottom-ads></template>
-    -->
-    <template #page-bottom>
-      <Comment />
-    </template>
-  </Layout>
+  <Layout />
+
+  <Comment ref="c" />
 
   <footer class="b">Copyright © 2020-2021 毛瑞</footer>
 </template>
 
 <script lang="ts">
-import { watch, onMounted } from 'vue'
+import { nextTick, onMounted, ref, watch } from 'vue'
 import { useSiteData, usePageData } from 'vitepress'
 import DefaultTheme from 'vitepress/dist/client/theme-default'
+import lozad from 'lozad'
 import Comment from './components/Comment.vue'
 
 import 'markdown-it-latex/dist/index.css'
@@ -86,6 +73,23 @@ function getDom(query) {
   return document.querySelectorAll(query)
 }
 
+const lazyLoadImgs =
+  'loading' in HTMLImageElement.prototype
+    ? () => {
+        for (
+          let i = 0, lazyImgs = getDom('.lazy'), len = lazyImgs.length, element;
+          i < len;
+          i++
+        ) {
+          element = lazyImgs[i]
+
+          element.setAttribute('src', element.getAttribute('data-src'))
+        }
+      }
+    : () => {
+        lozad('.lazy').observe()
+      }
+
 let pageData
 let siteData
 export default {
@@ -95,15 +99,17 @@ export default {
   },
   setup() {
     const REG_MD = /(?:(\/)index)?\.md$/
-    watch(pageData || (pageData = usePageData()), page => {
+    const initPage = () => {
+      const page = pageData.value
+
       page.title ||
         (page.title = getTitle(
           (siteData || (siteData = useSiteData())).value,
           page.relativePath.replace(REG_MD, '$1')
         ))
-    })
 
-    onMounted(() => {
+      lazyLoadImgs()
+
       const echartsBlocks = getDom('.echarts')
       echartsBlocks &&
         echartsBlocks.length &&
@@ -162,7 +168,19 @@ export default {
 
           mermaid.init(undefined, mermaidBlocks)
         })
+    }
+
+    watch(pageData || (pageData = usePageData()), () => {
+      nextTick(initPage)
     })
+
+    const comment = ref(null)
+    onMounted(() => {
+      document.querySelector('.page>.container').appendChild(comment.value.$el)
+      initPage()
+    })
+
+    return { c: comment }
   },
 }
 </script>
@@ -182,7 +200,7 @@ export default {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 666;
+  z-index: val(--z-index-sidebar);
   background: url('./assets/loading.jpg') center center no-repeat #062734;
   background-size: contain;
 }

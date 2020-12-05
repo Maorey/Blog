@@ -19,10 +19,12 @@ const options: VssueAPI.Options = {
   clientId: 'f1ada006b51b19ef3424',
   clientSecret: '5e4149693c9e4b3f660672aa56e2a27ae1598199',
   state: 'r5A3$K_7',
-  labels: ['comment'],
-  prefix: '[comment] ',
-  autoCreateIssue: true,
-  issueContent: ({ url }) => `This issue is the comments of ${url}`,
+  labels: ['comments'],
+  prefix: '[comments] ',
+  issueContent: ({ url }) =>
+    `This issue is comments of the blog [${document.title
+      .split('|')[0]
+      .trim()}](${url})`,
 }
 
 export default {
@@ -46,9 +48,8 @@ export default {
           el: '#c',
           render: h =>
             h('keep-alive', [
-              h('Vssue', {
+              h('vssue', {
                 key: reactiveData.k,
-                attrs: { id: 'c' },
                 props: { title: reactiveData.t, options },
               }),
             ]),
