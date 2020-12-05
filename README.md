@@ -174,8 +174,8 @@ index: 0
 ## TODO
 
 - markdown 插件(参考: [markdown-it-vue](https://github.com/ravenq/markdown-it-vue)):
-  - 图片查看
-  - 字体图标
+  - 字体图标(含SVG Symbol)
+  - 图片查看/媒体播放
 - 标签/归档
 - 换肤/背景
 - UI
