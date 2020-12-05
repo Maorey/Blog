@@ -5,6 +5,7 @@ sidebar: false
 <div style="text-align:center">
 
 ![毛瑞](logo.jpg)
+
 </div>
 
 # 俺的博客重新上线啦！
