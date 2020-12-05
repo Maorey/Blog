@@ -13,7 +13,7 @@
       <template #page-bottom-ads></template>
     -->
     <template #page-bottom>
-      <Comment v-if="$themeConfig.isProd" />
+      <Comment />
     </template>
   </Layout>
 
