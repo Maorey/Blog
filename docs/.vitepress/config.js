@@ -44,8 +44,6 @@ module.exports = {
       '/': { nav, sidebar },
     },
 
-    isProd: process.env.NODE_ENV === 'production',
-
     algolia: {
       apiKey: 'c57105e511faa5558547599f120ceeba',
       indexName: 'blog',
@@ -59,17 +57,28 @@ module.exports = {
       md.use(require('markdown-it-ins'))
       md.use(require('markdown-it-abbr'))
       md.use(require('markdown-it-mark'))
-      md.use(require('markdown-it-katex'))
       md.use(require('markdown-it-latex').default)
+      md.use(require('markdown-it-katex'))
       md.use(require('markdown-it-deflist'))
       md.use(require('markdown-it-footnote'))
       md.use(require('markdown-it-img-lazy'))
       md.use(require('markdown-it-task-lists'))
-      md.use(require('markdown-it-link-attributes'))
+      md.use(require('markdown-it-link-attributes'), {
+        pattern: /^https?:\/\//,
+        attrs: {
+          target: '_blank',
+          rel: 'noopener',
+        },
+      })
 
       md.use(require('./markdown/markdown-it-plugin-mermaid'))
       md.use(require('./markdown/markdown-it-plugin-echarts'))
       md.use(require('./markdown/markdown-it-plugin-flowchart'))
+
+      const originalRender = md.render
+      md.render = function () {
+        return originalRender.apply(this, arguments).replace(/{/g, '\\{')
+      }
     },
   },
 }

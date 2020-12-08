@@ -207,6 +207,7 @@ export default {
   max-width: 100%;
   min-width: 400px;
   min-height: 300px;
+  overflow: hidden;
 }
 
 .loading::before {

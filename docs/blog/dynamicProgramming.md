@@ -27,48 +27,37 @@ index: 3
 
 ### 基本思想
 
-与分治法类似 (如快速/归并排序算法), 将待求解问题分为若干子问题, 从子问题的解得到原问题的解, 这是自顶向下递归求解, 图示如下:
+与分治法类似 (如快速/归并排序算法), 将待求解问题分为若干子问题, 从子问题的解得到原问题的解, 这是自顶向下递归求解, 一个典型的调用栈(斐波那契数列`@(1/2[1-(1/2)^n])/(1-(1/2))=s_n@`)图示如下:
 
-```echarts
-{
-  xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  },
-  yAxis: {
-      type: 'value'
-  },
-  series: [
-    {
-      data: [820, 932, 901, 934, 1290, 1330, 1320],
-      type: 'line'
-    }
-  ]
-}
-```
+```AsciiMath
+oint_Cx^3 dx+4y^2 dy
 
-```flowchart
-st=>start: Start:>http://www.google.com[blank]
-e=>end:>http://www.google.com
-op1=>operation: My Operation
-sub1=>subroutine: My Subroutine
-cond=>condition: Yes
-or No?:>http://www.google.com
-io=>inputoutput: catch something...
-para=>parallel: parallel tasks
+2=(((3-x)xx2)/(3-x))
 
-st->op1->cond
-cond(yes)->io->e
-cond(no)->para
-para(path1, bottom)->sub1(right)->op1
-para(path2, top)->op1
+sum_(m=1)^oosum_(n=1)^oo(m^2 n)/(3^m(m3^n+n3^m)
 ```
 
 ```mermaid
-graph TD
-A[方形] --> B(圆角)
-    B --> C{条件a}
-    C --> |a=1| D[结果1]
-    C --> |a=2| E[结果2]
-    F[竖向流程图]
+flowchart TB
+  A("f(n)") --> A1("f(n - 1)")
+    A1 --> A11("f(n - 2)")
+      A11 --> A111(...) --> B11
+      A11 --> A112(...) --> B11
+    A1 --> A12("f(n - 3)")
+      A12 --> A121(...) --> B12
+      A12 --> A122(...) --> B12
+  A --> A2("f(n - 2)")
+    A2 --> A21("f(n - 3)")
+      A21 --> A211(...) --> B21
+      A21 --> A212(...) --> B21
+    A2 --> A22("f(n - 4)")
+      A22 --> A221(...) --> B22
+      A22 --> A222(...) --> B22
+
+  B1("f(n - 1)") --> B("f(n)")
+    B11("f(n - 2)") --> B1
+    B12("f(n - 3)") --> B1
+  B2("f(n - 2)") --> B
+    B21("f(n - 3)") --> B2
+    B22("f(n - 4)") --> B2
 ```

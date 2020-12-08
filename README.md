@@ -170,6 +170,8 @@ index: 0
 <Menu />
 ```
 
+[公式参考链接](http://asciimath.org)
+
 更多请参考: [vitepress](https://vitepress.vuejs.org/guide/frontmatter.html)
 
 ## TODO
@@ -177,6 +179,7 @@ index: 0
 - markdown 插件(参考: [markdown-it-vue](https://github.com/ravenq/markdown-it-vue)):
   - 字体图标(含SVG Symbol)
   - 图片查看/媒体播放
+  - mermaid/flowchart(无交互)可服务端渲染
 - 标签/归档
 - 换肤/背景
 - UI
