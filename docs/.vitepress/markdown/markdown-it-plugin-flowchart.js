@@ -5,7 +5,7 @@ module.exports = md => {
     const token = tokens[idx]
 
     if (token.info === 'flowchart') {
-      return `<pre class="flowchart loading">${token.content.trim()}</pre>`
+      return `<pre v-pre class="flowchart loading">${token.content.trim()}</pre>`
     }
 
     return originalFence(tokens, idx, options, env, slf)

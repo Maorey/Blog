@@ -202,6 +202,56 @@ export default {
 </script>
 
 <style>
+* {
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  scrollbar-arrow-color: var(--c-brand);
+
+  scrollbar-base-color: var(--c-divider-light);
+  scrollbar-color: var(--c-brand-light) transparent;
+  scrollbar-darkshadow-color: var(--c-brand);
+  scrollbar-face-color: var(--c-brand-light);
+  scrollbar-highlight-color: var(--c-divider-light);
+  scrollbar-shadow-color: var(--c-brand-light);
+  scrollbar-track-color: var(--c-divider-light);
+}
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  background: none;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+::-webkit-scrollbar-thumb {
+  min-width: 15px;
+  min-height: 15px;
+  background: var(--c-brand-light);
+  border-radius: 4px;
+  transition: 0.3s;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+::-webkit-scrollbar:hover {
+  background: var(--c-divider-light);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--c-brand);
+}
+
+.page > .container {
+  max-width: 75rem;
+}
+
+br + br {
+  display: none;
+}
+
+.katex-display {
+  max-width: 100%;
+  overflow: auto hidden;
+}
+
 .loading {
   position: relative;
   max-width: 100%;
@@ -230,7 +280,7 @@ export default {
 }
 
 .b {
-  max-width: 960px;
+  max-width: 75rem;
   margin: 0 auto;
   padding: 2rem 1.5rem 2.25rem;
   border-top: 1px solid var(--c-divider);

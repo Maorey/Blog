@@ -10,7 +10,7 @@ module.exports = md => {
       try {
         const options = eval(`(${code})`)
 
-        return `<pre class="echarts loading" style="${
+        return `<pre v-pre class="echarts loading" style="${
           typeof options.width === 'string'
             ? `width:${options.width};`
             : options.width

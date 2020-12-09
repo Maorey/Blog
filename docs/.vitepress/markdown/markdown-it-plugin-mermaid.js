@@ -5,7 +5,7 @@ module.exports = md => {
     const token = tokens[idx]
 
     if (token.info === 'mermaid') {
-      return `<pre class="mermaid loading">${token.content.trim()}</pre>`
+      return `<pre v-pre class="mermaid loading">${token.content.trim()}</pre>`
     }
 
     return originalFence(tokens, idx, options, env, slf)

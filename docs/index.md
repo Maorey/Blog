@@ -8,9 +8,9 @@ sidebar: false
 
 </div>
 
-# 俺的博客重新上线啦！
+# 俺的博客重新上线啦！ :tired_face: :tada:
 
-```TypeScript
+```TypeScript{4}
 export default interface Hello {
   static me?: string
   readonly uuid: string

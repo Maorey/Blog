@@ -76,8 +76,12 @@ module.exports = {
       md.use(require('./markdown/markdown-it-plugin-flowchart'))
 
       const originalRender = md.render
+      const REG_MATH_MUSTACHE_TAG = /<span class="katex">/g
+      const replacer = '<span v-pre class="katex">'
       md.render = function () {
-        return originalRender.apply(this, arguments).replace(/{/g, '\\{')
+        return originalRender
+          .apply(this, arguments)
+          .replace(REG_MATH_MUSTACHE_TAG, replacer)
       }
     },
   },

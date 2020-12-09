@@ -5,7 +5,7 @@
 <script lang="ts">
 import { onMounted, watchEffect } from 'vue'
 import { VssueAPI } from 'vssue'
-import { usePageData, inBrowser } from 'vitepress'
+import { usePageData } from 'vitepress'
 // import GithubV3 from '@vssue/api-github-v3'
 
 // import '../libs/vssue.min'
@@ -21,7 +21,7 @@ const options: VssueAPI.Options = {
   state: 'r5A3$K_7',
   labels: ['comments'],
   prefix: '[comments] ',
-  autoCreateIssue: process.env.NODE_ENV === 'production',
+  // autoCreateIssue: process.env.NODE_ENV === 'production', // 未创建issue会跳转登陆...
   issueContent: ({ url }) =>
     `This issue is comments of the blog [${document.title
       .split('|')[0]
