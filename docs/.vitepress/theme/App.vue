@@ -1,19 +1,19 @@
 <template>
-  <Layout />
-
-  <template v-if="inBrowser">
-    <teleport to=".theme>main">
-      <Comment />
-    </teleport>
-    <teleport to=".theme>main">
-      <footer class="b">Copyright © 2020-2021 毛瑞</footer>
-    </teleport>
-  </template>
+  <Layout>
+    <template v-if="m" #sidebar-bottom>
+      <teleport to=".theme>main">
+        <Comment />
+      </teleport>
+      <teleport to=".theme>main">
+        <footer class="b">Copyright © 2020-2021 毛瑞</footer>
+      </teleport>
+    </template>
+  </Layout>
 </template>
 
 <script lang="ts">
-import { nextTick, onMounted, onUnmounted, watch } from 'vue'
-import { useSiteData, usePageData, inBrowser } from 'vitepress'
+import { nextTick, onMounted, onUnmounted, watch, ref } from 'vue'
+import { useSiteData, usePageData } from 'vitepress'
 import DefaultTheme from 'vitepress/dist/client/theme-default'
 import lozad from 'lozad'
 import Comment from './components/Comment.vue'
@@ -186,7 +186,13 @@ export default {
     Comment,
   },
   setup() {
-    onMounted(initPage)
+    const mounted = ref(false)
+
+    onMounted(() => {
+      initPage()
+
+      mounted.value = true
+    })
 
     onUnmounted(() => {
       window.removeEventListener('resize', resizeECharts)
@@ -196,7 +202,7 @@ export default {
       nextTick(initPage)
     })
 
-    return { inBrowser }
+    return { m: mounted }
   },
 }
 </script>
