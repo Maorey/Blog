@@ -1,10 +1,8 @@
 <template>
-  <Layout>
-    <template #page-bottom>
-      <Comment :ref="n" />
-      <footer :ref="n" class="b">Copyright © 2020-2021 毛瑞</footer>
-    </template>
-  </Layout>
+  <Layout />
+
+  <Comment :ref="n" />
+  <footer :ref="n" class="b">Copyright © 2020-2021 毛瑞</footer>
 </template>
 
 <script lang="ts">
