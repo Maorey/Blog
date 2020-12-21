@@ -1,12 +1,15 @@
 <template>
   <Layout />
 
-  <Comment :ref="n" />
-  <footer :ref="n" class="b">Copyright © 2020-2021 毛瑞</footer>
+  <teleport to=".theme>main">
+    <Comment />
+
+    <footer class="b">Copyright © 2020-2021 毛瑞</footer>
+  </teleport>
 </template>
 
 <script lang="ts">
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, watch } from 'vue'
 import { useSiteData, usePageData } from 'vitepress'
 import DefaultTheme from 'vitepress/dist/client/theme-default'
 import lozad from 'lozad'
@@ -180,20 +183,7 @@ export default {
     Comment,
   },
   setup() {
-    const nodes = ref([])
-
-    onMounted(() => {
-      initPage()
-
-      // I know it's sucks
-      const main = document.querySelector('.theme>main')
-      const injectNodes = nodes.value
-      if (main) {
-        while (injectNodes.length) {
-          main.appendChild(injectNodes.shift())
-        }
-      }
-    })
+    onMounted(initPage)
 
     onUnmounted(() => {
       window.removeEventListener('resize', resizeECharts)
@@ -202,12 +192,6 @@ export default {
     watch(pageData || (pageData = usePageData()), () => {
       nextTick(initPage)
     })
-
-    return {
-      n(el) {
-        el && nodes.value.push(el.$el || el)
-      },
-    }
   },
 }
 </script>
