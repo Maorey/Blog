@@ -1,17 +1,19 @@
 <template>
   <Layout />
 
-  <teleport to=".theme>main">
-    <Comment />
-  </teleport>
-  <teleport to=".theme>main">
-    <footer class="b">Copyright © 2020-2021 毛瑞</footer>
-  </teleport>
+  <template v-if="inBrowser">
+    <teleport to=".theme>main">
+      <Comment />
+    </teleport>
+    <teleport to=".theme>main">
+      <footer class="b">Copyright © 2020-2021 毛瑞</footer>
+    </teleport>
+  </template>
 </template>
 
 <script lang="ts">
 import { nextTick, onMounted, onUnmounted, watch } from 'vue'
-import { useSiteData, usePageData } from 'vitepress'
+import { useSiteData, usePageData, inBrowser } from 'vitepress'
 import DefaultTheme from 'vitepress/dist/client/theme-default'
 import lozad from 'lozad'
 import Comment from './components/Comment.vue'
@@ -193,6 +195,8 @@ export default {
     watch(pageData || (pageData = usePageData()), () => {
       nextTick(initPage)
     })
+
+    return { inBrowser }
   },
 }
 </script>
