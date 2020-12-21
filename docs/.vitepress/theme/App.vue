@@ -1,11 +1,10 @@
 <template>
   <Layout>
     <template #page-bottom>
-      <Comment />
+      <Comment :ref="n" />
+      <footer :ref="n" class="b">Copyright © 2020-2021 毛瑞</footer>
     </template>
   </Layout>
-
-  <footer ref="f" class="b">Copyright © 2020-2021 毛瑞</footer>
 </template>
 
 <script lang="ts">
@@ -183,11 +182,19 @@ export default {
     Comment,
   },
   setup() {
-    const footer = ref(null)
+    const nodes = ref([])
 
     onMounted(() => {
       initPage()
-      document.querySelector('.theme>main').appendChild(footer.value)
+
+      // I know it's sucks
+      const main = document.querySelector('.theme>main')
+      const injectNodes = nodes.value
+      if (main) {
+        while (injectNodes.length) {
+          main.appendChild(injectNodes.shift())
+        }
+      }
     })
 
     onUnmounted(() => {
@@ -198,7 +205,11 @@ export default {
       nextTick(initPage)
     })
 
-    return { f: footer }
+    return {
+      n(el) {
+        el && nodes.value.push(el.$el || el)
+      },
+    }
   },
 }
 </script>
@@ -282,11 +293,12 @@ br + br {
 }
 
 .vssue {
-  margin-top: 2rem;
+  margin: 0 1.5rem;
+  width: auto !important;
 }
 
 .b {
-  margin: 0 1.5rem;
+  margin: 2.25rem 1.5rem 0;
   padding: 2rem 1.5rem 2.25rem;
   border-top: 1px solid var(--c-divider);
   text-align: center;
