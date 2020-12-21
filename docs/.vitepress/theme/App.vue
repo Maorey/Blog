@@ -3,7 +3,8 @@
 
   <teleport to=".theme>main">
     <Comment />
-
+  </teleport>
+  <teleport to=".theme>main">
     <footer class="b">Copyright © 2020-2021 毛瑞</footer>
   </teleport>
 </template>
