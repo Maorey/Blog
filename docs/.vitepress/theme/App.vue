@@ -1,9 +1,11 @@
 <template>
-  <Layout />
+  <Layout>
+    <template #page-bottom>
+      <Comment />
+    </template>
+  </Layout>
 
-  <Comment ref="c" style="margin-top: 2rem" />
-
-  <footer class="b">Copyright © 2020-2021 毛瑞</footer>
+  <footer ref="f" class="b">Copyright © 2020-2021 毛瑞</footer>
 </template>
 
 <script lang="ts">
@@ -181,11 +183,11 @@ export default {
     Comment,
   },
   setup() {
-    const comment = ref(null)
+    const footer = ref(null)
 
     onMounted(() => {
-      document.querySelector('.page>.container').appendChild(comment.value.$el)
       initPage()
+      document.querySelector('.theme>main').appendChild(footer.value)
     })
 
     onUnmounted(() => {
@@ -196,7 +198,7 @@ export default {
       nextTick(initPage)
     })
 
-    return { c: comment }
+    return { f: footer }
   },
 }
 </script>
@@ -240,7 +242,7 @@ export default {
 }
 
 .page > .container {
-  max-width: 75rem;
+  max-width: 73rem;
 }
 
 br + br {
@@ -279,13 +281,15 @@ br + br {
   overflow: auto hidden;
 }
 
+.vssue {
+  margin-top: 2rem;
+}
+
 .b {
-  max-width: 75rem;
-  margin: 0 auto;
+  margin: 0 1.5rem;
   padding: 2rem 1.5rem 2.25rem;
   border-top: 1px solid var(--c-divider);
   text-align: center;
-  line-height: 1.4;
   font-size: 0.9rem;
   color: var(--c-text-light);
 }
