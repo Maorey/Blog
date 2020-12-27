@@ -1,18 +1,15 @@
 <template>
   <Layout>
-    <template v-if="m" #sidebar-bottom>
-      <teleport to=".theme>main">
-        <Comment />
-      </teleport>
-      <teleport to=".theme>main">
-        <footer class="b">Copyright © 2020-2021 毛瑞</footer>
-      </teleport>
+    <template #page-bottom>
+      <Comment />
+
+      <footer class="b">Copyright © 2020-2021 毛瑞</footer>
     </template>
   </Layout>
 </template>
 
 <script lang="ts">
-import { nextTick, onMounted, onUnmounted, watch, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, watch } from 'vue'
 import { useSiteData, usePageData } from 'vitepress'
 import DefaultTheme from 'vitepress/dist/client/theme-default'
 import lozad from 'lozad'
@@ -98,6 +95,18 @@ const lazyLoadImgs =
     : () => {
         lozad('.lazy').observe()
       }
+function reLayout() {
+  // I know it's sucks
+  const page = document.querySelector('.page')
+  const container = page && page.querySelector('.container')
+  if (container) {
+    let element = container.querySelector('#c') || container.querySelector('.vssue')
+    element && page.appendChild(element)
+
+    element = container.querySelector('.b')
+    element && page.appendChild(element)
+  }
+}
 function initPage() {
   const page = pageData.value
 
@@ -178,6 +187,8 @@ function initPage() {
 
       mermaid.init(undefined, mermaidBlocks)
     })
+
+  reLayout()
 }
 
 export default {
@@ -186,13 +197,7 @@ export default {
     Comment,
   },
   setup() {
-    const mounted = ref(false)
-
-    onMounted(() => {
-      initPage()
-
-      mounted.value = true
-    })
+    onMounted(initPage)
 
     onUnmounted(() => {
       window.removeEventListener('resize', resizeECharts)
@@ -201,8 +206,6 @@ export default {
     watch(pageData || (pageData = usePageData()), () => {
       nextTick(initPage)
     })
-
-    return { m: mounted }
   },
 }
 </script>

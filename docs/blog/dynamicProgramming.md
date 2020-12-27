@@ -510,121 +510,37 @@ function addTo(goldMine: GoldMine, plans: Plan[]) {
     plan.mines.push(goldMine)
   }
 }
-function defaultCompare(a: any, b: any) {
-  return a === b
-}
-function sameArray<T extends any = any, R extends any = T>(
-  arrayA: T[] | readonly T[] | undefined,
-  arrayB: R[] | readonly R[] | undefined,
-  ignoreOrder?: boolean,
-  sameItem?: (itemInA: T, itemInB: R) => boolean
-) {
-  if (arrayA === arrayB) {
-    return true
-  }
-
-  if (!arrayA || !arrayB) {
-    return false
-  }
-
-  const size = arrayA.length
-
-  if (size !== arrayB.length) {
-    return false
-  }
-
-  sameItem || (sameItem = defaultCompare)
-  for (let i = 0, j, item, isDiffer; i < size; i++) {
-    item = arrayA[i]
-    isDiffer = !sameItem(item, arrayB[i])
-
-    if (ignoreOrder && isDiffer) {
-      for (j = 0; j < size; j++) {
-        if (j !== i && sameItem(item, arrayB[j])) {
-          isDiffer = false
-          break
-        }
-      }
-    }
-
-    if (isDiffer) {
-      return false
-    }
-  }
-
-  return true
-}
-function samePlan(planA: Plan, planB: Plan) {
-  return (
-    planA === planB ||
-    (planA.gold === planB.gold &&
-      planA.cost === planB.cost &&
-      sameArray(planA.mines, planB.mines))
-  )
-}
 function merge<T extends GoldMine = GoldMine, R extends GoldMine = T>(
   leftPlans: Plan<T>[],
   rightPlans: Plan<R>[]
 ): Plan<T | R>[] {
-  let leftValue = leftPlans[0].gold
-  let rightValue = rightPlans[0].gold
+  let leftGold = leftPlans[0].gold
+  let rightGold = rightPlans[0].gold
 
-  if (leftValue === rightValue) {
+  if (leftGold === rightGold) {
     // 归并
     let l = leftPlans.length
     let r = rightPlans.length
     let p = l + r
     const mergedPlans = Array<Plan<T | R>>(p)
 
-    let leftPlan
-    let rightPlan
     while (l && r) {
-      leftPlan = leftPlans[l - 1]
-      rightPlan = rightPlans[r - 1]
-
-      leftValue = leftPlan.cost
-      rightValue = rightPlan.cost
-
-      if (leftValue === rightValue) {
-        l--
-        r--
-        mergedPlans[--p] = rightPlan
-        sameArray(leftPlan.mines, rightPlan.mines) || (mergedPlans[--p] = leftPlan)
-      } else if (leftValue > rightValue) {
-        l--
-        mergedPlans[--p] = leftPlan
-      } else {
-        r--
-        mergedPlans[--p] = rightPlan
-      }
+      mergedPlans[--p] =
+        leftPlans[l - 1].cost > rightPlans[r - 1].cost
+          ? leftPlans[--l]
+          : rightPlans[--r]
     }
-
-    let compareOnceFlag
     while (l) {
-      leftPlan = leftPlans[--l]
-      if (
-        compareOnceFlag ||
-        (compareOnceFlag = !samePlan(leftPlan, mergedPlans[p]))
-      ) {
-        mergedPlans[--p] = leftPlan
-      }
+      mergedPlans[--p] = leftPlans[--l]
     }
     while (r) {
-      rightPlan = rightPlans[--r]
-      if (
-        compareOnceFlag ||
-        (compareOnceFlag = !samePlan(rightPlan, mergedPlans[p]))
-      ) {
-        mergedPlans[--p] = rightPlan
-      }
+      mergedPlans[--p] = rightPlans[--r]
     }
-
-    mergedPlans.splice(0, p)
 
     return mergedPlans
   }
 
-  return leftValue > rightValue ? leftPlans : rightPlans
+  return leftGold > rightGold ? leftPlans : rightPlans
 }
 
 function getMostGold<T extends GoldMine = GoldMine>(
