@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <template #page-bottom>
+    <template v-if="i" #page-bottom>
       <Comment />
 
       <footer class="b">Copyright © 2020-2021 毛瑞</footer>
@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { nextTick, onMounted, onUnmounted, watch } from 'vue'
-import { useSiteData, usePageData } from 'vitepress'
+import { useSiteData, usePageData, inBrowser } from 'vitepress'
 import DefaultTheme from 'vitepress/dist/client/theme-default'
 import lozad from 'lozad'
 import Comment from './components/Comment.vue'
@@ -188,7 +188,7 @@ function initPage() {
       mermaid.init(undefined, mermaidBlocks)
     })
 
-  reLayout()
+  inBrowser && reLayout()
 }
 
 export default {
@@ -206,6 +206,8 @@ export default {
     watch(pageData || (pageData = usePageData()), () => {
       nextTick(initPage)
     })
+
+    return { i: inBrowser }
   },
 }
 </script>
