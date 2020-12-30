@@ -49,6 +49,8 @@ export default {
 .n .f {
   width: 450px;
   height: 90px;
+  margin: auto;
+  display: block;
   object-fit: cover;
   object-position: 0 -76px;
 }

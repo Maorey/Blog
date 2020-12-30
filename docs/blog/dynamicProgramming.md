@@ -605,4 +605,4 @@ function getMostGold<T extends GoldMine = GoldMine>(
 
 ## 参考文献
 
-*TODO*
+[漫画：什么是动态规划？](https://zhuanlan.zhihu.com/p/31628866)

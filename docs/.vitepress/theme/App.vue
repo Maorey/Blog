@@ -250,6 +250,12 @@ export default {
   background: var(--c-brand);
 }
 
+.nav-bar,
+.sidebar {
+  border: none !important;
+  box-shadow: var(--shadow-2);
+}
+
 .page > .container {
   max-width: 73rem;
 }
@@ -280,7 +286,7 @@ br + br {
   top: 0;
   left: 0;
   z-index: val(--z-index-sidebar);
-  background: url('./assets/loading.jpg') center center no-repeat #062734;
+  background: url('./assets/loading.jpg') center center no-repeat #f1f1f1;
   background-size: contain;
 }
 
@@ -291,8 +297,10 @@ br + br {
 }
 
 .vssue {
-  margin: 0 1.5rem;
   width: auto !important;
+  max-width: 73rem;
+  margin: 0 auto;
+  padding: 0 1.5rem !important;
 }
 
 .b {
