@@ -45,7 +45,7 @@ module.exports = {
     },
 
     algolia: {
-      apiKey: 'c57105e511faa5558547599f120ceeba',
+      apiKey: 'STILL_WAIT_THE_EMAIL',
       indexName: 'blog',
     },
   },
