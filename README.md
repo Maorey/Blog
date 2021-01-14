@@ -14,12 +14,11 @@ sidebar: auto
 
 - [node](https://nodejs.org/): 10.x 版本以上
 
-写文章可以用各种 markdown 编辑器, 或者任何文本编辑器甚至直接在 github 网页上写
-
+写文章可以用各种 markdown 编辑器, 或者任何文本编辑器, 甚至直接在 github 网页上写, 但是有些语法可能会不支持预览(比如图表)
 
 ## 安装使用
 
-使用命令行, 也可以配置 [github CI/CD](https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions)
+使用命令行, 建议配置 [github CI/CD](https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions)
 
 ### 初次安装
 
@@ -29,7 +28,7 @@ npm (安装node附带):
 npm i
 ```
 
-[yarn](https://classic.yarnpkg.com/):
+[yarn](https://classic.yarnpkg.com)【建议】:
 
 ```bash
 yarn
@@ -43,7 +42,7 @@ npm:
 npm build
 ```
 
-yarn:
+yarn【建议】:
 
 ```bash
 yarn build
@@ -155,7 +154,7 @@ hide: true
 // false: 不显示
 sidebar: auto
 
-// 同目录下的排序, 顺序小的在后面
+// 同目录下的排序, 数字小的在后面
 index: 0
 ---
 
