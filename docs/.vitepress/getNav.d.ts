@@ -1,4 +1,4 @@
-import { DefaultTheme } from 'vitepress/dist/client/theme-default/config'
+import { DefaultTheme } from 'vitepress'
 
 /** 读取顶部导航 */
 declare function getNav(

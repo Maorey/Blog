@@ -6,14 +6,8 @@
 import { onMounted, watchEffect } from 'vue'
 import { VssueAPI } from 'vssue'
 import { usePageData } from 'vitepress'
-// import GithubV3 from '@vssue/api-github-v3'
-
-// import '../libs/vssue.min'
-
-// import 'vssue/dist/vssue.min.css'
 
 const options: VssueAPI.Options = {
-  // api: GithubV3,
   owner: 'Maorey',
   repo: 'Blog',
   clientId: 'f1ada006b51b19ef3424',
@@ -21,7 +15,7 @@ const options: VssueAPI.Options = {
   state: 'r5A3$K_7',
   labels: ['comments'],
   prefix: '[comments] ',
-  // autoCreateIssue: process.env.NODE_ENV === 'production', // 未创建issue会跳转登陆...
+  // autoCreateIssue: process.env.NODE_ENV === 'production', // 未创建issue的会跳转登陆...
   issueContent: ({ url }) =>
     `This issue is comments of the blog [${document.title
       .split('|')[0]
@@ -31,11 +25,15 @@ const options: VssueAPI.Options = {
 export default {
   props: { title: String, class: String, style: String },
   setup(props) {
-    const pageData = usePageData()
+    import('vssue/dist/vssue.min.css')
+    const libs = [import('../libs/vue2.min'), import('../libs/vssue.min')]
+    const pendingLibs = Promise.all(libs) // 省掉 libs 变量, 打包会报错, 咱也惹不起啊
 
+    const pageData = usePageData()
     onMounted(() => {
-      import('vssue/dist/vssue.min.css')
-      import('../libs/vssue.min').then(({ default: Vue2 }) => {
+      pendingLibs.then(res => {
+        const Vue2 = res[1].default(res[0].default)
+
         const reactiveData = Vue2.observable({ t: 0, k: 0 })
         watchEffect(() => {
           const page = pageData.value

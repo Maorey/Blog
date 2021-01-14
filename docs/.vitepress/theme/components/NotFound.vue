@@ -42,6 +42,7 @@ export default {
 .n #t {
   width: 100%;
   height: 150px;
+  max-width: 600px;
   margin-top: 10px;
   pointer-events: all;
 }

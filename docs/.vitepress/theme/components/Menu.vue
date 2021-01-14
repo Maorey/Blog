@@ -121,10 +121,8 @@ function resolveSiteData({ lang, locales, themeConfig: { locales: themeLocales }
 }
 
 export default {
-  name: 'Menu',
-  props: {
-    menu: { type: Object },
-  },
+  name: 'Menu', // for 递归
+  props: { menu: Object },
   setup(props) {
     return {
       data: props.menu || resolveSiteData(useSiteData().value),

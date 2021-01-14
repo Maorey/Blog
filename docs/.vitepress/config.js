@@ -32,7 +32,6 @@ module.exports = {
   serviceWorker: true,
   themeConfig: {
     repo: 'Maorey/Blog',
-    docsRepo: 'Maorey/Blog',
     docsDir: 'docs',
     docsBranch: 'master',
 

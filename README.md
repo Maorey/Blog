@@ -176,10 +176,24 @@ index: 0
 
 ## TODO
 
-- 服务端渲染[报错](https://github.com/vuejs/vue-next/issues/2781), 暂先本地直接改node_modules, 然后手工打包部署...
-- markdown 插件(参考: [markdown-it-vue](https://github.com/ravenq/markdown-it-vue)):
+- markdown 插件:
   - 字体图标(含SVG Symbol)
   - 图片查看/媒体播放
+  - 待定
 - 标签/归档
 - 换肤/背景
 - UI
+- 代码高亮行错位
+- 使用 [vite](https://github.com/vitejs/vite) [2.0.0-beta.20](https://github.com/vitejs/vite/releases/tag/v2.0.0-beta.20) 之后的版本异步导入模块(`import()`)打包会报错
+
+  ```bash
+  build error:
+  TypeError: Cannot read property 'edit' of null
+      at MagicString.overwrite (.\node_modules\vite\dist\node\chunks\dep-661a710c.js:12699:11)
+      at Object.generateBundle (.\node_modules\vite\dist\node\chunks\dep-661a710c.js:31690:35)
+      at .\node_modules\rollup\dist\shared\rollup.js:18781:25 {
+    code: 'PLUGIN_ERROR',
+    plugin: 'vite:import-analysis',
+    hook: 'generateBundle'
+  }
+  ```

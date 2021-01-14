@@ -11,7 +11,7 @@
 <script lang="ts">
 import { nextTick, onMounted, onUnmounted, watch } from 'vue'
 import { useSiteData, usePageData, inBrowser } from 'vitepress'
-import DefaultTheme from 'vitepress/dist/client/theme-default'
+import DefaultTheme from 'vitepress/theme'
 import lozad from 'lozad/dist/lozad.es'
 import Comment from './components/Comment.vue'
 
