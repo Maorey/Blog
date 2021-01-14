@@ -1,11 +1,11 @@
 ---
-title: ES语法杂谈
+title: 迭代器
 index: 1
 ---
 
 ## 前言
 
-这次咱来聊聊一些ES语法, 主要是控制流方面的, 因为也不是特别新的语法(`ES2015-2018`), 标题就酱紫吧:rofl:, 现代浏览器都支持 (IE: 啥? 村里通网了么?)
+这次咱来聊聊迭代器相关ES语法, 因为也不是特别新的语法(`ES2015-2018`), 标题就酱紫吧:rofl:, 现代浏览器都支持 (IE: 啥? 村里通网了么?)
 
 ## 迭代器 (Iterators - ES2015)
 
@@ -15,7 +15,7 @@ index: 1
 interface IteratorYieldResult<TYield> {
   /** 是否到达结束位置 */
   done?: false
-  /** 是否当前位置值 */
+  /** 当前位置值 */
   value: TYield
 }
 interface IteratorReturnResult<TReturn> {
@@ -61,14 +61,14 @@ const iterator: IterableIterator<string> = SOME_STRING[Symbol.iterator]()
 
 iterator.next() // { value: 'A', done: false }
 iterator.next() // { value: 'B', done: true }
-iterator.next() // { value: 'A', done: true }
-iterator.next() // { value: 'A', done: true }
+iterator.next() // { value: undefined, done: true }
+iterator.next() // { value: undefined, done: true }
 ```
 
 迭代器的主要消费者 (`done = true` 时即结束迭代)
 
-- `for...of`
-- `...`
+- `for...of` / `for await...of`
+- `...` (解构赋值, 扩展运算)
 - `yield*`
 - `Array.from()`
 - `Map(), Set(), WeakMap(), WeakSet()` (比如: `new Map([['a', 1], ['b', 2]])`)
@@ -236,7 +236,7 @@ iterator.next() // { value: 'over', done: true }
 iterator.next() // { value: undefined, done: true }
 ```
 
-生成器函数使用 `function*` 声明 (`*`在函数名前面就行), 函数体内可使用 `yield` 表达式返回当前迭代器的值 (可视作迭代器 `next` 方法), 没有 `return` 语句则以 `undefined` 为 `value` 结束, 总是返回一个迭代器, 不可用作构造函数(即`new`)
+生成器函数使用 `function*` 声明 (`*`在函数名前面就行), 函数体内可使用 `yield` [表达式](https://tc39.es/ecma262/#sec-expressions)返回当前迭代器的值 (可视作迭代器 `next` 方法), 没有 `return` 语句则以 `undefined` 为 `value` 结束, 总是返回一个迭代器, 不可用作构造函数(即`new`)
 
 如果`yield`表达式在另一个表达式中**必须**加括号:
 
@@ -369,11 +369,11 @@ function* foo() {
 
 ### 执行器
 
-使用生成器函数有个问题是**需要了解实现细节**, 所以比较好的方式是牺牲一定的灵活度, 遵循一定的规则来实现, 这样就可以使用**特定的执行器**来执行它, 常见的方式是使用`Thunk`函数(`(callback: any) => any`)/`Promise`来作为`yield`的值
+使用生成器函数有个问题是**需要了解实现细节**, 所以比较好的方式是牺牲一定的灵活度, 遵循一定的规则来实现, 这样就可以使用**特定的执行器**来执行它, 常见的方式是使用[Thunk](http://www.ruanyifeng.com/blog/2015/05/thunk.html)函数(`(callback: any) => any`)/`Promise`来作为`yield`的值
 
 ## 异步函数 (AsyncFunction - ES2017)
 
-异步函数使用 `async function声明`, 函数体内部可以使用 `await` 命令等待异步操作结果(`thenAble`对象), 总是返回一个`Promise`对象, 它是[生成器函数](#生成器函数-generatorfunction-es2015)的语法糖(内置执行器)
+异步函数使用 `async function声明`, 函数体内部可以使用 `await` 表达式等待异步操作结果(`thenAble`对象), 总是返回一个`Promise`对象, 它是[生成器函数](#生成器函数-generatorfunction-es2015)的语法糖(内置执行器)
 
 ```TypeScript
 async function foo(delay?: number) {
@@ -520,9 +520,9 @@ run()
 
 ## 聊聊
 
-协程: 可以看到, 迭代器(含异步)这种执行权交替转移的方式是协程的不完全实现
-上下文: 自动绑定(生成器(含异步)函数)了执行上下文
-性能: 迭代器性能自然是比不上传统的迭代方式的, 不管是从数据结构(含内存分配)还是查找等方面考量, 都是如此. 但是我们使用它的场景往往是在于管道的控制等, 所以一般也不会有大量的数据/步骤需要迭代, 缺点是可忽略的. 而且使用它会给我们带来的开发/维护等方面的诸多好处, 这是**不可忽视的优点**
+- [协程](https://mp.weixin.qq.com/s/57IERpGIlvRwYCh6vSbMDA): 可以看到, 迭代器(含异步)这种执行权交替转移的方式是协程的不完全实现
+- [上下文](https://tc39.es/ecma262/#sec-execution-contexts): 自动绑定(生成器(含异步)函数)了执行上下文
+- 性能: 迭代器性能自然是比不上传统的迭代方式的, 不管是从数据结构(含内存分配)还是查找等方面考量, 都是如此. 但是我们使用它的场景往往是在于管道的控制等, 所以一般也不会有大量的数据/步骤需要迭代, 缺点是可忽略的. 而且使用它会给我们带来的开发/维护等方面的诸多好处, 这是**不可忽视的优点**
 
 ### 应用
 
