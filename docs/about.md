@@ -1,7 +1,6 @@
 ---
 title: 关于
 index: 8
-sidebar: auto
 ---
 
 # 关于我

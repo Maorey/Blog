@@ -12,7 +12,7 @@
 import { nextTick, onMounted, onUnmounted, watch } from 'vue'
 import { useSiteData, usePageData, inBrowser } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
-import lozad from 'lozad/dist/lozad.es'
+import lozad from 'lozad'
 import Comment from './components/Comment.vue'
 
 import 'markdown-it-latex/dist/index.css'
