@@ -306,7 +306,7 @@ flowchart TB
   C --> C1(尝试自顶向下递归, 分析执行过程)
   C1 --> C2(找出最优子结构, 设计状态转移方程)
   C2 --> C3(使用备忘录剪枝重叠子问题)
-  C3 --> C4(将算法改造成自底向上求解的方式)
+  C3 --> C4(将算法改造成自底向上递推求解的形式)
   C -.-> C2
   C2 -.-> C4
 ```
@@ -415,7 +415,7 @@ $$
 后文中将省略已出现过的代码
 :::
 
-### 递归形式
+### 带备忘录递归算法 :thumbsup:
 
 只计算最大收益数值(`getMostGold`):
 
@@ -428,15 +428,23 @@ interface GoldMine {
   cost: number
 }
 
-function getMostGold<T extends GoldMine = GoldMine>(
+let DPTable: { [key: string]: number }
+
+function solve<T extends GoldMine = GoldMine>(
   goldMines: T[],
   minerCount: number,
-  goldMineCount = goldMines.length
+  goldMineCount: number
 ): number {
+  const key = minerCount + '.' + goldMineCount
+  const result = DPTable[key]
+  if (result !== undefined) {
+    return result
+  }
+
   if (goldMineCount < 2) {
     const goldMine = goldMines[0]
 
-    return minerCount < goldMine.cost ? 0 : goldMine.gold
+    return (DPTable[key] = minerCount < goldMine.cost ? 0 : goldMine.gold)
   }
 
   const goldMine = goldMines[--goldMineCount]
@@ -445,12 +453,23 @@ function getMostGold<T extends GoldMine = GoldMine>(
       ? 0
       : minerCount === goldMine.cost
         ? goldMine.gold
-        : goldMine.gold +
-          getMostGold(goldMines, minerCount - goldMine.cost, goldMineCount)
+        : goldMine.gold + solve(goldMines, minerCount - goldMine.cost, goldMineCount)
 
-  const left = getMostGold(goldMines, minerCount, goldMineCount)
+  const left = solve(goldMines, minerCount, goldMineCount)
 
-  return left > right ? left : right
+  return (DPTable[key] = left > right ? left : right)
+}
+
+function getMostGold<T extends GoldMine = GoldMine>(
+  goldMines: T[],
+  minerCount: number,
+  goldMineCount = goldMines.length
+): number {
+  DPTable = {}
+  const result = solve(goldMines, minerCount, goldMineCount)
+  DPTable = null! // 睁一只眼闭一只眼
+
+  return result
 }
 
 /* 验证
@@ -527,11 +546,19 @@ function merge<T extends GoldMine = GoldMine, R extends GoldMine = T>(
   return leftGold > rightGold ? leftPlans : rightPlans
 }
 
-function getMostGold<T extends GoldMine = GoldMine>(
+let DPTable: { [key: string]: any }
+
+function solve<T extends GoldMine = GoldMine>(
   goldMines: T[],
   minerCount: number,
-  goldMineCount = goldMines.length
+  goldMineCount: number
 ): Plan<T>[] {
+  const key = minerCount + '.' + goldMineCount
+  const result = DPTable[key]
+  if (result !== undefined) {
+    return result
+  }
+
   let goldMine
   let cost
 
@@ -539,30 +566,43 @@ function getMostGold<T extends GoldMine = GoldMine>(
     goldMine = goldMines[0]
     cost = goldMine.cost
 
-    return minerCount < cost
-      ? [{ gold: 0, cost: 0, mines: [] }]
-      : [{ gold: goldMine.gold, cost, mines: [goldMine] }]
+    return (DPTable[key] =
+      minerCount < cost
+        ? [{ gold: 0, cost: 0, mines: [] }]
+        : [{ gold: goldMine.gold, cost, mines: [goldMine] }])
   }
 
   goldMine = goldMines[--goldMineCount]
   cost = goldMine.cost
 
   if (minerCount < cost) {
-    return getMostGold(goldMines, minerCount, goldMineCount)
+    return (DPTable[key] = solve(goldMines, minerCount, goldMineCount))
   }
 
   let right
   if (minerCount === cost) {
     right = [{ gold: goldMine.gold, cost, mines: [goldMine] }]
   } else {
-    right = addTo(goldMine, getMostGold(goldMines, minerCount - cost, goldMineCount))
+    right = addTo(goldMine, solve(goldMines, minerCount - cost, goldMineCount))
   }
 
-  return merge(getMostGold(goldMines, minerCount, goldMineCount), right)
+  return (DPTable[key] = merge(solve(goldMines, minerCount, goldMineCount), right))
+}
+
+function getMostGold<T extends GoldMine = GoldMine>(
+  goldMines: T[],
+  minerCount: number,
+  goldMineCount = goldMines.length
+): Plan<T>[] {
+  DPTable = {}
+  const result = solve(goldMines, minerCount, goldMineCount)
+  DPTable = null! // 睁一只眼闭一只眼
+
+  return result
 }
 ```
 
-### 递推(迭代)形式
+### 动态规划算法 :heart_eyes::call_me_hand:
 
 只计算最大收益数值(`getMostGold`):
 
@@ -572,7 +612,7 @@ function getMostGold<T extends GoldMine = GoldMine>(
   minerCount: number,
   goldMineCount = goldMines.length
 ): number {
-  const DTTable: { [goldMineCount: number]: number } = {}
+  const DPTable: { [goldMineCount: number]: number } = {}
 
   let goldMine: T
   let gold: number
@@ -584,11 +624,11 @@ function getMostGold<T extends GoldMine = GoldMine>(
     cost = goldMine.cost
 
     for (j = minerCount; j >= cost; j--) {
-      DTTable[j] = Math.max(DTTable[j] || 0, (DTTable[j - cost] || 0) + gold)
+      DPTable[j] = Math.max(DPTable[j] || 0, (DPTable[j - cost] || 0) + gold)
     }
   }
 
-  return DTTable[minerCount]
+  return DPTable[minerCount]
 }
 ```
 
@@ -604,7 +644,7 @@ function getMostGold<T extends GoldMine = GoldMine>(
   minerCount: number,
   goldMineCount = goldMines.length
 ): Plan<T>[] {
-  const DTTable: { [goldMineCount: number]: Plan<T>[] } = {}
+  const DPTable: { [goldMineCount: number]: Plan<T>[] } = {}
 
   let goldMine: T
   let gold: number
@@ -618,16 +658,16 @@ function getMostGold<T extends GoldMine = GoldMine>(
     cost = goldMine.cost
 
     for (j = minerCount; j >= cost; j--) {
-      leftPlans = DTTable[j - cost]
+      leftPlans = DPTable[j - cost]
       leftPlans = leftPlans
         ? addTo(goldMine, leftPlans.map(copyPlan))
         : [{ gold, cost, mines: [goldMine] }]
-      rightPlans = DTTable[j]
-      DTTable[j] = rightPlans ? merge(leftPlans, rightPlans) : leftPlans
+      rightPlans = DPTable[j]
+      DPTable[j] = rightPlans ? merge(leftPlans, rightPlans) : leftPlans
     }
   }
 
-  return DTTable[minerCount]
+  return DPTable[minerCount]
 }
 ```
 
