@@ -257,15 +257,16 @@ function fibonacci(n: number) {
 function O(v){return v==4 ? 'O(2&lt;sup>n&lt;/sup>)' : v==2 ? 'O(nlogn)' : v==1 ? 'O(n)' : v==0 ? 'O(0)' :''}
 function A(v){return v==4 ? 'O(2^n)' : O(v)}
 return {
+  legend: {},
   tooltip: {
     trigger: 'axis',
     confine: true,
     formatter: function(p,t,c) {
       var d=p[0],e=p[1],f='&lt;b style="margin-left:10px">',g='&lt;/b>',
-        h='&lt;br/>&lt;i style="display:inline-block;width:12px;height:12px;margin-right:5px;vertical-align:middle;border-radius:100%;background:',i='">&lt;/i>'
-      return c(t, '&lt;h4 style="text-align:center">'+ d.name +'&lt;/h4>'+
-        h+ d.color +i+ d.seriesName +f+ O(d.value) +g+
-        h+ e.color +i+ e.seriesName +f+ O(e.value) +g)
+        h='&lt;i style="display:inline-block;width:12px;height:12px;margin-right:5px;vertical-align:middle;border-radius:100%;background:',i='">&lt;/i>'
+      return c(t, '&lt;h4>'+ d.name +'&lt;/h4>&lt;div style="text-align:left">'+
+        h+ d.color +i+ d.seriesName +f+ O(d.value) +g+ '&lt;br/>'+
+        h+ e.color +i+ e.seriesName +f+ O(e.value) +g+ '&lt;/div>')
     }
   },
   xAxis: [{
@@ -416,7 +417,7 @@ $$
 
 ### 递归形式
 
-只计算最大收益数值:
+只计算最大收益数值(`getMostGold`):
 
 ```TypeScript
 /** 金矿信息 */
@@ -466,7 +467,7 @@ getMostGold(
 */
 ```
 
-得到详细方案:
+得到详细方案(`getMostGold`):
 
 ```TypeScript
 /** 得到黄金最多的 采矿方案 */
@@ -475,11 +476,14 @@ interface Plan<T extends GoldMine = GoldMine> extends GoldMine {
   mines: T[]
 }
 
-function addTo(goldMine: GoldMine, plans: Plan[]) {
-  let plan
-  let i = plans.length
+function addTo<T extends GoldMine = GoldMine>(
+  goldMine: T,
+  plans: Plan<T>[]
+): Plan<T>[] {
   const { gold, cost } = goldMine
 
+  let i = plans.length
+  let plan: Plan<T>
   while (i--) {
     plan = plans[i]
 
@@ -487,6 +491,8 @@ function addTo(goldMine: GoldMine, plans: Plan[]) {
     plan.cost += cost
     plan.mines.push(goldMine)
   }
+
+  return plans
 }
 function merge<T extends GoldMine = GoldMine, R extends GoldMine = T>(
   leftPlans: Plan<T>[],
@@ -549,8 +555,7 @@ function getMostGold<T extends GoldMine = GoldMine>(
   if (minerCount === cost) {
     right = [{ gold: goldMine.gold, cost, mines: [goldMine] }]
   } else {
-    right = getMostGold(goldMines, minerCount - cost, goldMineCount)
-    addTo(goldMine, right)
+    right = addTo(goldMine, getMostGold(goldMines, minerCount - cost, goldMineCount))
   }
 
   return merge(getMostGold(goldMines, minerCount, goldMineCount), right)
@@ -559,13 +564,70 @@ function getMostGold<T extends GoldMine = GoldMine>(
 
 ### 递推(迭代)形式
 
+只计算最大收益数值(`getMostGold`):
+
 ```TypeScript
 function getMostGold<T extends GoldMine = GoldMine>(
   goldMines: T[],
   minerCount: number,
   goldMineCount = goldMines.length
+): number {
+  const DTTable: { [goldMineCount: number]: number } = {}
+
+  let goldMine: T
+  let gold: number
+  let cost: number
+  let j: number
+  while (goldMineCount--) {
+    goldMine = goldMines[goldMineCount]
+    gold = goldMine.gold
+    cost = goldMine.cost
+
+    for (j = minerCount; j >= cost; j--) {
+      DTTable[j] = Math.max(DTTable[j] || 0, (DTTable[j - cost] || 0) + gold)
+    }
+  }
+
+  return DTTable[minerCount]
+}
+```
+
+得到详细方案(`getMostGold`):
+
+```TypeScript
+function copyPlan<T extends GoldMine = GoldMine>(plan: Plan<T>): Plan<T> {
+  return { gold: plan.gold, cost: plan.cost, mines: [...plan.mines] }
+}
+
+function getMostGold<T extends GoldMine = GoldMine>(
+  goldMines: T[],
+  minerCount: number,
+  goldMineCount = goldMines.length
 ): Plan<T>[] {
-  // TODO
+  const DTTable: { [goldMineCount: number]: Plan<T>[] } = {}
+
+  let goldMine: T
+  let gold: number
+  let cost: number
+  let j: number
+  let leftPlans: Plan<T>[]
+  let rightPlans: Plan<T>[]
+  while (goldMineCount--) {
+    goldMine = goldMines[goldMineCount]
+    gold = goldMine.gold
+    cost = goldMine.cost
+
+    for (j = minerCount; j >= cost; j--) {
+      leftPlans = DTTable[j - cost]
+      leftPlans = leftPlans
+        ? addTo(goldMine, leftPlans.map(copyPlan))
+        : [{ gold, cost, mines: [goldMine] }]
+      rightPlans = DTTable[j]
+      DTTable[j] = rightPlans ? merge(leftPlans, rightPlans) : leftPlans
+    }
+  }
+
+  return DTTable[minerCount]
 }
 ```
 
