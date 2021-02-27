@@ -236,7 +236,7 @@ iterator.next() // { value: 'over', done: true }
 iterator.next() // { value: undefined, done: true }
 ```
 
-生成器函数使用 `function*` 声明 (`*`在函数名前面就行), 函数体内可使用 `yield` [表达式](https://tc39.es/ecma262/#sec-expressions)返回当前迭代器的值 (可视作迭代器 `next` 方法), 没有 `return` 语句则以 `undefined` 为 `value` 结束, 总是返回一个迭代器, 不可用作构造函数(即`new`)
+生成器函数使用 `function*` 声明, 函数体内可使用 `yield` [表达式](https://tc39.es/ecma262/#sec-expressions)返回当前迭代器的值 (可视作迭代器 `next` 方法), 没有 `return` 语句则以 `undefined` 为 `value` 结束, 总是返回一个迭代器, 不可用作构造函数(即`new`)
 
 如果`yield`表达式在另一个表达式中**必须**加括号:
 
@@ -373,7 +373,7 @@ function* foo() {
 
 ## 异步函数 (AsyncFunction - ES2017)
 
-异步函数使用 `async function声明`, 函数体内部可以使用 `await` 表达式等待异步操作结果(`thenAble`对象), 总是返回一个`Promise`对象, 它是[生成器函数](#生成器函数-generatorfunction-es2015)的语法糖(内置执行器)
+异步函数使用 `async function` 声明, 函数体内部可以使用 `await` 表达式等待异步操作结果(`thenAble`对象), 总是返回一个`Promise`对象, 它是[生成器函数](#生成器函数-generatorfunction-es2015)的语法糖(内置执行器)
 
 ```TypeScript
 async function foo(delay?: number) {
@@ -477,7 +477,7 @@ async function run() {
 run() // foo: 1 \n foo: 2 \n run: done \n foo: 3
 ```
 
-异步生成器函数返回的异步迭代器, 其[next](#next) / [return](#return) / [throw](#throw) 方法的行为与上述生成器函数返回的迭代器相似, 注意下`Promise`的特殊处理方式即可(异步/生成器函数体内可以直接`try...catch`), 也可以被 [yield*](#yield-表达式) 遍历, 不可用作构造函数(即`new`)
+异步生成器函数返回的异步迭代器, 其[next](#next) / [return](#return) / [throw](#throw) 方法的行为与上述生成器函数返回的迭代器相似, 注意下`Promise`和错误处理(`try...catch`)即可, 也可以被 [yield*](#yield-表达式) 遍历, 不可用作构造函数(即`new`)
 
 ```TypeScript
 function* foo() {
@@ -516,12 +516,12 @@ run()
 // baz: 3 \n bar: 0 \n run: bar: 1 \n bar: 2 \n baz: 4
 ```
 
-执行器设计地好的话, 其实是可以使用相同的. 这是比较巧妙(但不是巧合)的地方, 使用时可以忽略掉同步和异步的差别
+遵循一定的规范, 是可以使用相同的执行器来执行的. 这是比较巧妙(但不是巧合)的地方, 可以忽略掉同步和异步的差别
 
 ## 聊聊
 
 - [协程](https://mp.weixin.qq.com/s/57IERpGIlvRwYCh6vSbMDA): 可以看到, 迭代器(含异步)这种执行权交替转移的方式是协程的不完全实现
-- [上下文](https://tc39.es/ecma262/#sec-execution-contexts): 自动绑定(生成器(含异步)函数)了执行上下文
+- [上下文](https://tc39.es/ecma262/#sec-execution-contexts): 自动绑定了(生成器(含异步)函数)执行上下文
 - 性能: 迭代器性能自然是比不上传统的迭代方式的, 不管是从数据结构(含内存分配)还是查找等方面考量, 都是如此. 但是我们使用它的场景往往是在于管道的控制等, 所以一般也不会有大量的数据/步骤需要迭代, 缺点是可忽略的. 而且使用它会给我们带来的开发/维护等方面的诸多好处, 这是**不可忽视的优点**
 
 ### 应用

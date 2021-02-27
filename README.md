@@ -82,6 +82,7 @@ yarn build
 - [markdown-it-task-lists](https://github.com/revin/markdown-it-task-lists)
 - [markdown-it-link-attributes](https://github.com/crookedneighbor/markdown-it-link-attributes)
 - markdown-it-plugin-[echarts](https://github.com/apache/incubator-echarts):
+  **使用`eval`获取图表配置对象**(即: 可以写js)
 
   width/height: 指定容器宽高, 数字单位为`px`, 其他单位使用字符串
 

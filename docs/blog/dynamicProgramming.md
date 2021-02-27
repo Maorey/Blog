@@ -252,58 +252,37 @@ function fibonacci(n: number) {
 
 ### 对比
 
-*TODO: 时间/空间复杂度*
-
 ```echarts
-{
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            crossStyle: {
-                color: '#999'
-            }
-        }
-    },
-    xAxis: [
-        {
-            type: 'category',
-            data: ['普通递归', '带备忘录递归', '带备忘录动态规划', '动态规划'],
-            axisPointer: {
-                type: 'shadow'
-            }
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value',
-            name: '时间复杂度',
-            axisLabel: {
-                formatter: 'O({value}}'
-            }
-        },
-        {
-            type: 'value',
-            name: '空间复杂度',
-            axisLabel: {
-                formatter: 'O({value})'
-            }
-        }
-    ],
-    series: [
-        {
-            name: '时间复杂度',
-            type: 'bar',
-            data: [2.0, 4.9, 7.0, 23.2]
-        },
-        {
-            name: '空间复杂度',
-            type: 'bar',
-            yAxisIndex: 1,
-            data: [2.6, 5.9, 9.0, 26.4]
-        }
-    ]
+(function() {
+function O(v){return v==4 ? 'O(2&lt;sup>n&lt;/sup>)' : v==2 ? 'O(nlogn)' : v==1 ? 'O(n)' : v==0 ? 'O(0)' :''}
+function A(v){return v==4 ? 'O(2^n)' : O(v)}
+return {
+  tooltip: {
+    trigger: 'axis',
+    confine: true,
+    formatter: function(p,t,c) {
+      var d=p[0],e=p[1],f='&lt;b style="margin-left:10px">',g='&lt;/b>',
+        h='&lt;br/>&lt;i style="display:inline-block;width:12px;height:12px;margin-right:5px;vertical-align:middle;border-radius:100%;background:',i='">&lt;/i>'
+      return c(t, '&lt;h4 style="text-align:center">'+ d.name +'&lt;/h4>'+
+        h+ d.color +i+ d.seriesName +f+ O(d.value) +g+
+        h+ e.color +i+ e.seriesName +f+ O(e.value) +g)
+    }
+  },
+  xAxis: [{
+    type: 'category',
+    data: ['普通递归', '带备忘录递归', '带备忘录动态规划', '动态规划'],
+    axisPointer: { type: 'shadow' }
+  }],
+  yAxis: [
+    { type: 'value', name: '时间复杂度', axisLabel: { formatter: A } },
+    { type: 'value', name: '空间复杂度', axisLabel: { formatter: A } }
+  ],
+  series: [
+    { name: '时间复杂度', type: 'bar', data: [4, 2, 1, 1] },
+    { name: '空间复杂度', type: 'bar', yAxisIndex: 1, data: [4, 2, 2, 1] }
+  ]
 }
+})()
 ```
 
 ## 讲套路
