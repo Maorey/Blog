@@ -256,6 +256,10 @@ export default {
   box-shadow: var(--shadow-2);
 }
 
+.nav-bar-title > .logo {
+  height: 2rem;
+}
+
 .page > .container {
   max-width: 73rem;
 }

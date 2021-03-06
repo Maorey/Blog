@@ -4,7 +4,7 @@ sidebar: false
 
 <div style="text-align:center">
 
-![毛瑞](logo.jpg)
+![毛瑞](me.jpg)
 
 </div>
 

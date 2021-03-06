@@ -11,17 +11,12 @@ for (let i = 0, len = nav.length, navItem; i < len; i++) {
   }
 }
 
-/** @typedef {import('vitepress').UserConfig} UserConfig */
-
-/** @type {UserConfig['head']} */
-const head = [['link', { rel: 'icon', href: `/logo.jpg` }]]
-
-/** @type {UserConfig} */
+/** @type {import('vitepress').UserConfig} */
 module.exports = {
   lang: 'zh-CN',
   title: '玉书',
   description: '毛瑞的博客',
-  head,
+  head: [['link', { rel: 'icon', href: `logo.jpg` }]],
   locales: {
     '/': {
       lang: 'zh-CN',
@@ -35,6 +30,7 @@ module.exports = {
     docsDir: 'docs',
     docsBranch: 'master',
 
+    logo: 'logo.jpg',
     editLinks: true,
     editLinkText: '编辑本文',
     lastUpdated: '上次更新',
