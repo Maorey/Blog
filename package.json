@@ -36,26 +36,26 @@
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
     "markdown-it-task-lists": "^2.1.1",
-    "mermaid": "^8.9.1",
+    "mermaid": "^8.9.2",
     "t-rex-runner": "^1.0.6",
-    "typescript": "^4.2.2",
+    "typescript": "^4.2.3",
     "vitepress": "^0.12.2",
     "vssue": "^1.4.7"
   },
   "resolutions": {
     "@polka/url": "^1.0.0-next.11",
-    "@vue/compiler-sfc": "^3.0.6",
-    "@vue/server-renderer": "^3.0.6",
-    "@vue/shared": "^3.0.6",
+    "@vue/compiler-sfc": "^3.0.7",
+    "@vue/server-renderer": "^3.0.7",
     "argparse": "^2.0.1",
     "axios": "^0.21.1",
+    "commander": "^6.2.1",
     "debug": "^4.3.1",
-    "katex": "^0.12.0",
+    "katex": "^0.13.0",
     "lru-cache": "^6.0.0",
     "markdown-it": "^12.0.4",
-    "postcss": "^8.2.6",
+    "postcss": "^8.2.8",
     "safe-buffer": "^5.2.1",
-    "vite": "2.0.4",
-    "vue": "^3.0.6"
+    "vite": "2.1.0",
+    "vue": "^3.0.7"
   }
 }
