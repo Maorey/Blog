@@ -3,7 +3,7 @@ title: 前端基本能力自查
 index: 1
 ---
 
-# 基础
+## 基础
 
 - [html](https://developer.mozilla.org/zh-CN/docs/Web/HTML)
 - [css](https://developer.mozilla.org/zh-CN/docs/Web/CSS)
@@ -18,7 +18,7 @@ index: 1
   - 宏任务 & 微任务
   - 数据结构 / 算法 / 设计模式
 
-# 框架
+## 框架
 
 - [React.js](https://reactjs.org)
   - [Component](https://reactjs.org/docs/components-and-props.html)
@@ -41,7 +41,7 @@ index: 1
   - [Directives](https://v3.vuejs.org/guide/custom-directive.html)
   - [Plugins](https://v3.vuejs.org/guide/plugins.html)
 
-# 状态管理及路由
+## 状态管理及路由
 
 - [vue-router](https://next.router.vuejs.org)
 - [vuex](https://vuex.vuejs.org)
@@ -49,7 +49,7 @@ index: 1
 - [Redux](http://redux.js.org)
 - [MobX](https://mobx.js.org)
 
-# 复杂状态/流程管理及其他
+## 复杂状态/流程管理及其他
 
 - [redux-saga](https://redux-saga.js.org)
 - [rxjs](https://cn.rx.js.org)
@@ -57,7 +57,7 @@ index: 1
 - 微前端
 - 跨平台
 
-# 工程化 及 自动化
+## 工程化 及 自动化
 
 - [git](https://git-scm.com) 及 协作、分支管理、CI/CD
 - [Node.js](https://nodejs.org/en/docs)
