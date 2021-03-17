@@ -29,6 +29,8 @@ index: 1
   - [Fiber](https://github.com/acdlite/react-fiber-architecture)
 
 - [Vue.js](https://v3.vuejs.org) 推荐视频: [框架设计](https://www.bilibili.com/video/BV134411c7Sk) & [课程](https://www.bilibili.com/video/BV1d4411v7UX)
+  - [Component](https://v3.vuejs.org/guide/component-basics.html)
+  - [LifeCycle](https://v3.vuejs.org/guide/instance.html#lifecycle-diagram)
   - [jsx](https://v3.vuejs.org/guide/render-function.html#jsx)
   - [Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html)
   - [Virtual DOM](https://v3.vuejs.org/guide/optimizations.html#virtual-dom)
@@ -49,7 +51,7 @@ index: 1
 
 # 复杂状态/流程管理及其他
 
-- [redux-saga](https://redux-saga.js.org/)
+- [redux-saga](https://redux-saga.js.org)
 - [rxjs](https://cn.rx.js.org)
 - 函数式编程
 - 微前端
