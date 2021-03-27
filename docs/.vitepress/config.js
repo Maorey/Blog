@@ -16,7 +16,7 @@ module.exports = {
   lang: 'zh-CN',
   title: '玉书',
   description: '毛瑞的博客',
-  head: [['link', { rel: 'icon', href: 'logo.jpg' }]],
+  head: [['link', { rel: 'icon', href: '/logo.jpg' }]],
   locales: {
     '/': {
       lang: 'zh-CN',
