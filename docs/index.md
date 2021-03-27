@@ -12,9 +12,11 @@ sidebar: false
 
 ```TypeScript{4}
 export default interface Hello {
-  static me?: string
-  readonly uuid: string
-  say: (words: string) => void
+  static me = '毛瑞'
+  readonly uuid = 'Maorey'
+  sex = '男'
+  hobby = 'female'
+  date: (anyTime: number, anywhere: string) => true
 }
 ```
 
