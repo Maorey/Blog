@@ -1,33 +1,33 @@
 ---
-title: 关于
+title: 关于我
 index: 8
 ---
 
-# 关于我
-待补充
+要写点啥呢？
 
-## 一级标题
-待补充
+## 废话
 
-> tips
+要不写点废话吧
 
-1. 待补充
-  - 待补充
-  - 待补充
-2. 待补充
-  - [ ] 任务 1
-  - [x] 任务 2
-  - [ ] 任务 3
+> 废话它也是话，也算字数的
+
+1. 写废话
+  - 左右写一句
+  - 右手再写一句
+2. 说废话
+  - [ ] 酝酿一下
+  - [x] 这就是句废话啊
+  - [ ] 好样的
 
 -------------
 
 ```ts
-function codeBlocks() {
-  return "Can be inserted"
+function speak() {
+  return "What does the fox say!"
 }
 ```
 
-### 二级标题
+## Mime type
 
 | Header                    | Mime type    | Extensions | Description
 |---------------------------|--------------|------------|-------------
@@ -38,9 +38,9 @@ function codeBlocks() {
 | `42 4D`                   | image/bmp    | bmp        | Bitmap image
 | `00 00 01 00`             | image/x-icon | ico        | Icon image
 
-#### 三级标题
+## 浏览器支持
 
-支持现代浏览器
+支持在现代浏览器中运行
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Safari |
 | :-: | :-: | :-: | :-: |

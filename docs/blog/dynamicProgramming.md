@@ -525,7 +525,7 @@ function merge<T extends GoldMine = GoldMine, R extends GoldMine = T>(
     let l = leftPlans.length
     let r = rightPlans.length
     let p = l + r
-    const mergedPlans = Array<Plan<T | R>>(p)
+    const mergedPlans: Array<Plan<T | R>> = []
 
     while (l && r) {
       mergedPlans[--p] =
@@ -636,7 +636,7 @@ function getMostGold<T extends GoldMine = GoldMine>(
 
 ```TypeScript
 function copyPlan<T extends GoldMine = GoldMine>(plan: Plan<T>): Plan<T> {
-  return { gold: plan.gold, cost: plan.cost, mines: [...plan.mines] }
+  return { ...plan, mines: [...plan.mines] }
 }
 
 function getMostGold<T extends GoldMine = GoldMine>(

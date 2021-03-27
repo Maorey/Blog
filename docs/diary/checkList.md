@@ -29,7 +29,7 @@ index: 1
   - [Fiber](https://github.com/acdlite/react-fiber-architecture)
 
 - [Vue.js](https://v3.vuejs.org) 推荐视频: [框架设计](https://www.bilibili.com/video/BV134411c7Sk) & [课程](https://www.bilibili.com/video/BV1d4411v7UX)
-  - [Component](https://v3.vuejs.org/guide/component-basics.html)
+  - [Component](https://v3.vuejs.org/guide/component-basics.html) & [Dynamic & Async Components](https://v3.vuejs.org/guide/component-dynamic-async.html)
   - [LifeCycle](https://v3.vuejs.org/guide/instance.html#lifecycle-diagram)
   - [jsx](https://v3.vuejs.org/guide/render-function.html#jsx)
   - [Composition API](https://v3.vuejs.org/guide/composition-api-introduction.html)

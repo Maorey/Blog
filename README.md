@@ -172,6 +172,8 @@ index: 0
 
 公式参考链接: [katex](https://katex.org) ~~[asciimath](http://asciimath.org)~~
 
+[emoji](https://github.com/markdown-it/markdown-it-emoji/blob/master/lib/data/full.json)
+
 更多请参考: [vitepress](https://vitepress.vuejs.org/guide/frontmatter.html)
 
 ## TODO
