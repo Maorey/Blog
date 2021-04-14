@@ -10,31 +10,13 @@ export default {
   enhanceApp({ app }) {
     // app is the Vue 3 app instance from `createApp()`. router is VitePress'
     // custom router. `siteData`` is a `ref`` of current site-level metadata.
-    app.component('Nfd', NotFound)
-    app.component('Menu', Menu)
 
-    // 自定义标签 如数学公式
-    // const CUSTOM_TAGS = new Set([
-    //   'math',
-    //   'semantics',
-    //   'mrow',
-    //   'msub',
-    //   'msuo',
-    //   'mo',
-    //   'mi',
-    //   'mn',
-    //   'annotation',
-    // ])
-    // const originalIsCustomElement = app.config.isCustomElement
-    // app.config.isCustomElement = function (tag) {
-    //   return (
-    //     (originalIsCustomElement && originalIsCustomElement.apply(this, arguments)) ||
-    //     CUSTOM_TAGS.has(tag)
-    //   )
-    // }
     if (!inBrowser) {
       app.config.isCustomElement = () => true
       app.config.errorHandler = () => {}
     }
+
+    // 注册全局组件
+    app.component('Menu', Menu)
   },
 } as Theme

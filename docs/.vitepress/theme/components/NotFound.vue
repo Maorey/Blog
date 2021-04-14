@@ -14,7 +14,6 @@
 
 <script>
 import { onMounted } from 'vue'
-import { useSiteData } from 'vitepress'
 // import { initRunner as tRexRunner } from 't-rex-runner/dist/runner'
 // import tRexRunner from '../libs/tRexRunner.min'
 

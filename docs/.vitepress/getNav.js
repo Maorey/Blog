@@ -29,12 +29,9 @@ const fs = require('fs')
 const path = require('path')
 const rootDir = path.resolve()
 const docsDir = path.join(rootDir, 'docs')
-const vitepress = '.vitepress'
-const vitepressDir = path.join(docsDir, vitepress)
-const public = 'public'
-const publicDir = path.join(docsDir, public)
+const excludes = /(?:\.vitepress|public|components)$/
 
-// const recordFile = path.join(vitepressDir, 'record.json')
+// const recordFile = path.join(path.join(docsDir, '.vitepress'), 'record.json')
 
 // let record
 // try {
@@ -122,12 +119,8 @@ const REG_TRIM_END = /\.md$/
 module.exports = function getNav(noFile, pathRelativeToDocs = './', rootPath = '/') {
   const nav = []
 
-  const absolutePath = path.resolve(docsDir, pathRelativeToDocs)
-  if (absolutePath === vitepressDir || absolutePath === publicDir) {
-    return nav
-  }
-
   const isRoot = rootPath === '/'
+  const absolutePath = path.resolve(docsDir, pathRelativeToDocs)
   const dirs = fs.readdirSync(absolutePath, { withFileTypes: true })
   for (let i = 0, len = dirs.length, dir, name, info, link, children; i < len; i++) {
     dir = dirs[i]
@@ -148,11 +141,7 @@ module.exports = function getNav(noFile, pathRelativeToDocs = './', rootPath = '
           })
         }
       }
-    } else if (
-      dir.isDirectory() &&
-      !name.endsWith(public) &&
-      !name.endsWith(vitepress)
-    ) {
+    } else if (dir.isDirectory() && !excludes.test(name)) {
       name = path.basename(name)
       info = extractInfo(path.join(absolutePath, name, index))
 

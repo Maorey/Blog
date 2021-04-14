@@ -55,8 +55,9 @@ yarn build
 ├── docs # 文档目录
 │   │── public # 静态资源, 如使用到的图片等
 │   │── .vitepress # 博客配置代码, 含主题等
+│   │── components # vue组件目录 (任意位置)
 │   │
-│   │── ... # 自定义博客文档结构 (每个目录都需要一个 index.md 文件)
+│   │── ... # 自定义博客文档结构 (每个目录都需要一个 index.md 文件, 【不要使用前面的文件夹名】)
 │   │
 │   └── index.md # 目录对应的默认页
 │
@@ -136,6 +137,24 @@ yarn build
   C -->|Two| E[Result 2]
   ```
 
+- [使用Vue组件](https://vitepress.vuejs.org/guide/using-vue.html)
+
+  ```md
+  # Docs
+
+  This is a .md using a custom component
+
+  <CustomComponent />
+
+  ## More docs
+
+  ...
+
+  <script setup>
+  import CustomComponent from '../components/CustomComponent.vue'
+  </script>
+  ```
+
 ## 使用说明
 
 在每个 `.md` 文件中可以使用如下宏:
@@ -162,9 +181,6 @@ index: 0
 // 正文区域
 // 若注释区未设置标题则使用第一个一级标题
 # 文章标题
-
-// 页面找不到
-<Nfd />
 
 // 列出当前目录树(仅index.md), 文章目录请使用 markdown 目录语法
 <Menu />
