@@ -1,24 +1,19 @@
 <template>
-  <canvas
-    ref="el"
-    width="320"
-    height="320"
-    style="border: 1px solid; cursor: crosshair"
-  />
-  <i @click="toggle" style="margin: 10px">
-    {{ isPoint ? '请指定点' : '正在绘制多边形' }}(右键切换)
-  </i>
-  <i @click="clear">清空</i>
-  <p>
-    计算结果:
-    <b :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`">{{
-      result ? '点在面内(或边上)' : result === false ? '点在面外' : '--'
-    }}</b>
-  </p>
+  <div :class="$style.wrap">
+    <i @click="toggle">{{ isPoint ? '请指定点' : '正在绘制多边形' }}(右键切换)</i>
+    <i @click="clear">重置</i>
+    <canvas ref="el" width="320" height="320" />
+    <p>
+      计算结果:
+      <b :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`">{{
+        result ? '点在面内(或边上)' : result === false ? '点在面外' : '--'
+      }}</b>
+    </p>
+  </div>
 </template>
 
 <script lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watchEffect, onUnmounted } from 'vue'
 
 interface Point {
   x: number
@@ -91,6 +86,7 @@ export default {
     let canvas: HTMLCanvasElement
     let context: CanvasRenderingContext2D
     let rect: DOMRect
+
     const points: Point[] = []
     const onClick = (event: MouseEvent) => {
       const point = {
@@ -138,22 +134,50 @@ export default {
       event.preventDefault()
     }
 
-    onMounted(() => {
-      canvas = el.value!
-      context = canvas.getContext('2d')!
-      rect = canvas.getBoundingClientRect()
-
+    const on = () => {
       canvas.addEventListener('click', onClick)
       canvas.addEventListener('mousemove', onMove)
       canvas.addEventListener('contextmenu', stop)
-    })
-    onUnmounted(() => {
+    }
+    const off = () => {
       canvas.removeEventListener('click', onClick)
       canvas.removeEventListener('mousemove', onMove)
       canvas.removeEventListener('contextmenu', stop)
-    })
+    }
+    const init = () => {
+      canvas && off()
+      if (el.value) {
+        canvas = el.value
+        context = canvas.getContext('2d')!
+        rect = canvas.getBoundingClientRect()
+        on()
+      }
+    }
+
+    watchEffect(init)
+    onUnmounted(off)
 
     return { el, isPoint, result, toggle, clear }
   },
 }
 </script>
+
+<style lang="scss" module>
+.wrap {
+  :global {
+    i {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    canvas {
+      display: block;
+      width: 320px;
+      height: 320px;
+      margin-top: 10px;
+      border: 1px solid var(--c-brand);
+      cursor: crosshair;
+    }
+  }
+}
+</style>
