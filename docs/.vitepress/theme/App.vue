@@ -95,15 +95,18 @@ const lazyLoadImgs =
     : () => {
         lozad('.lazy').observe()
       }
+function querySelector(dom, selector) {
+  return dom.querySelector(selector)
+}
 function reLayout() {
   // I know it's sucks
-  const page = document.querySelector('.page')
-  const container = page && page.querySelector('.container')
+  const page = querySelector(document, '.page')
+  const container = page && querySelector(page, '.container')
   if (container) {
-    let element = container.querySelector('#c') || container.querySelector('.vssue')
+    let element = querySelector(container, '#c') || querySelector(container, '.vssue')
     element && page.appendChild(element)
 
-    element = container.querySelector('.b')
+    element = querySelector(container, '.foot')
     element && page.appendChild(element)
   }
 }
