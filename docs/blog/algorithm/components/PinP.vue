@@ -25,10 +25,10 @@ interface Point {
   y: number
 }
 
-const clearCanvas = (context: CanvasRenderingContext2D) => {
+function clearCanvas(context: CanvasRenderingContext2D) {
   context.clearRect(0, 0, 320, 320)
 }
-const drawPolygon = (context: CanvasRenderingContext2D, points: Point[]) => {
+function drawPolygon(context: CanvasRenderingContext2D, points: Point[]) {
   clearCanvas(context)
 
   context.beginPath()
@@ -44,12 +44,12 @@ const drawPolygon = (context: CanvasRenderingContext2D, points: Point[]) => {
   context.stroke()
   context.fill()
 }
-const drawPoint = (context: CanvasRenderingContext2D, point: Point) => {
+function drawPoint(context: CanvasRenderingContext2D, point: Point) {
   context.fillStyle = 'red'
   context.fillRect(point.x - 1, point.y - 1, 2, 2)
 }
 
-const pinp = ({ x: px, y: py }: Point, points: Point[]) => {
+function pinp({ x: px, y: py }: Point, points: Point[]) {
   let odd = false // py射线与多边形的所有边的相交次数是否为奇数
 
   // points[i]-points[j] 为多边形的一条边
