@@ -118,7 +118,7 @@ export default {
       isPoint.value = false
       result.value = null
       points.splice(0)
-      clearCanvas(context)
+      context && clearCanvas(context)
     }
     const toggle = () => {
       if (isPoint.value) {
