@@ -5,10 +5,10 @@
     height="320"
     style="border: 1px solid; cursor: crosshair"
   />
-  <button @click="toggle" style="margin: 10px">
+  <i @click="toggle" style="margin: 10px">
     {{ isPoint ? '请指定点' : '正在绘制多边形' }}(右键切换)
-  </button>
-  <button @click="clear">清空</button>
+  </i>
+  <i @click="clear">清空</i>
   <p>
     计算结果:
     <b :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`">{{

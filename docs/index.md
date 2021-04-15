@@ -10,16 +10,21 @@ sidebar: false
 
 # 俺的博客重新上线啦！ :tired_face: :tada:
 
-```TypeScript{4}
-export default interface Hello {
+```TypeScript{2}
+export default abstract class Hello {
   static me = '毛瑞'
-  readonly uuid = 'Maorey'
+  protected readonly uuid = 'Maorey'
   sex = '男'
-  hobby = 'female'
-  date: (anyTime: number, anywhere: string) => true
+  private get hobby() {
+    return 'young lady'
+  }
+  public talk(balabala: string) {
+    return balabala.slice(balabala.length / 3)
+  }
+  abstract date(anyTime?: number, anyPlace?: string): true
 }
 ```
 
 <Menu />
 
-要来只[小恐龙](/404.html)([源码](https://www.cnblogs.com/undefined000/p/trex_1.html))么?
+要来只[小恐龙](404) ([源码](https://www.cnblogs.com/undefined000/p/trex_1.html))么?

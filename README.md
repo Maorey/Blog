@@ -53,9 +53,9 @@ yarn build
 ```bash
 │
 ├── docs # 文档目录
-│   │── public # 静态资源, 如使用到的图片等
 │   │── .vitepress # 博客配置代码, 含主题等
-│   │── components # vue组件目录 (任意位置)
+│   │── components # vue组件目录
+│   │── public # 静态资源, 如使用到的图片等
 │   │
 │   │── ... # 自定义博客文档结构 (每个目录都需要一个 index.md 文件, 【不要使用前面的文件夹名】)
 │   │
@@ -81,7 +81,7 @@ yarn build
 - [markdown-it-footnote](https://github.com/markdown-it/markdown-it-footnote)
 - [markdown-it-img-lazy](https://github.com/tolking/markdown-it-img-lazy)
 - [markdown-it-task-lists](https://github.com/revin/markdown-it-task-lists)
-- [markdown-it-link-attributes](https://github.com/crookedneighbor/markdown-it-link-attributes)
+- ~~[markdown-it-link-attributes](https://github.com/crookedneighbor/markdown-it-link-attributes)~~
 - markdown-it-plugin-[echarts](https://github.com/apache/incubator-echarts):
   **使用`eval`获取图表配置对象**(即: 可以写js)
 

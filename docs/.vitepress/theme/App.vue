@@ -3,7 +3,7 @@
     <template v-if="i" #page-bottom>
       <Comment />
 
-      <footer class="b">Copyright © 2020-2021 毛瑞</footer>
+      <footer class="foot">Copyright © 2020-2021 毛瑞</footer>
     </template>
   </Layout>
 </template>
@@ -211,108 +211,3 @@ export default {
   },
 }
 </script>
-
-<style>
-* {
-  scrollbar-width: thin;
-  scroll-behavior: smooth;
-  scrollbar-arrow-color: var(--c-brand);
-
-  scrollbar-base-color: var(--c-divider-light);
-  scrollbar-color: var(--c-brand-light) transparent;
-  scrollbar-darkshadow-color: var(--c-brand);
-  scrollbar-face-color: var(--c-brand-light);
-  scrollbar-highlight-color: var(--c-divider-light);
-  scrollbar-shadow-color: var(--c-brand-light);
-  scrollbar-track-color: var(--c-divider-light);
-}
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-  background: none;
-  border-radius: 4px;
-  transition: 0.3s;
-}
-::-webkit-scrollbar-thumb {
-  min-width: 15px;
-  min-height: 15px;
-  background: var(--c-brand-light);
-  border-radius: 4px;
-  transition: 0.3s;
-}
-::-webkit-scrollbar-button {
-  display: none;
-}
-::-webkit-scrollbar:hover {
-  background: var(--c-divider-light);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--c-brand);
-}
-
-.nav-bar,
-.sidebar {
-  border: none !important;
-  box-shadow: var(--shadow-2);
-}
-
-.nav-bar-title > .logo {
-  height: 2rem;
-}
-
-.page > .container {
-  max-width: 73rem;
-}
-
-br + br {
-  display: none;
-}
-
-.katex-display {
-  max-width: 100%;
-  overflow: auto hidden;
-}
-
-.loading {
-  position: relative;
-  max-width: 100%;
-  min-width: 400px;
-  min-height: 300px;
-  overflow: hidden;
-}
-
-.loading::before {
-  content: '';
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: val(--z-index-sidebar);
-  background: url('./assets/loading.jpg') center center no-repeat #f1f1f1;
-  background-size: contain;
-}
-
-.graph {
-  text-align: center;
-  box-sizing: border-box;
-  overflow: auto hidden;
-}
-
-.vssue {
-  width: auto !important;
-  max-width: 73rem;
-  margin: 0 auto;
-  padding: 0 1.5rem !important;
-}
-
-.b {
-  margin: 2.25rem 1.5rem 0;
-  padding: 2rem 1.5rem 2.25rem;
-  border-top: 1px solid var(--c-divider);
-  text-align: center;
-  font-size: 0.9rem;
-  color: var(--c-text-light);
-}
-</style>

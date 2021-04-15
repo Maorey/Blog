@@ -31,16 +31,19 @@
     "markdown-it-ins": "^3.0.1",
     "markdown-it-katex": "^2.0.3",
     "markdown-it-latex": "^0.2.0",
-    "markdown-it-link-attributes": "^3.0.0",
     "markdown-it-mark": "^3.0.1",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
     "markdown-it-task-lists": "^2.1.1",
     "mermaid": "^8.9.2",
+    "sass": "^1.32.8",
     "t-rex-runner": "^1.0.6",
     "typescript": "^4.2.4",
     "vitepress": "^0.13.0",
     "vssue": "^1.4.7",
+    "vue": "^3.0.11"
+  },
+  "resolutions": {
     "@polka/url": "^1.0.0-next.12",
     "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.11",
@@ -51,12 +54,10 @@
     "debug": "^4.3.1",
     "katex": "^0.13.2",
     "lru-cache": "^6.0.0",
-    "markdown-it": "^12.0.4",
+    "markdown-it": "^12.0.5",
     "postcss": "^8.2.10",
     "safe-buffer": "^5.2.1",
     "vite": "^2.1.5",
     "vue": "^3.0.11"
-  },
-  "resolutions": {
   }
 }

@@ -40,7 +40,7 @@ module.exports = {
     },
 
     algolia: {
-      apiKey: 'STILL_WAIT_THE_EMAIL',
+      apiKey: 'rejected',
       indexName: 'blog',
     },
   },
@@ -58,21 +58,21 @@ module.exports = {
       md.use(require('markdown-it-footnote'))
       md.use(require('markdown-it-img-lazy'))
       md.use(require('markdown-it-task-lists'))
-      md.use(require('markdown-it-link-attributes'), {
-        pattern: /^https?:\/\//,
-        attrs: {
-          target: '_blank',
-          rel: 'noopener',
-        },
-      })
+      // md.use(require('markdown-it-link-attributes'), {
+      //   pattern: /^https?:\/\//,
+      //   attrs: {
+      //     target: '_blank',
+      //     rel: 'noopener noreferrer',
+      //   },
+      // })
 
       md.use(require('./markdown/markdown-it-plugin-mermaid'))
       md.use(require('./markdown/markdown-it-plugin-echarts'))
       md.use(require('./markdown/markdown-it-plugin-flowchart'))
 
-      const originalRender = md.render
       const REG_MATH_MUSTACHE_TAG = /<span class="katex">/g
       const replacer = '<span v-pre class="katex">'
+      const originalRender = md.render
       md.render = function () {
         return originalRender
           .apply(this, arguments)

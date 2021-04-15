@@ -4,6 +4,8 @@ import Layout from './App.vue'
 import NotFound from './components/NotFound.vue'
 import Menu from './components/Menu.vue'
 
+import './global.scss'
+
 export default {
   Layout,
   NotFound, // () => '啥都没得', // <- this is a Vue 3 functional component

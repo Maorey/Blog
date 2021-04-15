@@ -37,12 +37,16 @@
       "scripthost"
     ]
   },
-  "include": [
-    "*.ts",
-    "*.tsx",
-    "*.vue",
-  ],
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.vue",
+    "node_modules/@vue/shared/dist/shared.d.ts",
+    "node_modules/@vue/reactivity/dist/reactivity.d.ts",
+    "node_modules/@vue/runtime-dom/dist/runtime-dom.d.ts",
+    "node_modules/@vue/runtime-core/dist/runtime-core.d.ts"
   ]
 }

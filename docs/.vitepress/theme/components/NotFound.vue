@@ -1,5 +1,5 @@
 <template>
-  <div class="n">
+  <div :class="$style.wrap">
     <!-- Chrome 小恐龙游戏 -->
     <div id="t" />
 
@@ -17,61 +17,60 @@ import { onMounted } from 'vue'
 // import { initRunner as tRexRunner } from 't-rex-runner/dist/runner'
 // import tRexRunner from '../libs/tRexRunner.min'
 
-function initTRexRunner() {
-  import('../libs/tRexRunner.min').then(module => {
-    module.default('#t')
-  })
-}
-
 export default {
   setup() {
-    onMounted(initTRexRunner)
+    onMounted(() => {
+      import('../libs/tRexRunner.min').then(module => {
+        module.default('#t')
+      })
+    })
   },
 }
 </script>
 
-<style>
-.n {
+<style lang="scss" module>
+.wrap {
   width: 100%;
   text-align: center;
   user-select: none;
   pointer-events: none;
-}
 
-.n #t {
-  width: 100%;
-  height: 150px;
-  max-width: 600px;
-  margin-top: 10px;
-  pointer-events: all;
-}
+  :global {
+    #t {
+      width: 100%;
+      height: 150px;
+      max-width: 600px;
+      margin-top: 10px;
+      pointer-events: all;
+    }
 
-.n .f {
-  width: 450px;
-  height: 90px;
-  margin: auto;
-  display: block;
-  object-fit: cover;
-  object-position: 0 -76px;
-}
+    .f {
+      width: 450px;
+      height: 90px;
+      margin: auto;
+      display: block;
+      object-fit: cover;
+      object-position: 0 -76px;
+    }
+    @media screen and (max-width: 426px) {
+      .f {
+        object-position: 0 -46px;
+      }
+    }
 
-@media screen and (max-width: 426px) {
-  .n .f {
-    object-position: 0 -46px;
+    .c {
+      width: 440px;
+      height: 330px;
+    }
+
+    .t {
+      margin: 10px 0;
+      display: block;
+    }
+
+    .a {
+      pointer-events: all;
+    }
   }
-}
-
-.n .c {
-  width: 440px;
-  height: 330px;
-}
-
-.n .t {
-  margin: 10px 0;
-  display: block;
-}
-
-.n .a {
-  pointer-events: all;
 }
 </style>

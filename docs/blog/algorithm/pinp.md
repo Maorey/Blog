@@ -11,12 +11,6 @@ index: 1
 
 <PinP />
 
-<script lang="ts">
-import PinP from './components/PinP.vue'
-
-export default { components: { PinP } }
-</script>
-
 ## 方法介绍
 
 ### 面积和
@@ -32,3 +26,11 @@ export default { components: { PinP } }
 ## 升维
 
 在3D场景中要如何实现？
+
+
+
+<script lang="ts">
+import PinP from './components/PinP.vue'
+
+export default { components: { PinP } }
+</script>
