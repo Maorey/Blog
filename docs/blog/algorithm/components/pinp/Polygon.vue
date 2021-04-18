@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wrap">
-    // TODO
+    <p>// TODO: 1. 判断多边形凹凸 2. 计算线段与多边形相交次数 3. 凹多边形分解为凸多边形</p>
     <i @click="toggle">{{ isLine ? '正在画线' : '正在画多边形' }}(右键切换)</i>
     <i @click="clear">重置</i>
     <canvas ref="el" width="320" height="320" />
