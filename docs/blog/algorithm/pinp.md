@@ -50,9 +50,9 @@ index: 1
 
 <div style="display:flex;justify-content:space-around">
 
-![areaIn](./public/pinp/areaIn.png)
+![areaIn](pinp/areaIn.png)
 
-![areaOut](./public/pinp/areaOut.png)
+![areaOut](pinp/areaOut.png)
 
 </div>
 
@@ -64,9 +64,9 @@ index: 1
 
 <div style="display:flex;justify-content:space-around">
 
-![angleIn](./public/pinp/angleIn.png)
+![angleIn](pinp/angleIn.png)
 
-![angleOut](./public/pinp/angleOut.png)
+![angleOut](pinp/angleOut.png)
 
 </div>
 
@@ -76,7 +76,8 @@ index: 1
 
 ### 卷绕数
 
-![卷绕数](./public/pinp/winding.gif)
+![卷绕数](pinp/winding.gif)
+
 *[图片来源](https://www.knowpia.cn/pages/卷绕数)*
 
 卷绕数定义可参考知乎: [卷绕数和高斯-博内定理](https://zhuanlan.zhihu.com/p/148342710)
@@ -93,7 +94,7 @@ index: 1
 
 <div style="text-align:center">
 
-![ray](./public/pinp/ray.png)
+![ray](pinp/ray.png)
 
 </div>
 
@@ -118,7 +119,7 @@ index: 1
 
 <div style="text-align:center">
 
-![triangle](./public/pinp/triangle.png)
+![triangle](apinp/triangle.png)
 
 </div>
 

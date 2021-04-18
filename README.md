@@ -54,8 +54,8 @@ yarn build
 │
 ├── docs # 文档目录
 │   │── .vitepress # 博客配置代码, 含主题等
-│   │── components # vue组件目录
 │   │── public # 静态资源, 如使用到的图片等
+│   │── components # vue组件目录 (任意位置)
 │   │
 │   │── ... # 自定义博客文档结构 (每个目录都需要一个 index.md 文件, 【不要使用前面的文件夹名】)
 │   │
