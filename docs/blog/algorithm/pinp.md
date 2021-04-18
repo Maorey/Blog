@@ -113,13 +113,13 @@ index: 1
 
 你可以在[多边形演示](#多边形演示)这一节亲手试试
 
-### 算法实现 (ts)
+### 算法实现
 
 基于以上理论和计算的方便, 从目标点P水平向左发射一条射线, 计算其与多边形相交次数
 
 <div style="text-align:center">
 
-![triangle](apinp/triangle.png)
+![triangle](pinp/triangle.png)
 
 </div>
 
