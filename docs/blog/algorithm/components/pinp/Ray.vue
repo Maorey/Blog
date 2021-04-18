@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wrap">
-    <i @click="toggle">{{ isPoint ? '请指定点' : '正在绘制多边形' }}(右键切换)</i>
+    <i @click="toggle">{{ isPoint ? '请指定点' : '正在画多边形' }}(右键切换)</i>
     <i @click="clear">重置</i>
     <canvas ref="el" width="320" height="320" />
     <p>
@@ -58,9 +58,9 @@ function pinp({ x: px, y: py }: Point, points: Point[]) {
     }
 
     // 点在边的范围内
-    if ((py >= startY && py <= endY) || (py <= startY && py >= endY)) {
+    if ((py > startY && py <= endY) || (py <= startY && py > endY)) {
       // 边与py射线交点的X坐标
-      const x = startX + ((py - startY) * (endX - startX)) / (endY - startY)
+      const x = startX + ((endX - startX) * (py - startY)) / (endY - startY)
 
       // 点在边上
       if (x === px) {
@@ -68,7 +68,7 @@ function pinp({ x: px, y: py }: Point, points: Point[]) {
       }
 
       // 射线与边相交
-      if (x > px) {
+      if (x < px) {
         odd = !odd
       }
     }

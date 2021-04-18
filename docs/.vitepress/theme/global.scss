@@ -71,6 +71,10 @@ br + br {
   max-width: 100%;
   overflow: auto hidden;
 }
+// 分数线
+.katex .mfrac .frac-line {
+  background: var(--c-text);
+}
 
 .loading {
   position: relative;

@@ -186,7 +186,7 @@ index: 0
 <Menu />
 ```
 
-公式参考链接: [katex](https://katex.org) ~~[asciimath](http://asciimath.org)~~
+公式参考链接: [katex](https://katex.org) ~~[asciimath](http://asciimath.org)~~, [可视化](https://demo.wiris.com/mathtype/en/developers.php#mathml-latex)
 
 [emoji](https://github.com/markdown-it/markdown-it-emoji/blob/master/lib/data/full.json)
 
