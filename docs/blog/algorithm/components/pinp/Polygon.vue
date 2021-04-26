@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.wrap">
     <p>// TODO: 计算射线与多边形相交次数</p>
-    <i @click="toggle">{{ isRay ? '正在画射线' : '正在画多边形' }}(右键切换)</i>
+    <i @click="toggle">{{ isRay ? '正在画射线' : '正在画多边形' }}(右键结束)</i>
     <i @click="clear">重置</i>
     <canvas ref="el" width="320" height="320" />
     <p>
@@ -110,18 +110,18 @@ export default {
 
     let rayEndPoint: Point | undefined
     const polygon: Point[] = []
+    const drawRay = (rayViaPoint: Point) => {
+      drawPolygon(context, polygon)
+      drawPoint(context, rayEndPoint!)
+      cross.value = drawRayAndCrossPoint(context, rayEndPoint!, rayViaPoint, polygon)
+    }
     const onClick = (event: MouseEvent) => {
+      const point = { x: event.pageX - rect.x, y: event.pageY - rect.y }
       if (isRay.value) {
-        if (rayEndPoint) {
-          drawPolygon(context, polygon)
-          rayEndPoint = undefined
-        } else {
-          drawPolygon(context, polygon)
-          rayEndPoint = { x: event.pageX - rect.x, y: event.pageY - rect.y }
-          drawPoint(context, rayEndPoint)
-        }
+        rayEndPoint || (rayEndPoint = point)
+        drawRay(point)
       } else {
-        polygon.push({ x: event.pageX - rect.x, y: event.pageY - rect.y })
+        polygon.push(point)
         drawPolygon(context, polygon)
         polygon.length > 2 &&
           result.value !== false &&
@@ -129,24 +129,13 @@ export default {
       }
     }
     const onMove = (event: MouseEvent) => {
-      if (isRay.value) {
-        if (rayEndPoint) {
-          drawPolygon(context, polygon)
-          drawPoint(context, rayEndPoint)
-          cross.value = drawRayAndCrossPoint(
-            context,
-            rayEndPoint,
-            { x: event.pageX - rect.x, y: event.pageY - rect.y },
-            polygon
-          )
-        }
-      } else {
-        polygon.length &&
+      isRay.value
+        ? rayEndPoint && drawRay({ x: event.pageX - rect.x, y: event.pageY - rect.y })
+        : polygon.length &&
           drawPolygon(
             context,
             polygon.concat({ x: event.pageX - rect.x, y: event.pageY - rect.y })
           )
-      }
     }
     const clear = () => {
       context && clearCanvas(context)

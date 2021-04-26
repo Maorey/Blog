@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wrap">
-    <i @click="toggle">{{ isPoint ? '请指定点' : '正在画多边形' }}(右键切换)</i>
+    <i @click="toggle">{{ isPoint ? '请指定点' : '正在画多边形' }}(右键结束)</i>
     <i @click="clear">重置</i>
     <canvas ref="el" width="320" height="320" />
     <p>
