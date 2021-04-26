@@ -23,14 +23,14 @@ interface Point {
 function clearCanvas(context: CanvasRenderingContext2D) {
   context.clearRect(0, 0, 320, 320)
 }
-function drawPolygon(context: CanvasRenderingContext2D, points: Point[]) {
+function drawPolygon(context: CanvasRenderingContext2D, polygon: Point[]) {
   clearCanvas(context)
 
   context.beginPath()
-  let point = points[0]
+  let point = polygon[0]
   context.moveTo(point.x, point.y)
-  for (let i = 1, len = points.length; i < len; i++) {
-    point = points[i]
+  for (let i = 1, len = polygon.length; i < len; i++) {
+    point = polygon[i]
     context.lineTo(point.x, point.y)
   }
   context.closePath()
@@ -44,13 +44,13 @@ function drawPoint(context: CanvasRenderingContext2D, point: Point) {
   context.fillRect(point.x - 1, point.y - 1, 2, 2)
 }
 
-function pinp({ x: px, y: py }: Point, points: Point[]) {
+function pinp({ x: px, y: py }: Point, polygon: Point[]) {
   let odd = false // py射线与多边形的所有边的相交次数是否为奇数
 
-  // points[i]-points[j] 为多边形的一条边
-  for (let i = points.length, j = 0; i--; j = i) {
-    const { x: startX, y: startY } = points[i]
-    const { x: endX, y: endY } = points[j]
+  // polygon[i]-polygon[j] 为多边形的一条边
+  for (let i = polygon.length, j = 0; i--; j = i) {
+    const { x: startX, y: startY } = polygon[i]
+    const { x: endX, y: endY } = polygon[j]
 
     // 点与边的端点重合
     if ((px === startX && py === startY) || (px === endX && py === endY)) {
@@ -87,45 +87,39 @@ export default {
     let context: CanvasRenderingContext2D
     let rect: DOMRect
 
-    const points: Point[] = []
+    const polygon: Point[] = []
     const onClick = (event: MouseEvent) => {
-      const point = {
-        x: event.pageX - rect.x,
-        y: event.pageY - rect.y,
-      }
+      const point = { x: event.pageX - rect.x, y: event.pageY - rect.y }
       if (isPoint.value) {
-        result.value = pinp(point, points)
-        drawPolygon(context, points)
+        drawPolygon(context, polygon)
         drawPoint(context, point)
+        result.value = pinp(point, polygon)
       } else {
+        polygon.push(point)
+        drawPolygon(context, polygon)
         result.value = null
-        points.push(point)
-        drawPolygon(context, points)
       }
     }
     const onMove = (event: MouseEvent) => {
       !isPoint.value &&
-        points.length &&
+        polygon.length &&
         drawPolygon(
           context,
-          points.concat({
-            x: event.pageX - rect.x,
-            y: event.pageY - rect.y,
-          })
+          polygon.concat({ x: event.pageX - rect.x, y: event.pageY - rect.y })
         )
     }
     const clear = () => {
+      context && clearCanvas(context)
       isPoint.value = false
       result.value = null
-      points.splice(0)
-      context && clearCanvas(context)
+      polygon.splice(0)
     }
     const toggle = () => {
       if (isPoint.value) {
         clear()
-      } else if (points.length > 2) {
+      } else if (polygon.length > 2) {
+        drawPolygon(context, polygon)
         isPoint.value = true
-        drawPolygon(context, points)
       }
     }
     const stop = (event: MouseEvent) => {

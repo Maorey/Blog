@@ -1,14 +1,14 @@
 <template>
   <div :class="$style.wrap">
-    <p>// TODO: 1. 判断多边形凹凸 2. 计算线段与多边形相交次数 3. 凹多边形分解为凸多边形</p>
-    <i @click="toggle">{{ isLine ? '正在画线' : '正在画多边形' }}(右键切换)</i>
+    <p>// TODO: 计算射线与多边形相交次数</p>
+    <i @click="toggle">{{ isRay ? '正在画射线' : '正在画多边形' }}(右键切换)</i>
     <i @click="clear">重置</i>
     <canvas ref="el" width="320" height="320" />
     <p>
       计算结果: 你画的是<b
         :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`"
         >{{ result ? '凸多边形' : result === false ? '凹多边形' : '--' }}</b
-      >; 线与多边形相交<b>{{ cross }}次</b>
+      >; 射线与多边形相交<b>{{ cross }}次</b>
     </p>
   </div>
 </template>
@@ -21,17 +21,19 @@ interface Point {
   y: number
 }
 
+const SIZE = 320
+
 function clearCanvas(context: CanvasRenderingContext2D) {
-  context.clearRect(0, 0, 320, 320)
+  context.clearRect(0, 0, SIZE, SIZE)
 }
-function drawPolygon(context: CanvasRenderingContext2D, points: Point[]) {
+function drawPolygon(context: CanvasRenderingContext2D, polygon: Point[]) {
   clearCanvas(context)
 
   context.beginPath()
-  let point = points[0]
+  let point = polygon[0]
   context.moveTo(point.x, point.y)
-  for (let i = 1, len = points.length; i < len; i++) {
-    point = points[i]
+  for (let i = 1, len = polygon.length; i < len; i++) {
+    point = polygon[i]
     context.lineTo(point.x, point.y)
   }
   context.closePath()
@@ -44,44 +46,61 @@ function drawPoint(context: CanvasRenderingContext2D, point: Point) {
   context.fillStyle = 'red'
   context.fillRect(point.x - 1, point.y - 1, 2, 2)
 }
-
-function pinp({ x: px, y: py }: Point, points: Point[]) {
-  let odd = false // py射线与多边形的所有边的相交次数是否为奇数
-
-  // points[i]-points[j] 为多边形的一条边
-  for (let i = points.length, j = 0; i--; j = i) {
-    const { x: startX, y: startY } = points[i]
-    const { x: endX, y: endY } = points[j]
-
-    // 点与边的端点重合
-    if ((px === startX && py === startY) || (px === endX && py === endY)) {
-      return true
+function drawRayAndCrossPoint(
+  context: CanvasRenderingContext2D,
+  rayEndPoint: Point,
+  rayViaPoint: Point,
+  polygon: Point[]
+) {
+  const { x: ex, y: ey } = rayEndPoint
+  const dy = rayViaPoint.y - ey
+  const dx = rayViaPoint.x - ex
+  const k = dy / dx
+  const c = ey - k * ex
+  let y = dy > 0 ? SIZE : 0
+  let x = (y - c) / k
+  if (dx > 0) {
+    if (x > SIZE) {
+      // 与右边界相交
+      x = SIZE
+      y = k * x + c
     }
+  } else if (x < 0) {
+    // 与左边界相交
+    x = 0
+    y = c
+  }
+  context.beginPath()
+  context.moveTo(ex, ey)
+  context.lineTo(x, y)
+  context.closePath()
+  context.strokeStyle = 'green'
+  context.stroke()
 
-    // 点在边的范围内
-    if ((py > startY && py <= endY) || (py <= startY && py > endY)) {
-      // 边与py射线交点的X坐标
-      const x = startX + ((py - startY) * (endX - startX)) / (endY - startY)
+  return 0
+}
 
-      // 点在边上
-      if (x === px) {
-        return true
-      }
-
-      // 射线与边相交
-      if (x > px) {
-        odd = !odd
-      }
+function isConvex(polygon: Point[]) {
+  // see: https://en.wikipedia.org/wiki/Graham_scan
+  for (let i = polygon.length, j = 0, k = 1, lastTurn = null; i--; k = j, j = i) {
+    const p1 = polygon[i]
+    const p2 = polygon[j]
+    const p3 = polygon[k]
+    const turn = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) >= 0
+    if (lastTurn === null) {
+      lastTurn = turn
+    } else if (turn !== lastTurn) {
+      return false
     }
   }
 
-  return odd
+  return true
 }
 
 export default {
   setup() {
     const el = ref<HTMLCanvasElement>()
-    const isLine = ref<boolean>()
+    const isRay = ref<boolean>()
     const result = ref<boolean | null>()
     const cross = ref(0)
 
@@ -89,46 +108,65 @@ export default {
     let context: CanvasRenderingContext2D
     let rect: DOMRect
 
-    const points: Point[] = []
+    let rayEndPoint: Point | undefined
+    const polygon: Point[] = []
     const onClick = (event: MouseEvent) => {
-      const point = {
-        x: event.pageX - rect.x,
-        y: event.pageY - rect.y,
-      }
-      if (isLine.value) {
-        result.value = pinp(point, points)
-        drawPolygon(context, points)
-        drawPoint(context, point)
+      if (isRay.value) {
+        if (rayEndPoint) {
+          drawPolygon(context, polygon)
+          rayEndPoint = undefined
+        } else {
+          drawPolygon(context, polygon)
+          rayEndPoint = { x: event.pageX - rect.x, y: event.pageY - rect.y }
+          drawPoint(context, rayEndPoint)
+        }
       } else {
-        result.value = null
-        points.push(point)
-        drawPolygon(context, points)
+        polygon.push({ x: event.pageX - rect.x, y: event.pageY - rect.y })
+        drawPolygon(context, polygon)
+        polygon.length > 2 &&
+          result.value !== false &&
+          (result.value = isConvex(polygon))
       }
     }
     const onMove = (event: MouseEvent) => {
-      !isLine.value &&
-        points.length &&
-        drawPolygon(
-          context,
-          points.concat({
-            x: event.pageX - rect.x,
-            y: event.pageY - rect.y,
-          })
-        )
+      if (isRay.value) {
+        if (rayEndPoint) {
+          drawPolygon(context, polygon)
+          drawPoint(context, rayEndPoint)
+          cross.value = drawRayAndCrossPoint(
+            context,
+            rayEndPoint,
+            { x: event.pageX - rect.x, y: event.pageY - rect.y },
+            polygon
+          )
+        }
+      } else {
+        polygon.length &&
+          drawPolygon(
+            context,
+            polygon.concat({ x: event.pageX - rect.x, y: event.pageY - rect.y })
+          )
+      }
     }
     const clear = () => {
-      isLine.value = false
+      context && clearCanvas(context)
+      isRay.value = false
       result.value = null
       cross.value = 0
-      points.splice(0)
-      context && clearCanvas(context)
+      rayEndPoint = undefined
+      polygon.splice(0)
     }
     const toggle = () => {
-      if (isLine.value) {
-        clear()
-      } else if (points.length > 2) {
-        isLine.value = true
-        drawPolygon(context, points)
+      if (isRay.value) {
+        if (rayEndPoint) {
+          drawPolygon(context, polygon)
+          rayEndPoint = undefined
+        } else {
+          clear()
+        }
+      } else if (polygon.length > 2) {
+        drawPolygon(context, polygon)
+        isRay.value = true
       }
     }
     const stop = (event: MouseEvent) => {
@@ -160,7 +198,7 @@ export default {
     watchEffect(init)
     onUnmounted(off)
 
-    return { el, isLine, result, cross, toggle, clear }
+    return { el, isRay, result, cross, toggle, clear }
   },
 }
 </script>

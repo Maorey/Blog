@@ -1,11 +1,13 @@
 ---
-title: 点在面内
+title: 点是否在多边形内
 index: 1
 ---
 
 ## 问题描述
 
+::: warning 求点是否在多边形内
 平面上有一个任意多边形, 指定任意平面点, 求该点是否在该多边形内
+:::
 
 ## 演示
 
@@ -42,6 +44,8 @@ index: 1
 
 <Polygon />
 
+*凹多边形分解为凸多边形下次吧, 诶嘿嘿(*^▽^*)~*
+
 ## 方法介绍
 
 ### 面积和
@@ -70,9 +74,9 @@ index: 1
 
 </div>
 
-优化: 若点在凸多边形内, 则点与凸多边形每个顶点及其所在边组成的夹角均为劣角
-
 对于凹多边形, 需要先分解为若干个凸多边形, 若点在任意凸多边形内, 则点在该凹多边形内
+
+优化: 若点在凸多边形内, 则点与凸多边形每个顶点及其所在边组成的夹角均为劣角
 
 ### 卷绕数
 
@@ -136,13 +140,13 @@ $$
 $$
 
 ```ts
-function pinp({ x: px, y: py }: Point, points: Point[]) {
+function pinp({ x: px, y: py }: Point, polygon: Point[]) {
   let odd = false // py射线与多边形的所有边的相交次数是否为奇数
 
-  // points[i]-points[j] 为多边形的一条边
-  for (let i = points.length, j = 0; i--; j = i) {
-    const { x: startX, y: startY } = points[i]
-    const { x: endX, y: endY } = points[j]
+  // polygon[i]-polygon[j] 为多边形的一条边
+  for (let i = polygon.length, j = 0; i--; j = i) {
+    const { x: startX, y: startY } = polygon[i]
+    const { x: endX, y: endY } = polygon[j]
 
     // 点与边的端点重合
     if ((px === startX && py === startY) || (px === endX && py === endY)) {
