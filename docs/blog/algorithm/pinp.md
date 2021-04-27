@@ -46,6 +46,28 @@ index: 1
 
 *凹多边形分解为凸多边形下次吧, 诶嘿嘿(*^▽^*)~*
 
+这里使用[扫描线](https://en.wikipedia.org/wiki/Graham_scan)法来判断多边形的凹凸, 即:
+
+若多边形的边始终朝一个方向旋转则是**凸多边形**, 代码如下:
+
+```ts
+function isConvex(polygon: Point[]) {
+  for (let i = polygon.length, j = 0, k = 1, lastTurn = null; i--; k = j, j = i) {
+    const p1 = polygon[i]
+    const p2 = polygon[j]
+    const p3 = polygon[k]
+    const turn = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) >= 0
+    if (lastTurn === null) {
+      lastTurn = turn
+    } else if (turn !== lastTurn) {
+      return false
+    }
+  }
+
+  return true
+}
+```
+
 ## 方法介绍
 
 ### 面积和

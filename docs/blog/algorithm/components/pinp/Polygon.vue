@@ -8,7 +8,7 @@
       计算结果: 你画的是<b
         :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`"
         >{{ result ? '凸多边形' : result === false ? '凹多边形' : '--' }}</b
-      >; 射线与多边形相交<b>{{ cross }}次</b>
+      >; 射线与多边形相交<b>{{ cross }}</b>次
     </p>
   </div>
 </template>
