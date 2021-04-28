@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.wrap">
     <i @click="toggle">{{ isPoint ? '请指定点' : '正在画多边形' }}(右键结束)</i>
-    <i @click="clear">重置</i>
+    <i @click="clear">重置(不能操作点我)</i>
     <canvas ref="el" width="320" height="320" />
     <p>
       计算结果:
@@ -41,7 +41,7 @@ function drawPolygon(context: CanvasRenderingContext2D, polygon: Point[]) {
 }
 function drawPoint(context: CanvasRenderingContext2D, point: Point) {
   context.fillStyle = 'red'
-  context.fillRect(point.x - 1, point.y - 1, 2, 2)
+  context.fillRect(point.x - 2, point.y - 2, 4, 4)
 }
 
 function pinp({ x: px, y: py }: Point, polygon: Point[]) {
@@ -158,20 +158,18 @@ export default {
 
 <style lang="scss" module>
 .wrap {
-  :global {
-    i {
-      margin-right: 10px;
-      cursor: pointer;
-    }
+  i {
+    margin-right: 10px;
+    cursor: pointer;
+  }
 
-    canvas {
-      display: block;
-      width: 320px;
-      height: 320px;
-      margin-top: 10px;
-      border: 1px solid var(--c-brand);
-      cursor: crosshair;
-    }
+  canvas {
+    display: block;
+    width: 320px;
+    height: 320px;
+    margin-top: 10px;
+    border: 1px solid var(--c-brand);
+    cursor: crosshair;
   }
 }
 </style>

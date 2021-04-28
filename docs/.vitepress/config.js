@@ -66,9 +66,9 @@ module.exports = {
       //   },
       // })
 
-      md.use(require('./markdown/markdown-it-plugin-mermaid'))
-      md.use(require('./markdown/markdown-it-plugin-echarts'))
-      md.use(require('./markdown/markdown-it-plugin-flowchart'))
+      md.use(require('./markdown/markdown-it-mermaid'))
+      md.use(require('./markdown/markdown-it-echarts'))
+      md.use(require('./markdown/markdown-it-flowchart'))
 
       const REG_MATH_MUSTACHE_TAG = /<span class="katex">/g
       const replacer = '<span v-pre class="katex">'

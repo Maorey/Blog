@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@vssue/api-github-v3": "^1.4.7",
-    "echarts": "^5.1.0",
+    "echarts": "^5.1.1",
     "flowchart.js": "^1.15.0",
     "lozad": "^1.16.0",
     "markdown-it-abbr": "^1.0.4",
@@ -39,7 +39,7 @@
     "sass": "^1.32.11",
     "t-rex-runner": "^1.0.6",
     "typescript": "^4.2.4",
-    "vitepress": "^0.13.1",
+    "vitepress": "^0.13.2",
     "vssue": "^1.4.8",
     "vue": "^3.0.11"
   },

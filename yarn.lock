@@ -868,10 +868,10 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-echarts@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/echarts/-/echarts-5.1.0.tgz#768cc585aa092560f48f01b2d52de493aeecd2b0"
-  integrity sha512-/X2nnN5BXW2tuA/Hv9YY279rDfwcXaBAjK9Azi//llshbKyUXXxBknsug21GJRpwTmLZbE8rjjbhchdm01bZtw==
+echarts@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/echarts/-/echarts-5.1.1.tgz#b186f162f017c555cfd67b12ede6762bdc3ddfda"
+  integrity sha512-b3nP8M9XwZM2jISuA+fP0EuJv8lcfgWrinel185Npy8bE/UhXTDIPJcqgQOCWdvk0c5CeT6Dsm1xBjmJXAGlxQ==
   dependencies:
     tslib "2.0.3"
     zrender "5.1.0"
@@ -1928,10 +1928,10 @@ vite@^2.0.5, vite@^2.2.3:
   optionalDependencies:
     fsevents "~2.3.1"
 
-vitepress@^0.13.1:
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/vitepress/-/vitepress-0.13.1.tgz#30d34b57a2d2222d8f339a856948ea1ae1f81ac9"
-  integrity sha512-RuvHueWP4oeMJAPuu7l4Q53H27d2z/aouygBv5ynrE6E34Kfij6d1sGS/+gWgnwEkYE9Srd7Y1w4+eZmhAtZKQ==
+vitepress@^0.13.2:
+  version "0.13.2"
+  resolved "https://registry.yarnpkg.com/vitepress/-/vitepress-0.13.2.tgz#f4bc7d11844172fb2e2fedb42945f84e1b60b207"
+  integrity sha512-Y5gN7QAXh2Dd3+e59FWnLuszudg7sO/0//9qUKg84cAX/cZrjvhUgxcAh8MqfCFw8K5m2/0D445FzuwBcqHQLw==
   dependencies:
     "@docsearch/css" "^1.0.0-alpha.28"
     "@docsearch/js" "^1.0.0-alpha.28"

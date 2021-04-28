@@ -1,14 +1,16 @@
 <template>
   <div :class="$style.wrap">
-    <p>// TODO: 计算射线与多边形相交次数</p>
+    <br />
     <i @click="toggle">{{ isRay ? '正在画射线' : '正在画多边形' }}(右键结束)</i>
-    <i @click="clear">重置</i>
+    <i @click="clear">重置(不能操作点我)</i>
     <canvas ref="el" width="320" height="320" />
     <p>
-      计算结果: 你画的是<b
-        :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`"
-        >{{ result ? '凸多边形' : result === false ? '凹多边形' : '--' }}</b
-      >; 射线与多边形相交<b>{{ cross }}</b>次
+      计算结果: 你画的是
+      <b :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`">{{
+        result ? '凸多边形' : result === false ? '凹多边形' : '--'
+      }}</b>
+      ; 射线与多边形相交
+      <b :style="`color: ${cross % 2 ? 'green' : 'red'}`">{{ cross }}</b> 次
     </p>
   </div>
 </template>
@@ -44,7 +46,7 @@ function drawPolygon(context: CanvasRenderingContext2D, polygon: Point[]) {
 }
 function drawPoint(context: CanvasRenderingContext2D, point: Point) {
   context.fillStyle = 'red'
-  context.fillRect(point.x - 1, point.y - 1, 2, 2)
+  context.fillRect(point.x - 2, point.y - 2, 4, 4)
 }
 function drawRayAndCrossPoint(
   context: CanvasRenderingContext2D,
@@ -52,11 +54,11 @@ function drawRayAndCrossPoint(
   rayViaPoint: Point,
   polygon: Point[]
 ) {
-  const { x: ex, y: ey } = rayEndPoint
-  const dy = rayViaPoint.y - ey
-  const dx = rayViaPoint.x - ex
+  const { x: rayEndX, y: rayEndY } = rayEndPoint
+  const dy = rayViaPoint.y - rayEndY
+  const dx = rayViaPoint.x - rayEndX
   const k = dy / dx
-  const c = ey - k * ex
+  const c = rayEndY - k * rayEndX
   let y = dy > 0 ? SIZE : 0
   let x = (y - c) / k
   if (dx > 0) {
@@ -71,13 +73,35 @@ function drawRayAndCrossPoint(
     y = c
   }
   context.beginPath()
-  context.moveTo(ex, ey)
+  context.moveTo(rayEndX, rayEndY)
   context.lineTo(x, y)
   context.closePath()
   context.strokeStyle = 'green'
   context.stroke()
 
-  return 0
+  let cross = 0
+  for (let i = polygon.length, j = 0; i--; j = i) {
+    const { x: startX, y: startY } = polygon[i]
+    const { x: endX, y: endY } = polygon[j]
+
+    const kP = (endY - startY) / (endX - startX)
+    const cP = startY - kP * startX
+
+    const crossX = (cP - c) / (k - kP)
+    const crossY = k * crossX + c
+
+    if (
+      ((crossX > startX && crossX < endX) || (crossX > endX && crossX < startX)) &&
+      ((crossY > startY && crossY < endY) || (crossY > endY && crossY < startY)) &&
+      ((crossX > rayEndX && crossX < x) || (crossX > x && crossX < rayEndX)) &&
+      ((crossY > rayEndY && crossY < y) || (crossY > y && crossY < rayEndY))
+    ) {
+      drawPoint(context, { x: crossX, y: crossY })
+      cross++
+    }
+  }
+
+  return cross
 }
 
 function isConvex(polygon: Point[]) {
@@ -129,13 +153,19 @@ export default {
       }
     }
     const onMove = (event: MouseEvent) => {
-      isRay.value
-        ? rayEndPoint && drawRay({ x: event.pageX - rect.x, y: event.pageY - rect.y })
-        : polygon.length &&
-          drawPolygon(
-            context,
-            polygon.concat({ x: event.pageX - rect.x, y: event.pageY - rect.y })
-          )
+      if (isRay.value) {
+        rayEndPoint && drawRay({ x: event.pageX - rect.x, y: event.pageY - rect.y })
+      } else {
+        const length = polygon.length
+        if (length) {
+          const tempPolygon = polygon.concat({
+            x: event.pageX - rect.x,
+            y: event.pageY - rect.y,
+          })
+          drawPolygon(context, tempPolygon)
+          length > 1 && (result.value = isConvex(tempPolygon))
+        }
+      }
     }
     const clear = () => {
       context && clearCanvas(context)
@@ -194,20 +224,18 @@ export default {
 
 <style lang="scss" module>
 .wrap {
-  :global {
-    i {
-      margin-right: 10px;
-      cursor: pointer;
-    }
+  i {
+    margin-right: 10px;
+    cursor: pointer;
+  }
 
-    canvas {
-      display: block;
-      width: 320px;
-      height: 320px;
-      margin-top: 10px;
-      border: 1px solid var(--c-brand);
-      cursor: crosshair;
-    }
+  canvas {
+    display: block;
+    width: 320px;
+    height: 320px;
+    margin-top: 10px;
+    border: 1px solid var(--c-brand);
+    cursor: crosshair;
   }
 }
 </style>

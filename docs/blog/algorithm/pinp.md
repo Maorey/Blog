@@ -44,8 +44,6 @@ index: 1
 
 <Polygon />
 
-*凹多边形分解为凸多边形下次吧, 诶嘿嘿(*^▽^*)~*
-
 这里使用[扫描线](https://en.wikipedia.org/wiki/Graham_scan)法来判断多边形的凹凸, 即:
 
 若多边形的边始终朝一个方向旋转则是**凸多边形**, 代码如下:
@@ -67,6 +65,8 @@ function isConvex(polygon: Point[]) {
   return true
 }
 ```
+
+*凹多边形分解为凸多边形就下次吧, 诶嘿嘿* `(*^▽^*)~`
 
 ## 方法介绍
 
