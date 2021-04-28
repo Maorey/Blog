@@ -55,13 +55,14 @@ function drawRayAndCrossPoint(
   polygon: Point[]
 ) {
   const { x: rayEndX, y: rayEndY } = rayEndPoint
-  const dy = rayViaPoint.y - rayEndY
-  const dx = rayViaPoint.x - rayEndX
-  const k = dy / dx
+
+  const k = (rayViaPoint.y - rayEndY) / (rayViaPoint.x - rayEndX)
   const c = rayEndY - k * rayEndX
-  let y = dy > 0 ? SIZE : 0
+
+  let y = rayViaPoint.y > rayEndY ? SIZE : 0
   let x = (y - c) / k
-  if (dx > 0) {
+
+  if (rayViaPoint.x > rayEndX) {
     if (x > SIZE) {
       // 与右边界相交
       x = SIZE
@@ -72,6 +73,7 @@ function drawRayAndCrossPoint(
     x = 0
     y = c
   }
+
   context.beginPath()
   context.moveTo(rayEndX, rayEndY)
   context.lineTo(x, y)
