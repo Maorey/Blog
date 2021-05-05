@@ -68,20 +68,120 @@ yarn build
 
 ## 支持markdown语法
 
-插件列表如下
+插件列表如下 (`=>`表示生成结果)
 
 - [markdown-it-sub](https://github.com/markdown-it/markdown-it-sub)
+
+  ```md
+  功能: 下标
+  标记: ~内容~
+  示例: H~2~0 => H<sub>2</sub>O
+  ```
+
 - [markdown-it-sup](https://github.com/markdown-it/markdown-it-sup)
+
+  ```md
+  功能: 上标
+  标记: ^内容^
+  示例: 29^th^ => 29<sup>th</sup>
+  ```
+
 - [markdown-it-ins](https://github.com/markdown-it/markdown-it-ins)
+
+  ```md
+  功能: 插入 (删除: ~~内容~~)
+  标记: ++内容++
+  示例: ++inserted++ => <ins>inserted</ins>
+  ```
+
 - [markdown-it-abbr](https://github.com/markdown-it/markdown-it-abbr)
+
+  ```md
+  功能: 缩写
+  标记: *[缩写]: 全称
+  示例:
+    *[HTML]: Hyper Text Markup Language
+    *[W3C]:  World Wide Web Consortium
+    The HTML specification is maintained by the W3C.
+
+    =>
+
+  The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.
+  ```
+
 - [markdown-it-mark](https://github.com/markdown-it/markdown-it-mark)
-- [markdown-it-katex](https://github.com/waylonflinn/markdown-it-katex)
-- [markdown-it-latex](https://github.com/tylingsoft/markdown-it-latex)
+
+  ```md
+  功能: 标记 (默认加黄色背景)
+  标记: ==内容==
+  示例: ==marked== => <mark>inserted</mark>
+  ```
+
+- [markdown-it-katex](https://github.com/waylonflinn/markdown-it-katex) 数学公式标记语法
+
+- [markdown-it-latex](https://github.com/tylingsoft/markdown-it-latex) 数学公式标记语法
+
 - [markdown-it-deflist](https://github.com/markdown-it/markdown-it-deflist)
+
+  ```md
+  功能: 定义列表 (<dl>)
+  标记:
+  项目 (<dt>)
+  : 描述 (<dd>)
+  示例: 见 https://pandoc.org/MANUAL.html#definition-lists
+  ```
+
 - [markdown-it-footnote](https://github.com/markdown-it/markdown-it-footnote)
-- [markdown-it-img-lazy](https://github.com/tolking/markdown-it-img-lazy)
+
+  ```md
+  功能: 脚注
+  标记: [^1] 内容 [^1]: 脚注
+  示例:
+  Here is a footnote reference,[^1] and another.[^longnote]
+
+  [^1]: Here is the footnote.
+
+  [^longnote]: Here's one with multiple blocks.
+
+  Subsequent paragraphs are indented to show that they
+belong to the previous footnote.
+
+  =>
+
+  Here is a footnote reference,<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup> and another.<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>
+  <hr class="footnotes-sep">
+  <section class="footnotes">
+    <ol class="footnotes-list">
+      <li id="fn1" class="footnote-item"><p>Here is the footnote. <a href="#fnref1" class="footnote-backref">↩</a></p>
+      </li>
+      <li id="fn2" class="footnote-item"><p>Here’s one with multiple blocks.</p>
+      <p>Subsequent paragraphs are indented to show that they
+      belong to the previous footnote. <a href="#fnref2" class="footnote-backref">↩</a></p>
+      </li>
+    </ol>
+  </section>
+  ```
+
+- [markdown-it-img-lazy](https://github.com/tolking/markdown-it-img-lazy) 懒加载图片, 相同位置文件名前加`_o_`用于点击浏览大图(都可以浏览大图)
+
 - [markdown-it-task-lists](https://github.com/revin/markdown-it-task-lists)
-- ~~[markdown-it-link-attributes](https://github.com/crookedneighbor/markdown-it-link-attributes)~~
+
+  ```md
+  功能: 任务列表
+  标记: 列表项(-/1.): [ ] todo [x] done
+  示例:
+  - [ ] todo
+  - [x] done
+
+  =>
+
+  <ul class="contains-task-list"><li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"> todo</li><li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"> done</li></ul>
+  ```
+
+- [markdown-it-html5-media](https://github.com/eloquence/markdown-it-html5-media) 使用图片标记`![描述](链接)`, 以链接后缀区分媒体类型
+
+- ~~[markdown-it-link-attributes](https://github.com/crookedneighbor/markdown-it-link-attributes) 链接属性~~
+
 - markdown-it-plugin-[echarts](https://github.com/apache/incubator-echarts):
   **使用`eval`获取图表配置对象**(即: 可以写js)
 
@@ -107,6 +207,17 @@ yarn build
   }
   ```
 
+- markdown-it-plugin-[mermaid](https://github.com/mermaid-js/mermaid):
+
+
+  ```mermaid
+  graph TD
+  A[Hard] -->|Text| B(Round)
+  B --> C{Decision}
+  C -->|One| D[Result 1]
+  C -->|Two| E[Result 2]
+  ```
+
 - markdown-it-plugin-[flowchart](https://github.com/adrai/flowchart.js):
 
   ```flowchart
@@ -124,17 +235,6 @@ yarn build
   cond(no)->para
   para(path1, bottom)->sub1(right)->op1
   para(path2, top)->op1
-  ```
-
-- markdown-it-plugin-[mermaid](https://github.com/mermaid-js/mermaid):
-
-
-  ```mermaid
-  graph TD
-  A[Hard] -->|Text| B(Round)
-  B --> C{Decision}
-  C -->|One| D[Result 1]
-  C -->|Two| E[Result 2]
   ```
 
 - [使用Vue组件](https://vitepress.vuejs.org/guide/using-vue.html)
@@ -194,11 +294,11 @@ index: 0
 
 ## TODO
 
-- markdown 插件:
-  - 字体图标(含SVG Symbol)
-  - 图片查看/媒体播放
-  - 待定
-- 标签/归档
-- 换肤/背景
-- UI
-- bug: 代码高亮行错位
+- [ ] markdown 插件:
+  - [ ] 字体图标(含SVG Symbol)
+  - [x] 图片查看/媒体播放
+  - [ ] 待定
+- [ ] 标签/归档
+- [ ] 换肤/背景
+- [ ] UI
+- [ ] bug: 代码高亮行错位

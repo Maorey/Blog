@@ -3,6 +3,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { onMounted, watchEffect } from 'vue'
 import { VssueAPI } from 'vssue'
 import { usePageData } from 'vitepress'

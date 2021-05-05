@@ -9,13 +9,17 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { nextTick, onMounted, onUnmounted, watch } from 'vue'
 import { useSiteData, usePageData, inBrowser } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import lozad from 'lozad'
+
+import Layout = DefaultTheme.Layout
 import Comment from './components/Comment.vue'
 
-import 'markdown-it-latex/dist/index.css'
+let siteData
+let pageData
 
 function resolveRootPathByLang(locales, lang) {
   for (let rootPath in locales) {
@@ -39,7 +43,6 @@ function resolveSidebarData(sidebarDatas, relativePath) {
     }
   }
 }
-
 function getTitle(
   { lang, locales, themeConfig: { locales: themeLocales } },
   relativePath
@@ -70,20 +73,25 @@ function getTitle(
 
   return title || relativePath
 }
-
-function getDom(query) {
-  return document.querySelectorAll(query)
+function setTitle() {
+  const page = pageData.value
+  page.title ||
+    (page.title = getTitle(
+      (siteData || (siteData = useSiteData())).value,
+      page.relativePath.replace(/(?:(\/)index)?\.md$/, '$1')
+    ))
 }
 
-let siteData
-let pageData
-let resizeECharts
-const REG_MD = /(?:(\/)index)?\.md$/
-const lazyLoadImgs =
+const getContentDom = query => document.querySelectorAll('.content ' + (query || ''))
+
+const lazyLoadImages =
   'undefined' !== typeof HTMLImageElement && 'loading' in HTMLImageElement.prototype
     ? () => {
         for (
-          let i = 0, lazyImgs = getDom('.lazy'), len = lazyImgs.length, element;
+          let i = 0,
+            lazyImgs = getContentDom('.lazy'),
+            len = lazyImgs.length,
+            element;
           i < len;
           i++
         ) {
@@ -95,33 +103,48 @@ const lazyLoadImgs =
     : () => {
         lozad('.lazy').observe()
       }
-function querySelector(dom, selector) {
-  return dom.querySelector(selector)
-}
-function reLayout() {
-  // I know it's sucks
-  const page = querySelector(document, '.page')
-  const container = page && querySelector(page, '.container')
-  if (container) {
-    let element = querySelector(container, '#c') || querySelector(container, '.vssue')
-    element && page.appendChild(element)
 
-    element = querySelector(container, '.foot')
-    element && page.appendChild(element)
+let imageViewer
+function initImageViewer() {
+  const imgs = getContentDom('img')
+  let i = imgs.length
+  if (i) {
+    import('viewerjs/dist/viewer.min.css')
+    const promises = [import('viewerjs/dist/viewer.esm')]
+    const attribute = 'data-o'
+
+    const reg = /(.*\/)/
+    const replaceStr = '$1_o_'
+    const fetchOptions = { method: 'HEAD' }
+    while (i--) {
+      const img = imgs[i]
+      if (!img.getAttribute(attribute)) {
+        const originalSrc = img.src.replace(reg, replaceStr)
+        promises.push(
+          fetch(originalSrc, fetchOptions)
+            .then(res => {
+              res.ok && img.setAttribute(attribute, originalSrc)
+            })
+            .catch()
+        )
+      }
+    }
+
+    Promise.all(promises).then(([viewer]) => {
+      if (imageViewer) {
+        imageViewer.update()
+      } else {
+        imageViewer = new (viewer.default || viewer)(getContentDom()[0], {
+          url: img => img.getAttribute(attribute) || img.src,
+        })
+      }
+    })
   }
 }
-function initPage() {
-  const page = pageData.value
 
-  page.title ||
-    (page.title = getTitle(
-      (siteData || (siteData = useSiteData())).value,
-      page.relativePath.replace(REG_MD, '$1')
-    ))
-
-  lazyLoadImgs()
-
-  const echartsBlocks = getDom('.echarts')
+let resizeECharts
+function initEcharts() {
+  const echartsBlocks = getContentDom('.echarts')
   echartsBlocks &&
     echartsBlocks.length &&
     import('echarts').then(echarts => {
@@ -143,7 +166,7 @@ function initPage() {
         resizeECharts = () => {
           for (
             let i = 0,
-              blocks = getDom('[_echarts_instance_]'),
+              blocks = getContentDom('[_echarts_instance_]'),
               len = blocks.length,
               chart;
             i < len;
@@ -157,8 +180,10 @@ function initPage() {
         window.addEventListener('resize', resizeECharts)
       }
     })
+}
 
-  const flowchartBlocks = getDom('.flowchart')
+function initFlowchart() {
+  const flowchartBlocks = getContentDom('.flowchart')
   flowchartBlocks &&
     flowchartBlocks.length &&
     import('./libs/flowchart.min').then(flowchart => {
@@ -177,8 +202,10 @@ function initPage() {
         }
       }
     })
+}
 
-  const mermaidBlocks = getDom('.mermaid')
+function initMermaid() {
+  const mermaidBlocks = getContentDom('.mermaid')
   mermaidBlocks &&
     mermaidBlocks.length &&
     import('./libs/mermaid.min').then(mermaid => {
@@ -190,20 +217,45 @@ function initPage() {
 
       mermaid.init(undefined, mermaidBlocks)
     })
+}
+
+const querySelector = (dom, selector) => dom && dom.querySelector(selector)
+function reLayout() {
+  // I know it's sucks
+  const page = querySelector(document, '.page')
+  const container = page && querySelector(page, '.container')
+  if (container) {
+    let element = querySelector(container, '#c') || querySelector(container, '.vssue')
+    element && page.appendChild(element)
+
+    element = querySelector(container, '.foot')
+    element && page.appendChild(element)
+  }
+}
+
+function initPage() {
+  setTitle()
+
+  lazyLoadImages()
+
+  setTimeout(initImageViewer, 99) // 让请求往后排
+  initEcharts()
+  initFlowchart()
+  initMermaid()
 
   inBrowser && reLayout()
 }
 
+/** 【只有一个实例】 */
 export default {
-  components: {
-    Layout: DefaultTheme.Layout,
-    Comment,
-  },
+  components: { Layout, Comment },
   setup() {
     onMounted(initPage)
-
     onUnmounted(() => {
+      imageViewer && imageViewer.destroy()
       window.removeEventListener('resize', resizeECharts)
+
+      imageViewer = resizeECharts = pageData = siteData = null
     })
 
     watch(pageData || (pageData = usePageData()), () => {

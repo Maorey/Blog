@@ -20,6 +20,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck
 import { useSiteData } from 'vitepress'
 
 const REG_TRIM_END = /\/index\.html$/

@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.wrap">
-    <i @click="toggle">{{ isPoint ? '请指定点' : '正在画多边形' }}(右键结束)</i>
+    <i @click="toggle">{{ isPoint ? '请指定点' : '正在画多边形' }}(点我/右键结束)</i>
     <i @click="clear">重置(不能操作点我)</i>
     <canvas ref="el" width="320" height="320" />
     <p>
@@ -96,7 +96,7 @@ export default {
         result.value = pinp(point, polygon)
       } else {
         polygon.push(point)
-        drawPolygon(context, polygon)
+        polygon.length < 2 ? drawPoint(context, point) : drawPolygon(context, polygon)
         result.value = null
       }
     }

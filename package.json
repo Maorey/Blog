@@ -27,6 +27,7 @@
     "markdown-it-abbr": "^1.0.4",
     "markdown-it-deflist": "^2.1.0",
     "markdown-it-footnote": "^3.0.2",
+    "markdown-it-html5-media": "^0.7.0",
     "markdown-it-img-lazy": "^1.0.2",
     "markdown-it-ins": "^3.0.1",
     "markdown-it-katex": "^2.0.3",
@@ -36,9 +37,10 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-task-lists": "^2.1.1",
     "mermaid": "^8.9.3",
-    "sass": "^1.32.11",
+    "sass": "^1.32.12",
     "t-rex-runner": "^1.0.6",
     "typescript": "^4.2.4",
+    "viewerjs": "^1.9.0",
     "vitepress": "^0.13.2",
     "vssue": "^1.4.8",
     "vue": "^3.0.11"
@@ -52,12 +54,12 @@
     "axios": "^0.21.1",
     "commander": "^7.2.0",
     "debug": "^4.3.1",
-    "katex": "^0.13.3",
+    "katex": "^0.13.5",
     "lru-cache": "^6.0.0",
     "markdown-it": "^12.0.6",
     "postcss": "^8.2.13",
     "safe-buffer": "^5.2.1",
-    "vite": "^2.2.3",
+    "vite": "^2.2.4",
     "vue": "^3.0.11"
   }
 }

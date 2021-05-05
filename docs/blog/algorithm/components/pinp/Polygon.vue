@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.wrap">
     <br />
-    <i @click="toggle">{{ isRay ? '正在画射线' : '正在画多边形' }}(右键结束)</i>
+    <i @click="toggle">{{ isRay ? '正在画射线' : '正在画多边形' }}(点我/右键结束)</i>
     <i @click="clear">重置(不能操作点我)</i>
     <canvas ref="el" width="320" height="320" />
     <p>
@@ -148,10 +148,13 @@ export default {
         drawRay(point)
       } else {
         polygon.push(point)
-        drawPolygon(context, polygon)
-        polygon.length > 2 &&
-          result.value !== false &&
-          (result.value = isConvex(polygon))
+        const length = polygon.length
+        if (length < 2) {
+          drawPoint(context, point)
+        } else {
+          drawPolygon(context, polygon)
+          length > 2 && result.value !== false && (result.value = isConvex(polygon))
+        }
       }
     }
     const onMove = (event: MouseEvent) => {

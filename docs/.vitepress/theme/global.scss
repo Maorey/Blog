@@ -1,3 +1,5 @@
+@import 'markdown-it-latex/dist/index.css';
+
 // 滚动条
 * {
   scrollbar-width: thin;
@@ -67,8 +69,15 @@ br + br {
 }
 
 // markdown 插件
-.katex-display {
+img,
+video,
+audio,
+.katex-display,
+.loading {
   max-width: 100%;
+}
+
+.katex-display {
   overflow: auto hidden;
 }
 // 分数线
@@ -78,7 +87,6 @@ br + br {
 
 .loading {
   position: relative;
-  max-width: 100%;
   min-width: 400px;
   min-height: 300px;
   overflow: hidden;
@@ -101,6 +109,11 @@ br + br {
   text-align: center;
   box-sizing: border-box;
   overflow: auto hidden;
+}
+
+// 图片 (懒加载)
+.lazy {
+  cursor: zoom-in;
 }
 
 // 留言

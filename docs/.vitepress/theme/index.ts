@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Theme, inBrowser } from 'vitepress'
 
 import Layout from './App.vue'
