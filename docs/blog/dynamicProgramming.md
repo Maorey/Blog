@@ -522,10 +522,10 @@ function merge<T extends GoldMine = GoldMine, R extends GoldMine = T>(
 
   if (leftGold === rightGold) {
     // 归并
-    let l = leftPlans.length
-    let r = rightPlans.length
     const mergedPlans: Array<Plan<T | R>> = []
 
+    let l = leftPlans.length
+    let r = rightPlans.length
     while (l && r) {
       mergedPlans.unshift(
         leftPlans[l - 1].cost > rightPlans[r - 1].cost

@@ -1,3 +1,4 @@
+import Viewer from 'viewerjs'
 import 'viewerjs/dist/viewer.css'
 
-export * from 'viewerjs'
+export default Viewer // export * 咋就不行了???
