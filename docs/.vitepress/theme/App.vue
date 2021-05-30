@@ -88,10 +88,7 @@ const lazyLoadImages =
   'undefined' !== typeof HTMLImageElement && 'loading' in HTMLImageElement.prototype
     ? () => {
         for (
-          let i = 0,
-            lazyImgs = getContentDom('.lazy'),
-            len = lazyImgs.length,
-            element;
+          let i = 0, lazyImgs = getContentDom('.lazy'), len = lazyImgs.length, element;
           i < len;
           i++
         ) {
@@ -109,8 +106,7 @@ function initImageViewer() {
   const imgs = getContentDom('img')
   let i = imgs.length
   if (i) {
-    import('viewerjs/dist/viewer.min.css')
-    const promises = [import('viewerjs/dist/viewer.esm')]
+    const promises = [import('./libs/viewer')]
     const attribute = 'data-o'
 
     const reg = /(.*\/)/
@@ -147,7 +143,7 @@ function initEcharts() {
   const echartsBlocks = getContentDom('.echarts')
   echartsBlocks &&
     echartsBlocks.length &&
-    import('echarts').then(echarts => {
+    import('./libs/echarts').then(echarts => {
       echarts = echarts.default || echarts
 
       for (let i = 0, len = echartsBlocks.length, element, options; i < len; i++) {
@@ -186,7 +182,7 @@ function initFlowchart() {
   const flowchartBlocks = getContentDom('.flowchart')
   flowchartBlocks &&
     flowchartBlocks.length &&
-    import('./libs/flowchart.min').then(flowchart => {
+    import('./libs/flowchart').then(flowchart => {
       flowchart = flowchart.default || flowchart
 
       for (let i = 0, len = flowchartBlocks.length, element, chart; i < len; i++) {
@@ -208,7 +204,7 @@ function initMermaid() {
   const mermaidBlocks = getContentDom('.mermaid')
   mermaidBlocks &&
     mermaidBlocks.length &&
-    import('./libs/mermaid.min').then(mermaid => {
+    import('./libs/mermaid').then(mermaid => {
       mermaid = mermaid.default || mermaid
 
       for (let i = 0, len = mermaidBlocks.length; i < len; i++) {

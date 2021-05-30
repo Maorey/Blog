@@ -3,7 +3,7 @@ node_modules
 dist
 coverage
 compile
-*.min.js
+libs/*.js
 *.d.ts
 *.md
 *.json

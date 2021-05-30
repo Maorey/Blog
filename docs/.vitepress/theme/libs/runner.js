@@ -1,11 +1,11 @@
 /*! Copyright (c) 2014 The Chromium Authors. All rights reserved.
 * Use of this source code is governed by a BSD-style license that can be */
-export default (function() {
+export var runner = (() => {
   try {
     // 避免生成时服务端渲染报错 window/document 未定义
     var ZZ = window
   } catch(e) {
-    return function () {}
+    return a => 0
   }
 
   var ZY = ZZ.document

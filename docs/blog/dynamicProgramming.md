@@ -524,20 +524,20 @@ function merge<T extends GoldMine = GoldMine, R extends GoldMine = T>(
     // 归并
     let l = leftPlans.length
     let r = rightPlans.length
-    let p = l + r
     const mergedPlans: Array<Plan<T | R>> = []
 
     while (l && r) {
-      mergedPlans[--p] =
+      mergedPlans.unshift(
         leftPlans[l - 1].cost > rightPlans[r - 1].cost
           ? leftPlans[--l]
           : rightPlans[--r]
+      )
     }
     while (l) {
-      mergedPlans[--p] = leftPlans[--l]
+      mergedPlans.unshift(leftPlans[--l])
     }
     while (r) {
-      mergedPlans[--p] = rightPlans[--r]
+      mergedPlans.unshift(rightPlans[--r])
     }
 
     return mergedPlans
@@ -675,14 +675,12 @@ function getMostGold<T extends GoldMine = GoldMine>(
 
 请思考:
 
-1. 动态规划一定比递归更优么?
+1. 黄金矿工各算法的时间/空间复杂度怎么评估?
+
+2. 动态规划一定比递归更优么?
 
   *例如矿工数远远大于金矿数的情况;空间/频繁读写敏感场景*
 
-2. 黄金矿工各算法的时间/空间复杂度怎么评估?
-
-  *俺不知道*
-
-## 参考文献
+## 参考
 
 [漫画：什么是动态规划？](https://zhuanlan.zhihu.com/p/31628866)

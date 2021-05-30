@@ -15,8 +15,8 @@ export default {
     // custom router. `siteData`` is a `ref`` of current site-level metadata.
 
     if (!inBrowser) {
-      app.config.isCustomElement = () => true
-      app.config.errorHandler = () => {}
+      app.config.isCustomElement = a => true
+      app.config.errorHandler = a => 0
     }
 
     // 注册全局组件

@@ -3,4 +3,4 @@ public
 coverage
 compile
 dist
-*.min.js
+libs/*.js

@@ -5,8 +5,8 @@
 <script lang="ts">
 // @ts-nocheck
 import { onMounted, watchEffect } from 'vue'
-import { VssueAPI } from 'vssue'
 import { usePageData } from 'vitepress'
+import type { VssueAPI } from 'vssue'
 
 const options: VssueAPI.Options = {
   owner: 'Maorey',
@@ -26,14 +26,10 @@ const options: VssueAPI.Options = {
 export default {
   props: { title: String, class: String, style: String },
   setup(props) {
-    import('vssue/dist/vssue.min.css')
-    const libs = [import('../libs/vue2.min'), import('../libs/vssue.min')]
-    const pendingLibs = Promise.all(libs) // 省掉 libs 变量, 打包会报错, 咱也惹不起啊
-
     const pageData = usePageData()
     onMounted(() => {
-      pendingLibs.then(res => {
-        const Vue2 = res[1].default(res[0].default)
+      import('../libs/vssue').then(Vue2 => {
+        Vue2 = Vue2.vue || Vue2
 
         const reactiveData = Vue2.observable({ t: 0, k: 0 })
         watchEffect(() => {

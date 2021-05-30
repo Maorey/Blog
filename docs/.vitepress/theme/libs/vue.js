@@ -1,12 +1,12 @@
 /*! Vue.js v2.6.12
 * (c) 2014-2020 Evan You
 * Released under the MIT License. */
-export default (function() {
+export var Vue = (() => {
   try {
     // 避免生成时服务端渲染报错 window/document 未定义
     var ZZ = window
   } catch(e) {
-    return function() {}
+    return a => 0
   }
 
   var ZY = ZZ.document

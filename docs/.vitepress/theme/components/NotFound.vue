@@ -14,14 +14,15 @@
 
 <script>
 import { onMounted } from 'vue'
-// import { initRunner as tRexRunner } from 't-rex-runner/dist/runner'
-// import tRexRunner from '../libs/tRexRunner.min'
 
 export default {
   setup() {
     onMounted(() => {
-      import('../libs/tRexRunner.min').then(module => {
-        module.default('#t')
+      // 't-rex-runner/dist/runner'
+      import('../libs/runner').then(initRunner => {
+        initRunner = initRunner.runner || initRunner
+
+        initRunner('#t')
       })
     })
   },

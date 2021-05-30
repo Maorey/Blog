@@ -11,7 +11,7 @@ end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
-max_line_length = 86
+max_line_length = 88
 quote_type = single
 spaces_around_operators = true
 
