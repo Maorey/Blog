@@ -1,6 +1,6 @@
 ---
 title: 算法
-index: 10
+index: 99
 ---
 
 算法索引

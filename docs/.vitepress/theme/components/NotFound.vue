@@ -1,13 +1,14 @@
 <template>
   <div :class="$style.wrap">
-    <!-- Chrome 小恐龙游戏 -->
-    <div id="t" />
+    <h2 class="t">哦豁，网页找不到啦 Σ(っ °Д °;)っ</h2>
 
     <img class="f" src="../assets/404.jpg" />
     <img class="c" src="../assets/crack.jpg" />
 
-    <h2 class="t">哦豁，网页找不到啦 Σ(っ °Д °;)っ</h2>
+    <!-- Chrome 小恐龙游戏 -->
+    <div id="t" />
     <sub class="t">试试 摸摸小恐龙 或 按按空格/上/下键 呗 (｡◕ˇ∀ˇ◕)</sub>
+
     <a class="a" :href="$site.base">回首页</a>
   </div>
 </template>
@@ -41,7 +42,6 @@ export default {
       width: 100%;
       height: 150px;
       max-width: 600px;
-      margin-top: 10px;
       pointer-events: all;
     }
 
@@ -65,7 +65,6 @@ export default {
     }
 
     .t {
-      margin: 10px 0;
       display: block;
     }
 

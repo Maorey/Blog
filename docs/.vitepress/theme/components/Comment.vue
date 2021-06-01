@@ -29,7 +29,7 @@ export default {
     const pageData = usePageData()
     onMounted(() => {
       import('../libs/vssue').then(Vue2 => {
-        Vue2 = Vue2.vue || Vue2
+        Vue2 = Vue2.Vue || Vue2
 
         const reactiveData = Vue2.observable({ t: 0, k: 0 })
         watchEffect(() => {

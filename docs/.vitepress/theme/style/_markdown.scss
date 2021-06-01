@@ -1,0 +1,68 @@
+img,
+video,
+audio,
+.katex-display,
+.loading {
+  max-width: 100%;
+}
+
+// 折叠
+summary {
+  color: var(--c-text-light);
+  cursor: pointer;
+
+  &::-webkit-details-marker {
+    color: var(--c-brand-light);
+  }
+
+  &:focus {
+    outline-offset: 5px;
+    outline: 1px dashed var(--c-brand-light);
+  }
+}
+
+// 数学公式
+.katex-display {
+  overflow: auto hidden;
+}
+// 分数线
+.katex .mfrac .frac-line {
+  background: var(--c-text);
+}
+
+// (图表)加载
+.loading {
+  position: relative;
+  min-width: 400px;
+  min-height: 300px;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: val(--z-index-sidebar);
+    background: url('./assets/loading.jpg') center center no-repeat #f1f1f1;
+    background-size: contain;
+  }
+}
+// 图表
+.graph {
+  text-align: center;
+  box-sizing: border-box;
+  overflow: auto hidden;
+}
+
+// 图片 (懒加载)
+.lazy {
+  cursor: zoom-in;
+}
+
+// 脚注
+.footnotes-sep {
+  display: none;
+}

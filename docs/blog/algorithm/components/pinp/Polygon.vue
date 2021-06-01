@@ -109,10 +109,10 @@ function drawRayAndCrossPoint(
 function isConvex(polygon: Point[]) {
   // see: https://en.wikipedia.org/wiki/Graham_scan
   for (let i = polygon.length, j = 0, k = 1, lastTurn = null; i--; k = j, j = i) {
-    const p1 = polygon[i]
-    const p2 = polygon[j]
-    const p3 = polygon[k]
-    const turn = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) >= 0
+    const p0 = polygon[i]
+    const p1 = polygon[j]
+    const p2 = polygon[k]
+    const turn = (p1.x - p0.x) * (p2.y - p0.y) >= (p2.x - p0.x) * (p1.y - p0.y)
     if (lastTurn === null) {
       lastTurn = turn
     } else if (turn !== lastTurn) {

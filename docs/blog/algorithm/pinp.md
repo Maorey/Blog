@@ -1,7 +1,9 @@
 ---
 title: 点是否在多边形内
-index: 1
+index: 2
 ---
+
+*2021-04-15*
 
 ## 问题描述
 
@@ -44,17 +46,26 @@ index: 1
 
 <Polygon />
 
-这里使用[扫描线](https://en.wikipedia.org/wiki/Graham_scan)法来判断多边形的凹凸, 即:
+这里使用[扫描线](https://en.wikipedia.org/wiki/Graham_scan)法来判断多边形的凹凸, 即: **若多边形的边始终朝一个方向旋转则是凸多边形**
 
-若多边形的边始终朝一个方向旋转则是**凸多边形**, 代码如下:
+<details>
+<summary>推导及代码实现</summary>
+
+设多边形上的三个顶点分别为: $p_0$, $p_1$ 和 $p_2$, 则两条边为 $\overline{p_0p_1}$ 和 $\overline{p_1p_2}$. 若 $\overrightarrow{p_0p_1} \times \overrightarrow{p_0p_2}$ 为正则 $\overrightarrow{p_0p_2}$ 在 $\overrightarrow{p_0p_1}$ 的顺时针方向, 反之则为逆时针. 代入三点坐标可得叉积为:
+
+$$
+(p_{1_x} - p_{0_x}) \times (p_{2_y} - p_{0_y}) - (p_{2_x} - p_{0_x}) \times (p_{1_y} - p_{0_y})
+$$
+
+代码实现如下:
 
 ```ts
 function isConvex(polygon: Point[]) {
   for (let i = polygon.length, j = 0, k = 1, lastTurn = null; i--; k = j, j = i) {
-    const p1 = polygon[i]
-    const p2 = polygon[j]
-    const p3 = polygon[k]
-    const turn = (p2.x - p1.x) * (p3.y - p1.y) - (p2.y - p1.y) * (p3.x - p1.x) >= 0
+    const p0 = polygon[i]
+    const p1 = polygon[j]
+    const p2 = polygon[k]
+    const turn = (p1.x - p0.x) * (p2.y - p0.y) >= (p2.x - p0.x) * (p1.y - p0.y)
     if (lastTurn === null) {
       lastTurn = turn
     } else if (turn !== lastTurn) {
@@ -65,6 +76,8 @@ function isConvex(polygon: Point[]) {
   return true
 }
 ```
+
+</details>
 
 *凹多边形分解为凸多边形就下次吧, 诶嘿嘿* `(*^▽^*)~`
 

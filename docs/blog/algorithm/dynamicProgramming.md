@@ -3,6 +3,8 @@ title: 动态规划
 index: 1
 ---
 
+*2020-12-11*
+
 ## 这是啥
 
 参考百度百科 :wink: :
@@ -386,7 +388,10 @@ f(minerCount, goldMineCount) = \begin{cases}
 \end{cases}
 $$
 
-那么DP走起, `f(minerCount, goldMineCount)` 备忘录如下:
+:running:那么DP走起~
+
+<details open>
+<summary><code>f(minerCount, goldMineCount)</code> 备忘录</summary>
 
 |**minerCount / goldMineCount**|**1**|**2**|**3**|**4**|**5**|
 |:----:|:----:|:----:|:----:|:----:|:----:|
@@ -410,6 +415,8 @@ $$
 |**18**|400<br/>*(A)*|900<br/>*(A + B)*|1100<br/>*(A + B + C)*|1400<br/>*(A + B + C + D)*|1550<br/>*(A + B + D + E)*|
 |**19**|400<br/>*(A)*|900<br/>*(A + B)*|1100<br/>*(A + B + C)*|1400<br/>*(A + B + C + D)*|1550<br/>*(A + B + D + E)*|
 |**20**|400<br/>*(A)*|900<br/>*(A + B)*|1100<br/>*(A + B + C)*|1400<br/>*(A + B + C + D)*|1750<br/>*(A + B + C + D + E)*|
+
+</details>
 
 ::: tip 提示
 后文中将省略已出现过的代码

@@ -5,7 +5,7 @@ import Layout from './App.vue'
 import NotFound from './components/NotFound.vue'
 import Menu from './components/Menu.vue'
 
-import './global.scss'
+import './style/index.scss'
 
 export default {
   Layout,

@@ -1,0 +1,26 @@
+.nav-bar,
+.sidebar {
+  border: none !important;
+  box-shadow: var(--shadow-2);
+}
+
+.nav-bar-title > .logo {
+  height: 2rem;
+}
+
+.page > .container {
+  max-width: 73rem;
+}
+
+.foot {
+  margin: 2.25rem 1.5rem 0;
+  padding: 2rem 1.5rem 2.25rem;
+  border-top: 1px solid var(--c-divider);
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--c-text-light);
+}
+
+br + br {
+  display: none;
+}

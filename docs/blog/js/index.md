@@ -1,6 +1,6 @@
 ---
 title: JavaScript笔记
-index: 10
+index: 100
 ---
 
 `JavaScript`笔记索引

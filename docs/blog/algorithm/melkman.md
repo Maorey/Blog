@@ -1,24 +1,19 @@
 ---
 title: 最小凸包
-index: 2
+index: 3
 ---
+
+2021-06-04
 
 ## 问题描述
 
 平面上任意位置有3个及以上的点, 求这些点的最小外接凸多边形
 
-### 凸多边形定义
-
-对于一个形状, 如果对于所有的穿过这个形状的线, 这条线只和这个形状至多相交两次. 如果多余两次, 这个形状就是一个非凸多边形或者说凹多边形
-
-### 多边形相交定义
-
-1. SAT - 分离轴理论
-  如果两个凸多边形(只支持凸多边形, 凹多边形需先分解为凸的)没有相交, 那么存在这两个物体在一个轴上的投影(比如三维物体经光照投射到平面上形成的影子, 同理, 二维图形投影成线)不重叠
-2. GJK - Gilbert–Johnson–Keerthi 碰撞检测
-  如果两个形状(可以通过"支持函数"支持所有形状)重叠或者相交那么这两个形状的闵科夫斯基差(两个形状上所有点的差)产生的点的外围形状会包含原点。
-
 ## 演示
+
+## 前置知识
+
+[参考链接](./pinp#凸多边形)
 
 ## 方法介绍
 
@@ -28,7 +23,7 @@ index: 2
 
 ### Jarvis 步进法 (O(nH))
 
-### Graham 扫描法 (O(n㏒n))
+### Graham 扫描法 (O(n㏒n)) [^GrahamScan]
 
 ### Melkman 算法 (O(n))
 
@@ -37,3 +32,7 @@ index: 2
 ## 升维
 
 3D中的情况如何?
+
+## 参考链接
+
+[^GrahamScan]: [Understanding Graham scan algorithm for finding the Convex hull of a set of Points](https://muthu.co/understanding-graham-scan-algorithm-for-finding-the-convex-hull-of-a-set-of-points/)

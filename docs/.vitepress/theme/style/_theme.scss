@@ -1,0 +1,6 @@
+// 覆盖默认css变量 vitepress/dist/client/theme-default/styles/vars.css
+// 记得同步修改到 ./vssue.styl
+:root {
+  --c-brand: #f66;
+  --c-brand-light: #f99;
+}

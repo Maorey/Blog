@@ -1,0 +1,8 @@
+/** App 全局样式 */
+
+@import './theme'; // 主题css变量
+
+@import 'markdown-it-latex/dist/index.css';
+@import './scrollBar';
+@import './layout';
+@import './markdown';

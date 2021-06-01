@@ -117,9 +117,15 @@ yarn build
   示例: ==marked== => <mark>inserted</mark>
   ```
 
-- [markdown-it-katex](https://github.com/waylonflinn/markdown-it-katex) 数学公式标记语法
+- [markdown-it-katex](https://github.com/waylonflinn/markdown-it-katex) [支持公式](https://katex.org/docs/supported.html)
 
-- [markdown-it-latex](https://github.com/tylingsoft/markdown-it-latex) 数学公式标记语法
+  ```md
+  功能: 数学公式 katex 语法
+  标记: 行内 $katex$ 块级 $$katex$$
+  示例: $f(x)$ => <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathnormal" style="margin-right: 0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>
+  ```
+
+- [markdown-it-latex](https://github.com/tylingsoft/markdown-it-latex) 数学公式latex/asciimath语法
 
 - [markdown-it-deflist](https://github.com/markdown-it/markdown-it-deflist)
 
