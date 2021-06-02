@@ -65,11 +65,7 @@ function resolveSidebarSubData(sidebarDatas, pathname, deep) {
       }
 
       if (pathname.startsWith(link)) {
-        deepSidebarData = resolveSidebarSubData(
-          sidebarData.children,
-          pathname,
-          deep + 1
-        )
+        deepSidebarData = resolveSidebarSubData(sidebarData.children, pathname, deep + 1)
         if (deepSidebarData && deepSidebarData.e) {
           return deepSidebarData
         }

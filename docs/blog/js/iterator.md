@@ -534,7 +534,7 @@ run()
 - 控制流: 任务组合, 流程控制
 - [请补充]
 
-## 参考资料
+## 参考链接
 
 - [MDN](https://developer.mozilla.org): [Iterators_and_Generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators) 等
 - [阮一峰](http://www.ruanyifeng.com): [Iterator 和 for...of 循环](https://es6.ruanyifeng.com/#docs/iterator) 等

@@ -43,10 +43,7 @@ function resolveSidebarData(sidebarDatas, relativePath) {
     }
   }
 }
-function getTitle(
-  { lang, locales, themeConfig: { locales: themeLocales } },
-  relativePath
-) {
+function getTitle({ lang, locales, themeConfig: { locales: themeLocales } }, relativePath) {
   let title
 
   const rootPath = resolveRootPathByLang(locales, lang)
@@ -161,10 +158,7 @@ function initEcharts() {
       if (!resizeECharts) {
         resizeECharts = () => {
           for (
-            let i = 0,
-              blocks = getContentDom('[_echarts_instance_]'),
-              len = blocks.length,
-              chart;
+            let i = 0, blocks = getContentDom('[_echarts_instance_]'), len = blocks.length, chart;
             i < len;
             i++
           ) {

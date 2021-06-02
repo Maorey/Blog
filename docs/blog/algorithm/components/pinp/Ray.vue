@@ -1,8 +1,8 @@
 <template>
   <div :class="$style.wrap">
     <i @click="toggle">{{ isPoint ? '请指定点' : '正在画多边形' }}(点我/右键结束)</i>
-    <i @click="clear">重置(不能操作点我)</i>
-    <canvas ref="el" width="320" height="320" />
+    <i @click="clear">重置</i>
+    <canvas width="320" height="320" @click="onClick" @mousemove="onMove" @contextmenu="stop" />
     <p>
       计算结果:
       <b :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`">{{
@@ -13,16 +13,19 @@
 </template>
 
 <script lang="ts">
-import { ref, watchEffect, onUnmounted } from 'vue'
+import { ref } from 'vue'
 
 interface Point {
   x: number
   y: number
 }
 
+const SIZE = 320
+
 function clearCanvas(context: CanvasRenderingContext2D) {
-  context.clearRect(0, 0, 320, 320)
+  context.clearRect(0, 0, SIZE, SIZE)
 }
+
 function drawPolygon(context: CanvasRenderingContext2D, polygon: Point[]) {
   clearCanvas(context)
 
@@ -39,6 +42,7 @@ function drawPolygon(context: CanvasRenderingContext2D, polygon: Point[]) {
   context.stroke()
   context.fill()
 }
+
 function drawPoint(context: CanvasRenderingContext2D, point: Point) {
   context.fillStyle = 'red'
   context.fillRect(point.x - 2, point.y - 2, 4, 4)
@@ -77,19 +81,24 @@ function pinp({ x: px, y: py }: Point, polygon: Point[]) {
   return odd
 }
 
+const getPoint = (event: MouseEvent): Point => ({
+  x: event.pageX - (event.target as HTMLCanvasElement).offsetLeft,
+  y: event.pageY - (event.target as HTMLCanvasElement).offsetTop,
+})
+
 export default {
   setup() {
-    const el = ref<HTMLCanvasElement>()
     const isPoint = ref<boolean>()
     const result = ref<boolean | null>()
 
-    let canvas: HTMLCanvasElement
-    let context: CanvasRenderingContext2D
-    let rect: DOMRect
-
     const polygon: Point[] = []
+
+    let context: CanvasRenderingContext2D
+
     const onClick = (event: MouseEvent) => {
-      const point = { x: event.pageX - rect.x, y: event.pageY - rect.y }
+      context = (event.target as HTMLCanvasElement).getContext('2d')!
+      const point = getPoint(event)
+
       if (isPoint.value) {
         drawPolygon(context, polygon)
         drawPoint(context, point)
@@ -101,19 +110,16 @@ export default {
       }
     }
     const onMove = (event: MouseEvent) => {
-      !isPoint.value &&
-        polygon.length &&
-        drawPolygon(
-          context,
-          polygon.concat({ x: event.pageX - rect.x, y: event.pageY - rect.y })
-        )
+      !isPoint.value && polygon.length && drawPolygon(context, polygon.concat(getPoint(event)))
     }
+
     const clear = () => {
-      context && clearCanvas(context)
       isPoint.value = false
       result.value = null
       polygon.splice(0)
+      clearCanvas(context)
     }
+
     const toggle = () => {
       if (isPoint.value) {
         clear()
@@ -122,36 +128,14 @@ export default {
         isPoint.value = true
       }
     }
+
     const stop = (event: MouseEvent) => {
       toggle()
       event.stopPropagation()
       event.preventDefault()
     }
 
-    const on = () => {
-      canvas.addEventListener('click', onClick)
-      canvas.addEventListener('mousemove', onMove)
-      canvas.addEventListener('contextmenu', stop)
-    }
-    const off = () => {
-      canvas.removeEventListener('click', onClick)
-      canvas.removeEventListener('mousemove', onMove)
-      canvas.removeEventListener('contextmenu', stop)
-    }
-    const init = () => {
-      canvas && off()
-      if (el.value) {
-        canvas = el.value
-        context = canvas.getContext('2d')!
-        rect = canvas.getBoundingClientRect()
-        on()
-      }
-    }
-
-    watchEffect(init)
-    onUnmounted(off)
-
-    return { el, isPoint, result, toggle, clear }
+    return { isPoint, result, toggle, clear, onClick, onMove, stop }
   },
 }
 </script>

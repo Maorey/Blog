@@ -18,9 +18,7 @@ const options: VssueAPI.Options = {
   prefix: '[comments] ',
   // autoCreateIssue: process.env.NODE_ENV === 'production', // 未创建issue的会跳转登陆...
   issueContent: ({ url }) =>
-    `This issue is comments of the blog [${document.title
-      .split('|')[0]
-      .trim()}](${url})`,
+    `This issue is comments of the blog [${document.title.split('|')[0].trim()}](${url})`,
 }
 
 export default {

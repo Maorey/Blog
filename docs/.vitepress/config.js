@@ -84,9 +84,7 @@ module.exports = {
       const replacer = '<span v-pre class="katex">'
       const originalRender = md.render
       md.render = function () {
-        return originalRender
-          .apply(this, arguments)
-          .replace(REG_MATH_MUSTACHE_TAG, replacer)
+        return originalRender.apply(this, arguments).replace(REG_MATH_MUSTACHE_TAG, replacer)
       }
     },
   },

@@ -14,12 +14,10 @@ module.exports = md => {
           typeof options.width === 'string'
             ? `width:${options.width};`
             : options.width
-              ? `width:${options.width}px;`
-              : ''
+            ? `width:${options.width}px;`
+            : ''
         }height:${
-          typeof options.height === 'string'
-            ? options.height
-            : `${options.height || 250}px`
+          typeof options.height === 'string' ? options.height : `${options.height || 250}px`
         }">${code}</pre>`
       } catch (e) {
         return `<pre class="language-jsstacktrace">${e.stack}</pre>`

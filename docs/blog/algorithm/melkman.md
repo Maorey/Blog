@@ -11,7 +11,7 @@ index: 3
 
 ## 演示
 
-<Melkman />
+<Show />
 
 ## 前置知识
 
@@ -35,7 +35,7 @@ index: 3
 
 快速凸包构造算法的思路为: 想办法将点集进行划分, 然后分而治之
 
-对于一个点集, 最容易确定是凸包顶点的, 是上下左右**4个极值点**, 剩下的凸包顶点暂时无法确定
+对于一个点集, 最容易确定是凸包顶点的, 是上下左右**4个极值点**(有相等时取两端参与划分), 剩下的凸包顶点暂时无法确定
 
 那么基于这4个极值点, 可以想到把点集划分为**5个区域**, 很明显在这4个点围成的四边形内不可能存在凸包顶点, 那么还剩余的**4个区域**
 
@@ -43,13 +43,63 @@ index: 3
 
 ![划分](melkman/divide.png)
 
+#### 演示
+
+<Divide />
+
+<details>
+<summary>推导及代码实现</summary>
+
+```ts
+
+```
+
+</details>
+
 ### Jarvis 步进法 (O(nH))
+
+#### 演示
+
+<Jarvis />
+
+<details>
+<summary>推导及代码实现</summary>
+
+```ts
+
+```
+
+</details>
 
 ### Graham 扫描法 (O(n㏒n)) [^GrahamScan]
 
+#### 演示
+
+<Graham />
+
+<details>
+<summary>推导及代码实现</summary>
+
+```ts
+
+```
+
+</details>
+
 ### Melkman 算法 (O(n))
 
-## Melkman 算法实现
+#### 演示
+
+<Melkman />
+
+<details>
+<summary>推导及代码实现</summary>
+
+```ts
+
+```
+
+</details>
 
 ## 升维
 
@@ -59,12 +109,16 @@ index: 3
 
 ## 参考链接
 
-[凸包算法入门](https://www.cnblogs.com/dream-it-possible/p/8514706.html)
+- [凸包算法入门](https://www.cnblogs.com/dream-it-possible/p/8514706.html)
 
 [^GrahamScan]: [Understanding Graham scan algorithm for finding the Convex hull of a set of Points](https://muthu.co/understanding-graham-scan-algorithm-for-finding-the-convex-hull-of-a-set-of-points/)
 
 <script lang="ts">
+import Show from './components/melkman/Show.vue'
+import Divide from './components/melkman/Divide.vue'
+import Jarvis from './components/melkman/Jarvis.vue'
+import Graham from './components/melkman/Graham.vue'
 import Melkman from './components/melkman/Melkman.vue'
 
-export default { components: { Melkman } }
+export default { components: { Show, Divide, Jarvis, Graham, Melkman } }
 </script>

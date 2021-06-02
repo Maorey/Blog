@@ -46,7 +46,7 @@ index: 2
 
 <Polygon />
 
-这里使用[扫描线](https://en.wikipedia.org/wiki/Graham_scan)法来判断多边形的凹凸, 即: **若多边形的边始终朝一个方向旋转则是凸多边形**
+这里使用向量法来判断多边形的凹凸, 即: **若多边形的边始终朝一个方向旋转则是凸多边形**
 
 <details>
 <summary>推导及代码实现</summary>

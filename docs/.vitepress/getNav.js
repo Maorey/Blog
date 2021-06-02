@@ -74,8 +74,7 @@ const REG_HIDE = /(?<!\w)hide *: *(\w+)/
 const REG_INDEX = /(?<!\w)index *: *(\d+)/
 const parsers = {
   title(optionsContent, info, content) {
-    info.title =
-      commonExec(REG_TITLE, optionsContent) || commonExec(REG_MD_TITLE, content)
+    info.title = commonExec(REG_TITLE, optionsContent) || commonExec(REG_MD_TITLE, content)
   },
   hide(optionsContent, info) {
     info.hide = commonExec(REG_HIDE, optionsContent) === 'true'
@@ -147,11 +146,7 @@ module.exports = function getNav(noFile, pathRelativeToDocs = './', rootPath = '
 
       if (!info || !info.hide) {
         link = rootPath + name + '/'
-        children = getNav(
-          noFile,
-          path.relative(docsDir, path.join(absolutePath, name)),
-          link
-        )
+        children = getNav(noFile, path.relative(docsDir, path.join(absolutePath, name)), link)
         dir = (info && info.title) || name
         nav.push({
           i: (info && info.index) || dir, // 排序

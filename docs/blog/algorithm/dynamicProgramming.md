@@ -688,6 +688,6 @@ function getMostGold<T extends GoldMine = GoldMine>(
 
   *例如矿工数远远大于金矿数的情况;空间/频繁读写敏感场景*
 
-## 参考
+## 参考链接
 
 [漫画：什么是动态规划？](https://zhuanlan.zhihu.com/p/31628866)

@@ -2,8 +2,8 @@
   <div :class="$style.wrap">
     <br />
     <i @click="toggle">{{ isRay ? '正在画射线' : '正在画多边形' }}(点我/右键结束)</i>
-    <i @click="clear">重置(不能操作点我)</i>
-    <canvas ref="el" width="320" height="320" />
+    <i @click="clear">重置</i>
+    <canvas width="320" height="320" @click="onClick" @mousemove="onMove" @contextmenu="stop" />
     <p>
       计算结果: 你画的是
       <b :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`">{{
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { ref, watchEffect, onUnmounted } from 'vue'
+import { ref } from 'vue'
 
 interface Point {
   x: number
@@ -28,6 +28,7 @@ const SIZE = 320
 function clearCanvas(context: CanvasRenderingContext2D) {
   context.clearRect(0, 0, SIZE, SIZE)
 }
+
 function drawPolygon(context: CanvasRenderingContext2D, polygon: Point[]) {
   clearCanvas(context)
 
@@ -44,10 +45,12 @@ function drawPolygon(context: CanvasRenderingContext2D, polygon: Point[]) {
   context.stroke()
   context.fill()
 }
+
 function drawPoint(context: CanvasRenderingContext2D, point: Point) {
   context.fillStyle = 'red'
   context.fillRect(point.x - 2, point.y - 2, 4, 4)
 }
+
 function drawRayAndCrossPoint(
   context: CanvasRenderingContext2D,
   rayEndPoint: Point,
@@ -107,7 +110,6 @@ function drawRayAndCrossPoint(
 }
 
 function isConvex(polygon: Point[]) {
-  // see: https://en.wikipedia.org/wiki/Graham_scan
   for (let i = polygon.length, j = 0, k = 1, lastTurn = null; i--; k = j, j = i) {
     const p0 = polygon[i]
     const p1 = polygon[j]
@@ -123,63 +125,64 @@ function isConvex(polygon: Point[]) {
   return true
 }
 
+const getPoint = (event: MouseEvent): Point => ({
+  x: event.pageX - (event.target as HTMLCanvasElement).offsetLeft,
+  y: event.pageY - (event.target as HTMLCanvasElement).offsetTop,
+})
+
 export default {
   setup() {
-    const el = ref<HTMLCanvasElement>()
     const isRay = ref<boolean>()
     const result = ref<boolean | null>()
     const cross = ref(0)
 
-    let canvas: HTMLCanvasElement
-    let context: CanvasRenderingContext2D
-    let rect: DOMRect
-
-    let rayEndPoint: Point | undefined
     const polygon: Point[] = []
+    let rayEndPoint: Point | undefined
+
+    let context: CanvasRenderingContext2D
+
     const drawRay = (rayViaPoint: Point) => {
       drawPolygon(context, polygon)
       drawPoint(context, rayEndPoint!)
       cross.value = drawRayAndCrossPoint(context, rayEndPoint!, rayViaPoint, polygon)
     }
+
     const onClick = (event: MouseEvent) => {
-      const point = { x: event.pageX - rect.x, y: event.pageY - rect.y }
+      context = (event.target as HTMLCanvasElement).getContext('2d')!
+      const point = getPoint(event)
+
       if (isRay.value) {
         rayEndPoint || (rayEndPoint = point)
         drawRay(point)
       } else {
         polygon.push(point)
-        const length = polygon.length
-        if (length < 2) {
+        if (polygon.length < 2) {
           drawPoint(context, point)
         } else {
           drawPolygon(context, polygon)
-          length > 2 && result.value !== false && (result.value = isConvex(polygon))
+          polygon.length > 2 && result.value !== false && (result.value = isConvex(polygon))
         }
       }
     }
     const onMove = (event: MouseEvent) => {
       if (isRay.value) {
-        rayEndPoint && drawRay({ x: event.pageX - rect.x, y: event.pageY - rect.y })
-      } else {
-        const length = polygon.length
-        if (length) {
-          const tempPolygon = polygon.concat({
-            x: event.pageX - rect.x,
-            y: event.pageY - rect.y,
-          })
-          drawPolygon(context, tempPolygon)
-          length > 1 && (result.value = isConvex(tempPolygon))
-        }
+        rayEndPoint && drawRay(getPoint(event))
+      } else if (polygon.length) {
+        const tempPolygon = polygon.concat(getPoint(event))
+        drawPolygon((event.target as HTMLCanvasElement).getContext('2d')!, tempPolygon)
+        polygon.length > 1 && (result.value = isConvex(tempPolygon))
       }
     }
+
     const clear = () => {
-      context && clearCanvas(context)
       isRay.value = false
       result.value = null
       cross.value = 0
       rayEndPoint = undefined
       polygon.splice(0)
+      clearCanvas(context)
     }
+
     const toggle = () => {
       if (isRay.value) {
         if (rayEndPoint) {
@@ -193,36 +196,14 @@ export default {
         isRay.value = true
       }
     }
+
     const stop = (event: MouseEvent) => {
       toggle()
       event.stopPropagation()
       event.preventDefault()
     }
 
-    const on = () => {
-      canvas.addEventListener('click', onClick)
-      canvas.addEventListener('mousemove', onMove)
-      canvas.addEventListener('contextmenu', stop)
-    }
-    const off = () => {
-      canvas.removeEventListener('click', onClick)
-      canvas.removeEventListener('mousemove', onMove)
-      canvas.removeEventListener('contextmenu', stop)
-    }
-    const init = () => {
-      canvas && off()
-      if (el.value) {
-        canvas = el.value
-        context = canvas.getContext('2d')!
-        rect = canvas.getBoundingClientRect()
-        on()
-      }
-    }
-
-    watchEffect(init)
-    onUnmounted(off)
-
-    return { el, isRay, result, cross, toggle, clear }
+    return { isRay, result, cross, toggle, clear, onClick, onMove, stop }
   },
 }
 </script>
