@@ -149,8 +149,7 @@ yarn build
 
   [^longnote]: Here's one with multiple blocks.
 
-  Subsequent paragraphs are indented to show that they
-belong to the previous footnote.
+  Subsequent paragraphs are indented to show that they belong to the previous footnote.
 
   =>
 

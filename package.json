@@ -16,8 +16,8 @@
     "url": "git@github.com:Maorey/Blog.git"
   },
   "scripts": {
-    "dev": "npx --max_old_space_size=4096 vitepress dev docs",
-    "build": "npx --max_old_space_size=4096 vitepress build docs"
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs"
   },
   "devDependencies": {
     "@vssue/api-github-v3": "^1.4.7",
