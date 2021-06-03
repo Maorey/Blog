@@ -45,7 +45,7 @@ index: 3
 
 #### 演示
 
-<Divide />
+<Play :algorithm="divide" />
 
 <details>
 <summary>推导及代码实现</summary>
@@ -60,7 +60,7 @@ index: 3
 
 #### 演示
 
-<Jarvis />
+<Play :algorithm="divide" />
 
 <details>
 <summary>推导及代码实现</summary>
@@ -75,7 +75,7 @@ index: 3
 
 #### 演示
 
-<Graham />
+<Play :algorithm="divide" />
 
 <details>
 <summary>推导及代码实现</summary>
@@ -90,7 +90,7 @@ index: 3
 
 #### 演示
 
-<Melkman />
+<Play :algorithm="divide" />
 
 <details>
 <summary>推导及代码实现</summary>
@@ -115,10 +115,8 @@ index: 3
 
 <script lang="ts">
 import Show from './components/melkman/Show.vue'
-import Divide from './components/melkman/Divide.vue'
-import Jarvis from './components/melkman/Jarvis.vue'
-import Graham from './components/melkman/Graham.vue'
-import Melkman from './components/melkman/Melkman.vue'
+import Play from './components/melkman/Play.vue'
+import divide from './components/melkman/divide'
 
-export default { components: { Show, Divide, Jarvis, Graham, Melkman } }
+export default { components: { Show, Play }, methods: { divide } }
 </script>

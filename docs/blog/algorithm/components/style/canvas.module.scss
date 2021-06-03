@@ -1,0 +1,15 @@
+.wrap {
+  i {
+    margin-right: 10px;
+    cursor: pointer;
+  }
+
+  canvas {
+    display: block;
+    width: 320px;
+    height: 320px;
+    margin-top: 10px;
+    border: 1px solid var(--c-brand);
+    cursor: crosshair;
+  }
+}

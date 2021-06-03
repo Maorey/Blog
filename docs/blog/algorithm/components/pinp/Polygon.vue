@@ -1,9 +1,15 @@
 <template>
-  <div :class="$style.wrap">
+  <div :class="STYLE.wrap">
     <br />
     <i @click="toggle">{{ isRay ? '正在画射线' : '正在画多边形' }}(点我/右键结束)</i>
     <i @click="clear">重置</i>
-    <canvas width="320" height="320" @click="onClick" @mousemove="onMove" @contextmenu="stop" />
+    <canvas
+      width="320"
+      height="320"
+      @click="onClick"
+      @mousemove="onMove"
+      @contextmenu.stop.prevent="toggle"
+    />
     <p>
       计算结果: 你画的是
       <b :style="`color: ${result ? 'green' : result === false ? 'red' : ''}`">{{
@@ -17,6 +23,7 @@
 
 <script lang="ts">
 import { ref } from 'vue'
+import STYLE from '../style/canvas.module.scss'
 
 interface Point {
   x: number
@@ -197,31 +204,7 @@ export default {
       }
     }
 
-    const stop = (event: MouseEvent) => {
-      toggle()
-      event.stopPropagation()
-      event.preventDefault()
-    }
-
-    return { isRay, result, cross, toggle, clear, onClick, onMove, stop }
+    return { STYLE, isRay, result, cross, toggle, clear, onClick, onMove }
   },
 }
 </script>
-
-<style lang="scss" module>
-.wrap {
-  i {
-    margin-right: 10px;
-    cursor: pointer;
-  }
-
-  canvas {
-    display: block;
-    width: 320px;
-    height: 320px;
-    margin-top: 10px;
-    border: 1px solid var(--c-brand);
-    cursor: crosshair;
-  }
-}
-</style>
