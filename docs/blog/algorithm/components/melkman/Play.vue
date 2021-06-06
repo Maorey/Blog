@@ -16,15 +16,18 @@ import STYLE from '../style/canvas.module.scss'
 interface PointsWithDone extends Array<Point> {
   done?: boolean
 }
+interface LinesWithDone extends Array<Point[]> {
+  done?: boolean
+}
+type PolygonWithDone = PointsWithDone | LinesWithDone
 
-function* runAlgorithm(algorithm: Algorithm, points: Point[]) {
+function* runAlgorithm(algorithm: Algorithm, points: Point[], speed: number) {
   const iterator = algorithm(points)
-  const speed = 250
 
-  let result: IteratorResult<PointsWithDone, PointsWithDone>
+  let result: IteratorResult<PolygonWithDone, PolygonWithDone>
   do {
     result = iterator.next()
-    yield new Promise<PointsWithDone>(resolve => {
+    yield new Promise<PolygonWithDone>(resolve => {
       const value = result.value
       value.done = result.done
 
@@ -36,46 +39,69 @@ function* runAlgorithm(algorithm: Algorithm, points: Point[]) {
 }
 
 const SIZE = 320
-function draw(context: CanvasRenderingContext2D, points?: Point[], line?: PointsWithDone) {
-  context.clearRect(0, 0, SIZE, SIZE)
-
+const drawPoint = (
+  context: CanvasRenderingContext2D,
+  points?: Point[],
+  fillStyle: string | CanvasGradient | CanvasPattern = 'red',
+  size = 4
+) => {
   let i = points && points.length
-  let point
   if (i) {
-    context.fillStyle = 'red'
+    context.fillStyle = fillStyle
+    const half = size >> 1
+    let point
     while (i--) {
       point = points![i]
-      context.fillRect(point.x - 2, point.y - 2, 4, 4)
+      context.fillRect(point.x - half, point.y - half, size, size)
     }
   }
+}
+const drawLine = (
+  context: CanvasRenderingContext2D,
+  polygon: Point[],
+  strokeStyle: string | CanvasGradient | CanvasPattern = 'green',
+  closePath?: boolean
+) => {
+  let i = polygon.length
+  let point = polygon![--i]
+  context.beginPath()
+  context.moveTo(point.x, point.y)
+  while (i) {
+    point = polygon![--i]
+    context.lineTo(point.x, point.y)
+  }
+  closePath && context.closePath()
+  context.strokeStyle = strokeStyle
+  context.stroke()
+}
+const draw = (context: CanvasRenderingContext2D, points?: Point[], polygon?: PolygonWithDone) => {
+  context.clearRect(0, 0, SIZE, SIZE)
 
-  i = line && line.length
+  drawPoint(context, points)
+
+  let i = polygon && polygon.length
   if (i) {
-    let point = line![--i]
+    let pointOrLine = polygon![i - 1]
 
-    if (!line!.done) {
-      context.fillStyle = 'green'
-      context.fillRect(point.x - 3, point.y - 3, 6, 6)
-
-      if (i) {
-        context.beginPath()
-        context.moveTo(point.x, point.y)
-        point = line![--i]
-        context.lineTo(point.x, point.y)
-        context.strokeStyle = 'red'
-        context.stroke()
+    if (Array.isArray(pointOrLine)) {
+      if (!polygon!.done) {
+        drawPoint(context, pointOrLine, 'green', 6)
+        drawLine(context, pointOrLine, 'red')
+        i--
       }
-    }
+      while (i) {
+        drawLine(context, (polygon as LinesWithDone)[--i])
+      }
+    } else {
+      if (!polygon!.done) {
+        drawPoint(context, [pointOrLine], 'green', 6)
 
-    context.beginPath()
-    context.moveTo(point.x, point.y)
-    while (i) {
-      point = line![--i]
-      context.lineTo(point.x, point.y)
+        --i && drawLine(context, [pointOrLine, (polygon as PointsWithDone)[i - 1]], 'red')
+        polygon = (polygon as PointsWithDone).slice(0, i)
+      }
+
+      drawLine(context, polygon as PointsWithDone, 'green', polygon!.done)
     }
-    line!.done && context.closePath()
-    context.strokeStyle = 'green'
-    context.stroke()
   }
 }
 
@@ -83,6 +109,8 @@ export default {
   props: {
     /** 生成最小凸包算法, 类型为 Algorithm */
     algorithm: Function,
+    /** 播放速度 */
+    speed: Number,
   },
   setup(props: any) {
     const points: Point[] = []
@@ -99,12 +127,12 @@ export default {
           return
         }
 
-        for await (const line of runAlgorithm(props.algorithm, points)) {
+        for await (const polygon of runAlgorithm(props.algorithm, points, props.speed)) {
           if (animationStoped) {
             return
           }
 
-          draw(context, points, line)
+          draw(context, points, polygon)
         }
       },
       clear() {

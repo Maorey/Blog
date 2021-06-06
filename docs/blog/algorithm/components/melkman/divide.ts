@@ -1,4 +1,21 @@
+/** 使用canvas坐标系, 如下
+o——→ x
+|
+↓
+y
+*/
 import type { Point, Algorithm } from './types'
+
+/** 四角
+ * 上下极值点y坐标相等时, 按x坐标升序
+ * 左右极值点x坐标相等时, 按y坐标升序
+ */
+const enum Corner {
+  leftTop,
+  rightTop,
+  leftBottom,
+  rightBottom,
+}
 
 /** 比较极值点
  * @param extreme 当前极值点
@@ -9,8 +26,60 @@ import type { Point, Algorithm } from './types'
 type Compare = (extreme: Point, point: Point) => boolean | keyof Point
 const compareLeft: Compare = (e, p) => (e.x === p.x ? 'y' : e.x > p.x)
 const compareRight: Compare = (e, p) => (e.x === p.x ? 'y' : e.x < p.x)
-const compareTop: Compare = (e, p) => (e.y === p.y ? 'x' : e.y < p.y)
-const compareBottom: Compare = (e, p) => (e.y === p.y ? 'x' : e.y > p.y)
+const compareTop: Compare = (e, p) => (e.y === p.y ? 'x' : e.y > p.y)
+const compareBottom: Compare = (e, p) => (e.y === p.y ? 'x' : e.y < p.y)
+
+/** 划分四个角的向量 */
+type GetVector = (xExtremes: Point[], yExtremes: Point[]) => [Point, Point]
+const getLeftTopVector: GetVector = (leftExtremes, topExtremes) => [
+  topExtremes[0],
+  leftExtremes[0],
+]
+const getRightTopVector: GetVector = (rightExtremes, topExtremes) => [
+  rightExtremes[0],
+  topExtremes[topExtremes.length - 1],
+]
+const getLeftBottomVector: GetVector = (leftExtremes, bottomExtremes) => [
+  leftExtremes[leftExtremes.length - 1],
+  bottomExtremes[0],
+]
+const getRightBottomVector: GetVector = (rightExtremes, bottomExtremes) => [
+  bottomExtremes[bottomExtremes.length - 1],
+  rightExtremes[rightExtremes.length - 1],
+]
+
+/** 是否在四个角 */
+type InRange = (point: Point, vector: [Point, Point]) => boolean
+const inLeftTopRange: InRange = (point, vector) => point.x < vector[0].x && point.y < vector[1].y
+const inRightTopRange: InRange = (point, vector) => point.x > vector[1].x && point.y < vector[0].y
+const inLeftBottomRange: InRange = (point, vector) =>
+  point.x < vector[1].x && point.y > vector[0].y
+const inRightBottomRange: InRange = (point, vector) =>
+  point.x > vector[0].x && point.y > vector[1].y
+
+// const insert = (point: Point, points: Point[], sortField: keyof Point) => {
+//   // 二分查找 [low, high)
+//   const value = point[sortField]
+//   let low = 0
+//   let high = points.length
+//   let i: number
+//   while (low < high) {
+//     i = (low + high) >> 1 // 除2并向下取整
+//     if (points[i][sortField] > value) {
+//       high = i - 1
+//     } else {
+//       low = i + 1
+//     }
+//   }
+
+//   // 插入
+//   // points.splice(low, 0, point)
+//   i = points.length
+//   while (i > low) {
+//     points[i] = points[--i]
+//   }
+//   points[low] = point
+// }
 
 /** 更新极值点集
  * @param point
@@ -53,95 +122,99 @@ const updateExtremes = (point: Point, extremes: Point[], compare: Compare) => {
   }
 }
 
-type InRange = (point: Point, xExtremes: Point[], yExtremes: Point[]) => boolean
-const inLeftTopRange: InRange = (point, leftExtremes, topExtremes) =>
-  point.x < topExtremes[0].x && point.y > leftExtremes[leftExtremes.length - 1].y
-const inRightTopRange: InRange = (point, rightExtremes, topExtremes) =>
-  point.x > topExtremes[topExtremes.length - 1].x &&
-  point.y > rightExtremes[rightExtremes.length - 1].y
-const inLeftBottomRange: InRange = (point, leftExtremes, bottomExtremes) =>
-  point.x < bottomExtremes[0].x && point.y < leftExtremes[0].y
-const inRightBottomRange: InRange = (point, rightExtremes, bottomExtremes) =>
-  point.x > bottomExtremes[bottomExtremes.length - 1].x && point.y < rightExtremes[0].y
+/** 点是否在划分四个角向量的顺时针方向 不考虑dx/dy为0 */
+const isClockwise = (point: Point, [{ x, y }, end]: [Point, Point]) =>
+  (end.x - x) * (point.y - y) > (point.x - x) * (end.y - y)
 
-type GetVector = (xExtremes: Point[], yExtremes: Point[]) => [Point, Point]
-const getLeftTopVector: GetVector = (leftExtremes, topExtremes) => [
-  topExtremes[0],
-  leftExtremes[leftExtremes.length - 1],
-]
-const getRightTopVector: GetVector = (rightExtremes, topExtremes) => [
-  rightExtremes[rightExtremes.length - 1],
-  topExtremes[topExtremes.length - 1],
-]
-const getLeftBottomVector: GetVector = (leftExtremes, bottomExtremes) => [
-  leftExtremes[0],
-  bottomExtremes[0],
-]
-const getRightBottomVector: GetVector = (rightExtremes, bottomExtremes) => [
-  bottomExtremes[bottomExtremes.length - 1],
-  rightExtremes[0],
-]
-
-const isClockwise = (point: Point, vector: [Point, Point]) =>
-  (vector[1].x - vector[0].x) * (point.y - vector[0].y) >
-  (point.x - vector[0].x) * (vector[1].y - vector[0].y)
-
-/** 划分角落
- * 上下极值点y坐标相等时, 按x坐标升序
- * 左右极值点x坐标相等时, 按y坐标升序
- */
-const enum Corner {
-  leftTop,
-  rightTop,
-  leftBottom,
-  rightBottom,
-}
-
-interface CornerPoints extends Array<Point> {
+interface Functions {
   c: Corner
   x: Compare
   y: Compare
   i: InRange
-  v: [Point, Point]
+  v: GetVector
 }
+interface CornerPoints extends Array<Point> {
+  f: Functions
+}
+
+/** 获取指定角落的处理函数
+ * @param corner
+ * @returns [compareX, compareY, inRange, getVector]
+ */
+const getFunctions = (corner: Corner): Functions => {
+  switch (corner) {
+    case Corner.leftTop:
+      return {
+        c: corner,
+        x: compareLeft,
+        y: compareTop,
+        i: inLeftTopRange,
+        v: getLeftTopVector,
+      }
+    case Corner.rightTop:
+      return {
+        c: corner,
+        x: compareRight,
+        y: compareTop,
+        i: inRightTopRange,
+        v: getRightTopVector,
+      }
+    case Corner.leftBottom:
+      return {
+        c: corner,
+        x: compareLeft,
+        y: compareBottom,
+        i: inLeftBottomRange,
+        v: getLeftBottomVector,
+      }
+    case Corner.rightBottom:
+      return {
+        c: corner,
+        x: compareRight,
+        y: compareBottom,
+        i: inRightBottomRange,
+        v: getRightBottomVector,
+      }
+  }
+}
+const getCornerPoints = (cornerOrCornerPoints: Corner | CornerPoints): CornerPoints => {
+  const cornerPoints: CornerPoints = [] as any
+  cornerPoints.f =
+    (cornerOrCornerPoints as CornerPoints).f || getFunctions(cornerOrCornerPoints as Corner)
+
+  return cornerPoints
+}
+
 /** 对指定的四个角落之一进行划分
  * @param cornerPoints
- * @param corner
+ *
  * @returns [x极值点集, y极值点集, 相同角落待确定点集]
  */
 const partitionCorner = (cornerPoints: CornerPoints): [Point[], Point[], CornerPoints] => {
-  const xPoints: Point[] = []
-  const yPoints: Point[] = []
+  const xExtremes: Point[] = []
+  const yExtremes: Point[] = []
 
+  const { x: compareX, y: compareY } = cornerPoints.f
   let i = cornerPoints.length
-  if (i < 2) {
-    return [cornerPoints, xPoints, yPoints as CornerPoints]
-  }
-
   let point: Point
   while (i) {
     point = cornerPoints[--i]
 
-    updateExtremes(point, xPoints, cornerPoints.x)
-    updateExtremes(point, yPoints, cornerPoints.y)
+    updateExtremes(point, xExtremes, compareX)
+    updateExtremes(point, yExtremes, compareY)
   }
 
-  const restCornerPoints: CornerPoints = [] as any
-  restCornerPoints.c = cornerPoints.c
-  restCornerPoints.x = cornerPoints.x
-  restCornerPoints.y = cornerPoints.y
-  restCornerPoints.i = cornerPoints.i
-  restCornerPoints.v = cornerPoints.v
-
+  const restCornerPoints = getCornerPoints(cornerPoints)
+  const inRange = restCornerPoints.f.i
+  const vector = restCornerPoints.f.v(xExtremes, yExtremes)
   i = cornerPoints.length
   while (i) {
     point = cornerPoints[--i]
-    cornerPoints.i(point, xPoints, yPoints) &&
-      isClockwise(point, cornerPoints.v) &&
-      restCornerPoints.push(point)
+
+    inRange(point, vector) && isClockwise(point, vector) && restCornerPoints.push(point)
   }
 
-  return [xPoints, yPoints, restCornerPoints]
+  return [xExtremes, yExtremes, restCornerPoints]
 }
 
 /** 将点集划分为5个区域
@@ -171,49 +244,29 @@ const partition = (
     updateExtremes(point, bottomExtremes, compareBottom)
   }
 
-  const leftTopCornerPoints: CornerPoints = [] as any
+  const leftTopCornerPoints = getCornerPoints(Corner.leftTop)
   const leftTopVector = getLeftTopVector(leftExtremes, topExtremes)
-  leftTopCornerPoints.c = Corner.leftTop
-  leftTopCornerPoints.x = compareLeft
-  leftTopCornerPoints.y = compareTop
-  leftTopCornerPoints.i = inLeftTopRange
-  leftTopCornerPoints.v = leftTopVector
 
-  const rightTopCornerPoints: CornerPoints = [] as any
+  const rightTopCornerPoints = getCornerPoints(Corner.rightTop)
   const rightTopVector = getRightTopVector(rightExtremes, topExtremes)
-  rightTopCornerPoints.c = Corner.rightTop
-  rightTopCornerPoints.x = compareRight
-  rightTopCornerPoints.y = compareTop
-  rightTopCornerPoints.i = inRightTopRange
-  rightTopCornerPoints.v = rightTopVector
 
-  const leftBottomCornerPoints: CornerPoints = [] as any
-  const leftBottomVector = getLeftBottomVector(leftExtremes, bottomExtremes)
-  leftBottomCornerPoints.c = Corner.leftBottom
-  leftBottomCornerPoints.x = compareLeft
-  leftBottomCornerPoints.y = compareBottom
-  leftBottomCornerPoints.i = inLeftBottomRange
-  leftBottomCornerPoints.v = leftBottomVector
+  const leftBottomCornerPoints = getCornerPoints(Corner.leftBottom)
+  const leftBottomVector = getLeftTopVector(leftExtremes, bottomExtremes)
 
-  const rightBottomCornerPoints: CornerPoints = [] as any
+  const rightBottomCornerPoints = getCornerPoints(Corner.rightBottom)
   const rightBottomVector = getRightBottomVector(rightExtremes, bottomExtremes)
-  rightBottomCornerPoints.c = Corner.rightBottom
-  rightBottomCornerPoints.x = compareRight
-  rightBottomCornerPoints.y = compareBottom
-  rightBottomCornerPoints.i = inRightBottomRange
-  rightBottomCornerPoints.v = rightBottomVector
 
   i = points.length
   while (i) {
     point = points[--i]
 
-    inLeftTopRange(point, leftExtremes, topExtremes)
+    inLeftTopRange(point, leftTopVector)
       ? isClockwise(point, leftTopVector) && leftTopCornerPoints.push(point)
-      : inRightTopRange(point, rightExtremes, topExtremes)
+      : inRightTopRange(point, rightTopVector)
       ? isClockwise(point, rightTopVector) && rightTopCornerPoints.push(point)
-      : inLeftBottomRange(point, leftExtremes, bottomExtremes)
+      : inLeftBottomRange(point, leftBottomVector)
       ? isClockwise(point, leftBottomVector) && leftBottomCornerPoints.push(point)
-      : inRightBottomRange(point, rightExtremes, bottomExtremes) &&
+      : inRightBottomRange(point, rightBottomVector) &&
         isClockwise(point, rightBottomVector) &&
         rightBottomCornerPoints.push(point)
   }
@@ -247,6 +300,7 @@ const generateConvex = (
     result.push(bottomPoints[--i])
   }
 
+  result.push(result[0])
   return result
 }
 
@@ -267,7 +321,7 @@ const divide: Algorithm = function* (points) {
     cornerPoints = cornerPointsList.shift()!
     ;[xExtremes, yExtremes, cornerPoints] = partitionCorner(cornerPoints)
 
-    switch (cornerPoints.c) {
+    switch (cornerPoints.f.c) {
       case Corner.leftTop:
         leftPoints.push(...xExtremes)
         topPoints.unshift(...yExtremes)

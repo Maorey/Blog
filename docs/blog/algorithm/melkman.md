@@ -26,8 +26,19 @@ index: 3
 计算的步骤为:
 
 1. 从点集里取出一点**A**, 与剩下的点**B**依次连接, 得到一条直线**L** (共 $\sum_{\substack{1 < i < n - 1}}$ 条)
-2. 判断其他点是否都在这条直线**L**的同一侧 (共 $n - 2$ 个), 是则将这两点**A**和**B**去重地加入凸包数组 (插入更佳 按x,y排序)
-3. 按一定规则(按x,y排序)连接(排序)凸包数组得到凸包
+2. 判断其他点是否都在这条直线**L**的同一侧 (共 $n - 2$ 个), 是则将**L**([A, B])加入边数组
+3. [按需] 将边数组转换为点数组 (将点按顺时针/逆时针排序同时去重)
+
+#### 演示
+
+<Play :algorithm="exhaust" :speed="80" />
+
+<details>
+<summary>推导及代码实现</summary>
+
+<<< @/blog/algorithm/components/melkman/exhaust.ts
+
+</details>
 
 ### 分治法 (快包 O(n㏒n))
 
@@ -37,15 +48,19 @@ index: 3
 
 那么基于这4个极值点(集), 可以想到把点集划分为**5个区域**, 很明显在中间的4-8边形内不可能存在凸包顶点, 剩余的**4个区域**(左上角、右上角、左下角、右下角) 可能存在凸包顶点
 
-这4个区域可以视作新的点集, 继续对其划分直到不可分, 四个角划分方式相似. 比如, 左上角按左上两组极值点集进行划分, 再以相同地方式继续划分左上角的左上角
-
-上下左右四个顶点集顺时针连接即可得到凸包
+这4个区域可以视作新的点集, 但是新的点集的极值点就不一定是凸包顶点了, 这个时候**到划分线距离最远**的点**A**一定是凸包上的点, 将点**A**作为分割点继续划分, 排除掉内部不可能的点继续划分直到无法划分
 
 ![划分](melkman/divide.png)
 
+整理下计算的步骤:
+
+1. 找到x极值点**p0**和**p1**, 线段$\overline{p_0p_1}$将点集划分为两个部分, 称作**上包**和**下包**
+2. 在**上包**中找到离$\overline{p_0p_1}$最远的点**p2**, 使用线段$\overline{p_2p_0}$ 和 线段$\overline{p_1p_2}$ 继续对上包进行划分, 对得到的 **上包左上** 和 **上包右上** 继续执行第**2**步, 直到无法继续划分(上包为空)
+3. 对**下包**也做与**第2步**相似的操作
+
 #### 演示
 
-<Play :algorithm="divide" />
+<Play :algorithm="divide" :speed="250" />
 
 <details>
 <summary>推导及代码实现</summary>
@@ -145,7 +160,8 @@ index: 3
 <script lang="ts">
 import Show from './components/melkman/Show.vue'
 import Play from './components/melkman/Play.vue'
+import exhaust from './components/melkman/exhaust'
 import divide from './components/melkman/divide'
 
-export default { components: { Show, Play }, methods: { divide } }
+export default { components: { Show, Play }, methods: { exhaust, divide } }
 </script>
