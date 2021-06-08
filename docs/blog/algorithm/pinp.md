@@ -54,7 +54,7 @@ index: 2
 设多边形上的三个顶点分别为: $p_0$, $p_1$ 和 $p_2$, 则两条边为 $\overline{p_0p_1}$ 和 $\overline{p_1p_2}$. 若 $\overrightarrow{p_0p_1} \times \overrightarrow{p_0p_2}$ 为正则 $\overrightarrow{p_0p_2}$ 在 $\overrightarrow{p_0p_1}$ 的顺时针方向, 反之则为逆时针. 代入三点坐标可得叉积为:
 
 $$
-(p_{1_x} - p_{0_x}) \times (p_{2_y} - p_{0_y}) - (p_{2_x} - p_{0_x}) \times (p_{1_y} - p_{0_y})
+(p_{2_x} - p_{0_x}) \times (p_{1_y} - p_{0_y}) - (p_{1_x} - p_{0_x}) \times (p_{2_y} - p_{0_y})
 $$
 
 代码实现如下:
@@ -65,7 +65,7 @@ function isConvex(polygon: Point[]) {
     const p0 = polygon[i]
     const p1 = polygon[j]
     const p2 = polygon[k]
-    const turn = (p1.x - p0.x) * (p2.y - p0.y) >= (p2.x - p0.x) * (p1.y - p0.y)
+    const turn = (p2.x - p0.x) * (p1.y - p0.y) >= (p1.x - p0.x) * (p2.y - p0.y)
     if (lastTurn === null) {
       lastTurn = turn
     } else if (turn !== lastTurn) {

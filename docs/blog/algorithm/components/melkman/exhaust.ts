@@ -1,11 +1,6 @@
 import type { Point, Algorithm } from './types'
 
-/** 穷举法求最小凸包 使用canvas坐标系, 如下
-o——→ x
-|
-↓
-y
-*/
+/** 穷举法求最小凸包 */
 const exhaust: Algorithm = function* (points: Point[]) {
   const size = points.length
   if (size < 4) {

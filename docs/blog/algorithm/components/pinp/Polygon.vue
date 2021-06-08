@@ -121,7 +121,7 @@ function isConvex(polygon: Point[]) {
     const p0 = polygon[i]
     const p1 = polygon[j]
     const p2 = polygon[k]
-    const turn = (p1.x - p0.x) * (p2.y - p0.y) >= (p2.x - p0.x) * (p1.y - p0.y)
+    const turn = (p2.x - p0.x) * (p1.y - p0.y) >= (p1.x - p0.x) * (p2.y - p0.y)
     if (lastTurn === null) {
       lastTurn = turn
     } else if (turn !== lastTurn) {
