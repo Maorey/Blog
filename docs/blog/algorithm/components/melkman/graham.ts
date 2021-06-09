@@ -12,24 +12,24 @@ function insert(
   points: Point[],
   compare: (element: Point, point: Point) => boolean
 ) {
-  // 二分查找 [low, high)
+  // 二分查找 [low, high]
   let low = 0
-  let high = points.length
-  let i: number
-  while (low < high) {
-    i = (low + high) >> 1 // 除2并向下取整
-    if (compare(points[i], point)) {
-      high = i - 1
+  let mid: number
+  let high = points.length - 1
+  while (low <= high) {
+    mid = (low + high) >> 1 // 除2并向下取整
+    if (compare(points[mid], point)) {
+      high = mid - 1
     } else {
-      low = i + 1
+      low = mid + 1
     }
   }
 
   // 插入
   // points.splice(low, 0, point)
-  i = points.length
-  while (i > low) {
-    points[i] = points[--i]
+  mid = points.length
+  while (mid > low) {
+    points[mid] = points[--mid]
   }
   points[low] = point
 }
