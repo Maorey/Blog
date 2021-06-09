@@ -80,46 +80,48 @@ index: 3
 1. 左上、右上、左下、右下四个角处的点一定是凸包上的点, 因此选任意一个用来作为起点
 2. 依次从剩下的点里取出一个点, 按照顺时针或逆时针方向, 夹角最小的一个或多个点即为凸包顶点
 
-边界情况:
+优化一下:
 
-1. 第二个凸包顶点: 夹角与所选起点对应平行于坐标轴的射线计算, 比如选取左上角为起点, 顺时针方向前进, 则射线为起点→x轴正方向
-2. 何时闭合凸包(完成条件): 可以将起点添加的点集末尾, 若下一个计算出的点是起点则闭合
+1. 先找到左上角的点入栈, 选取顺时针方向遍历, 结果为点数组(栈), 先将下一个非起点的点入栈
+2. 遍历全部点
+    1. 若一个点**A**在栈顶两点向量的逆时针方向则用点**A**替换栈顶继续下一个点
+    2. 若完成本轮遍历时得到的顶点为起点, 则结束, 否则入栈继续下一轮
 
 #### 演示
 
-<Play :algorithm="divide" />
+<Play :algorithm="jarvis" :speed="125" />
 
 <details>
 <summary>推导及代码实现</summary>
 
-```ts
-
-```
+<<< @/blog/algorithm/components/melkman/jarvis.ts
 
 </details>
 
 ### Graham 扫描法 (O(n㏒n)) [^GrahamScan]
 
-首先选取一个一定是凸包顶点的点作为起点, 将坐标系原点移到起点, 将剩下的点按照幅角排序, 这样就可以依次去判断和连接了
+在[Jarvis 步进法](#jarvis-步进法-o-nh)中, 我们已经可以顺时针或逆时针地将凸包围出来了, 但是每次都要去遍历所有的点判断其时针方向才能确定一个顶点, 那要是我们按照时针方向去一个个寻找顶点不就只需要遍历一次了么？
 
-计算的步骤为(左下角起顺时针方向):
+Graham 扫描法就是这个思路, 还是先找到一个起点, 然后剩下的点按照相对起点的时针方向排序, 然后进行连接
 
-1. 找到所有x最小的点, 按照y升序全部加入凸包数组, 取末尾的点为起点**O**
-2. 依次计算剩余的点与起点**O**的幅角(y轴正向), 从小到大排序, 幅角相等按距离排序(近的在前), 第一个点和最后一个点一定是凸包顶点, 先把第一个点添加进凸包数组末尾
+计算的步骤为(左上角起顺时针方向):
+
+1. 找到左上角点作为起点**O**
+2. 将点集按照与起点**O**的幅角(y轴正向)从小到大排序, 幅角相等则按与起点**O**的距离排序(近的在前), 第一个点和最后一个点一定是凸包顶点, 先把第一个点添加进凸包顶点数组末尾
 3. 从排序数组中取出第一个点**A**
     1. 若点**A**为最后一个点, 加入凸包数组并结束
-    2. 从凸包数组取末尾两点得到一条直线**L**, 若点**A**在直线**L**右边, 则将点**A**加入凸包数组, 继续执行第**3**步; 否则移除凸包数组末尾点, 继续执行第**3.2**步
+    2. 从凸包数组取末尾两点得到一条直线**L**, 若点**A**在直线**L**顺时针方向, 则将点**A**加入凸包数组, 继续执行第**3**步; 否则移除凸包数组末尾点, 继续执行第**3.2**步
 
 #### 演示
 
-<Play :algorithm="divide" />
+<Play :algorithm="graham" :speed="125" />
 
 <details>
 <summary>推导及代码实现</summary>
 
-```ts
+其他点与起点的幅角范围为 [0, 180°], 使用$\cos$函数即可排序幅角, 同时可计算出距离
 
-```
+<<< @/blog/algorithm/components/melkman/graham.ts
 
 </details>
 
@@ -164,6 +166,8 @@ import Show from './components/melkman/Show.vue'
 import Play from './components/melkman/Play.vue'
 import exhaust from './components/melkman/exhaust'
 import divide from './components/melkman/divide'
+import jarvis from './components/melkman/jarvis'
+import graham from './components/melkman/graham'
 
-export default { components: { Show, Play }, methods: { exhaust, divide } }
+export default { components: { Show, Play }, methods: { exhaust, divide, jarvis, graham } }
 </script>
