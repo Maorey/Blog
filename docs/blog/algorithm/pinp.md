@@ -59,23 +59,7 @@ $$
 
 代码实现如下:
 
-```ts
-function isConvex(polygon: Point[]) {
-  for (let i = polygon.length, j = 0, k = 1, lastTurn = null; i--; k = j, j = i) {
-    const p0 = polygon[i]
-    const p1 = polygon[j]
-    const p2 = polygon[k]
-    const turn = (p2.x - p0.x) * (p1.y - p0.y) >= (p1.x - p0.x) * (p2.y - p0.y)
-    if (lastTurn === null) {
-      lastTurn = turn
-    } else if (turn !== lastTurn) {
-      return false
-    }
-  }
-
-  return true
-}
-```
+<<< @/blog/algorithm/components/pinp/isConvex.ts
 
 </details>
 
@@ -174,40 +158,7 @@ $$
 \end{array}
 $$
 
-```ts
-function pinp({ x: px, y: py }: Point, polygon: Point[]) {
-  let odd = false // py射线与多边形的所有边的相交次数是否为奇数
-
-  // polygon[i]-polygon[j] 为多边形的一条边
-  for (let i = polygon.length, j = 0; i--; j = i) {
-    const { x: startX, y: startY } = polygon[i]
-    const { x: endX, y: endY } = polygon[j]
-
-    // 点与边的端点重合
-    if ((px === startX && py === startY) || (px === endX && py === endY)) {
-      return true
-    }
-
-    // 点在边的范围内
-    if ((py > startY && py <= endY) || (py <= startY && py > endY)) {
-      // 边与py射线交点的X坐标
-      const x = startX + ((endX - startX) * (py - startY)) / (endY - startY)
-
-      // 点在边上
-      if (x === px) {
-        return true
-      }
-
-      // 射线与边相交
-      if (x < px) {
-        odd = !odd
-      }
-    }
-  }
-
-  return odd
-}
-```
+<<< @/blog/algorithm/components/pinp/isPointInPolygon.ts
 
 ## 升维
 

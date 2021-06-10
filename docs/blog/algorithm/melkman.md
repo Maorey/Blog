@@ -3,7 +3,7 @@ title: 最小凸包
 index: 3
 ---
 
-2021-06-11
+*2021-06-11*
 
 ## 问题描述
 
@@ -27,7 +27,7 @@ index: 3
 
 1. 从点集里取出一点**A**, 与剩下的点**B**依次连接, 得到一条直线**L**([A, B]) (共 $\sum_{\substack{1 < i < n - 1}}$ 条)
 2. 判断其他点是否都在这条直线**L**的同一侧 (共 $n - 2$ 个), 是则将**L**加入边数组
-3. [按需] 将边数组转换为点数组 (将点按顺时针/逆时针排序同时去重, `O(n)`因为数组里的边总是相邻的)
+3. [按需] 将边数组转换为点数组 (将边首尾相连并展平`O(n㏒n)`)
 
 #### 演示
 
@@ -127,25 +127,23 @@ Graham 扫描法就是这个思路, 还是先找到一个起点, 然后剩下的
 
 ### Melkman 算法 (O(n))
 
-从[Graham 扫描法](#graham-扫描法-o-n㏒n)改进而来, 是一个在线算法. 算法首先需要得到一个三角形凸包, 之后每加入一个点就对凸包进行调整. 在点按照幅角排序后, 时间复杂读可达到`O(n)`, 否则 `O(n㏒n)`
+从[Graham 扫描法](#graham-扫描法-o-n㏒n)改进而来, 改进的思路是: Graham 扫描法一次只能从一端处理下一个有序点, 若是可以打开合适的位置, 那么任意一点都可以成为"下一个有序点", 从而使用同样的方式去处理. 因此它也变成了一个在线算法: 在得到一个三角形凸包后, 之后每加入一个点就按上述思路对凸包进行调整. 该算法在输入的点有序时(按照幅角排序), 时间复杂度可达到`O(n)`, 否则 `O(n㏒n)`
 
 计算的步骤为:
 
-1. 先依次取出点, 直到能构造出三角形 (可能存在三点共线的情况)
-2. 读取下一点**A**, 记录点**A**与凸包的所有边的转向情况
-    1. 都在顺时针/逆时针方向则点**A**在凸包内部, 不做任何处理
-    2. 找到方向突变(在凸包外部)的两条边的交点索引**i**, 使用与 Graham 扫描法相似的方法(步骤**3**)连接该点
+1. 先依次取出点, 直到能构造出三角形 (注意可能存在三点共线的情况)
+2. 读取下一点**A**, 记录点**A**与当前凸包所有边的转向情况
+    1. 都在相同方向则点**A**在凸包内部, 不做任何处理
+    2. 找到方向突变(在凸包外部)的两条边的交点索引, 使用与 Graham 扫描法相似的方法(步骤**3**)连接该点
 
 #### 演示
 
-<Play :algorithm="divide" />
+<Play :algorithm="melkman" :speed="125" />
 
 <details>
 <summary>推导及代码实现</summary>
 
-```ts
-
-```
+<<< @/blog/algorithm/components/melkman/melkman.ts
 
 </details>
 
@@ -161,6 +159,8 @@ Graham 扫描法就是这个思路, 还是先找到一个起点, 然后剩下的
 
 [^GrahamScan]: [Understanding Graham scan algorithm for finding the Convex hull of a set of Points](https://muthu.co/understanding-graham-scan-algorithm-for-finding-the-convex-hull-of-a-set-of-points/)
 
+
+
 <script lang="ts">
 import Show from './components/melkman/Show.vue'
 import Play from './components/melkman/Play.vue'
@@ -168,6 +168,10 @@ import exhaust from './components/melkman/exhaust'
 import divide from './components/melkman/divide'
 import jarvis from './components/melkman/jarvis'
 import graham from './components/melkman/graham'
+import melkman from './components/melkman/melkman'
 
-export default { components: { Show, Play }, methods: { exhaust, divide, jarvis, graham } }
+export default {
+  components: { Show, Play },
+  methods: { exhaust, divide, jarvis, graham, melkman }
+}
 </script>

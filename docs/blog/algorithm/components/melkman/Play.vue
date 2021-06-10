@@ -3,6 +3,10 @@
     <br />
     <i @click="run">生成最小凸包</i>
     <i @click="clear">重置</i>
+    <i @click="down">加速</i>
+    <i @click="up">减速</i>
+    <input type="number" :min="step" :step="step" />
+    <i @click="random">生成随机点</i>
     <canvas width="320" height="320" @click="onClick"></canvas>
     <br />
   </div>
@@ -27,7 +31,7 @@ function* runAlgorithm(algorithm: Algorithm, points: Point[], speed: number) {
   let result: IteratorResult<PolygonWithDone, PolygonWithDone>
   do {
     result = iterator.next()
-    yield new Promise<PolygonWithDone>(resolve => {
+    speed = yield new Promise<PolygonWithDone>(resolve => {
       const value = result.value
       value.done = result.done
 
@@ -109,17 +113,43 @@ export default {
   props: {
     /** 生成最小凸包算法, 类型为 Algorithm */
     algorithm: Function,
-    /** 播放速度 */
+    /** 初始播放速度 */
     speed: Number,
   },
   setup(props: any) {
     const points: Point[] = []
+
+    const step = 10
+    let speed: number = props.speed
 
     let context: CanvasRenderingContext2D
     let animationStoped = false
 
     return {
       STYLE,
+      step,
+      up() {
+        speed += step
+      },
+      down() {
+        speed -= step
+        speed < speed && (speed = step)
+      },
+      random(event: MouseEvent) {
+        animationStoped = true
+
+        // 咱就不用 ref 昂 (`へ´*)ノ
+        let index =
+          +(event.target as any).previousSibling.value ||
+          +(Math.random() + '').slice(8, 9 + ((Math.random() * 3) | 0))
+        points.splice(index)
+        while (index) {
+          points[--index] = { x: (Math.random() * SIZE) | 0, y: (Math.random() * SIZE) | 0 }
+        }
+
+        context || (context = (event.target as any).nextSibling.getContext('2d'))
+        draw(context, points)
+      },
       async run() {
         animationStoped = false
 
@@ -127,7 +157,10 @@ export default {
           return
         }
 
-        for await (const polygon of runAlgorithm(props.algorithm, points, props.speed)) {
+        const iterator = runAlgorithm(props.algorithm, points, speed)
+        let result: IteratorResult<Promise<PolygonWithDone>>
+        while (!(result = iterator.next(speed)).done) {
+          const polygon = await result.value
           if (animationStoped) {
             return
           }

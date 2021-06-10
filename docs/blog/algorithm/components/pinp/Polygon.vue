@@ -23,12 +23,10 @@
 
 <script lang="ts">
 import { ref } from 'vue'
-import STYLE from '../style/canvas.module.scss'
 
-interface Point {
-  x: number
-  y: number
-}
+import STYLE from '../style/canvas.module.scss'
+import isConvex from './isConvex'
+import type { Point } from './types'
 
 const SIZE = 320
 
@@ -114,22 +112,6 @@ function drawRayAndCrossPoint(
   }
 
   return cross
-}
-
-function isConvex(polygon: Point[]) {
-  for (let i = polygon.length, j = 0, k = 1, lastTurn = null; i--; k = j, j = i) {
-    const p0 = polygon[i]
-    const p1 = polygon[j]
-    const p2 = polygon[k]
-    const turn = (p2.x - p0.x) * (p1.y - p0.y) >= (p1.x - p0.x) * (p2.y - p0.y)
-    if (lastTurn === null) {
-      lastTurn = turn
-    } else if (turn !== lastTurn) {
-      return false
-    }
-  }
-
-  return true
 }
 
 const getPoint = (event: MouseEvent): Point => ({

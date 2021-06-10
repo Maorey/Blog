@@ -20,12 +20,10 @@
 
 <script lang="ts">
 import { ref } from 'vue'
-import STYLE from '../style/canvas.module.scss'
 
-interface Point {
-  x: number
-  y: number
-}
+import STYLE from '../style/canvas.module.scss'
+import isPointInPolygon from './isPointInPolygon'
+import type { Point } from './types'
 
 const SIZE = 320
 
@@ -55,39 +53,6 @@ function drawPoint(context: CanvasRenderingContext2D, point: Point) {
   context.fillRect(point.x - 2, point.y - 2, 4, 4)
 }
 
-function pinp({ x: px, y: py }: Point, polygon: Point[]) {
-  let odd = false // py射线与多边形的所有边的相交次数是否为奇数
-
-  // polygon[i]-polygon[j] 为多边形的一条边
-  for (let i = polygon.length, j = 0; i--; j = i) {
-    const { x: startX, y: startY } = polygon[i]
-    const { x: endX, y: endY } = polygon[j]
-
-    // 点与边的端点重合
-    if ((px === startX && py === startY) || (px === endX && py === endY)) {
-      return true
-    }
-
-    // 点在边的范围内
-    if ((py > startY && py <= endY) || (py <= startY && py > endY)) {
-      // 边与py射线交点的X坐标
-      const x = startX + ((endX - startX) * (py - startY)) / (endY - startY)
-
-      // 点在边上
-      if (x === px) {
-        return true
-      }
-
-      // 射线与边相交
-      if (x < px) {
-        odd = !odd
-      }
-    }
-  }
-
-  return odd
-}
-
 const getPoint = (event: MouseEvent): Point => ({
   x: event.pageX - (event.target as HTMLCanvasElement).offsetLeft,
   y: event.pageY - (event.target as HTMLCanvasElement).offsetTop,
@@ -109,7 +74,7 @@ export default {
       if (isPoint.value) {
         drawPolygon(context, polygon)
         drawPoint(context, point)
-        result.value = pinp(point, polygon)
+        result.value = isPointInPolygon(point, polygon)
       } else {
         polygon.push(point)
         polygon.length < 2 ? drawPoint(context, point) : drawPolygon(context, polygon)

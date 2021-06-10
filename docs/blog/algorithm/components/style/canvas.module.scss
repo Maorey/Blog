@@ -1,7 +1,30 @@
 .wrap {
-  i {
+  font-family: none;
+
+  i,
+  input {
     margin-right: 10px;
+  }
+
+  i {
+    color: var(--c-text-light);
     cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      color: var(--c-brand-light);
+    }
+  }
+
+  input {
+    width: 60px;
+    padding: 3px 7px;
+    border: 1px solid var(--c-brand-light);
+
+    &:focus {
+      border-color: var(--c-brand);
+      outline: none;
+    }
   }
 
   canvas {
