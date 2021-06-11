@@ -5,7 +5,7 @@
     <i @click="clear">重置</i>
     <i @click="down">加速</i>
     <i @click="up">减速</i>
-    <input type="number" :min="step" :step="step" />
+    <input type="number" min="1" step="3" />
     <i @click="random">生成随机点</i>
     <canvas width="320" height="320" @click="onClick"></canvas>
     <br />
@@ -127,7 +127,6 @@ export default {
 
     return {
       STYLE,
-      step,
       up() {
         speed += step
       },
@@ -141,7 +140,7 @@ export default {
         // 咱就不用 ref 昂 (`へ´*)ノ
         let index =
           +(event.target as any).previousSibling.value ||
-          +(Math.random() + '').slice(8, 9 + ((Math.random() * 3) | 0))
+          +(Math.random() + '').slice(8, 9 + ((Math.random() * 3) | 0)) + 1
         points.splice(index)
         while (index) {
           points[--index] = { x: (Math.random() * SIZE) | 0, y: (Math.random() * SIZE) | 0 }
