@@ -73,7 +73,7 @@ const melkman: Algorithm = function* (points) {
     yield result.concat(point)
 
     for (
-      lastTurn = null, endPointer = pointer + 1, startPointer = 0;
+      lastTurn = null, startPointer = 0, endPointer = pointer + 1;
       endPointer--;
       startPointer = endPointer
     ) {
@@ -81,7 +81,7 @@ const melkman: Algorithm = function* (points) {
       endPoint = points[endPointer]
 
       turn =
-        (endPoint.x - startPoint.x) * (point.y - startPoint.y) >=
+        (endPoint.x - startPoint.x) * (point.y - startPoint.y) <=
         (point.x - startPoint.x) * (endPoint.y - startPoint.y)
       if (lastTurn === null) {
         lastTurn = turn
@@ -93,7 +93,7 @@ const melkman: Algorithm = function* (points) {
 
     if (lastTurn === null) {
       // 点在当前凸包外面
-      // TODO
+
     }
   }
 

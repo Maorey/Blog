@@ -21,6 +21,36 @@ summary {
   }
 }
 
+// 表格
+tr:nth-child(2n) {
+  background-color: var(--c-bg-accent);
+}
+
+// 容器
+.custom-block {
+  &.tip {
+    color: #0b0;
+    border-color: #0a0;
+    background-color: #0a03;
+  }
+
+  &.warning {
+    color: #bb0;
+    border-color: #aa0;
+    background-color: #aa03;
+  }
+
+  &.danger {
+    color: #b00;
+    border-color: #a00;
+    background-color: #a003;
+  }
+
+  .custom-block-title {
+    color: unset !important;
+  }
+}
+
 // 数学公式
 .katex-display {
   overflow: auto hidden;

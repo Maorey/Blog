@@ -38,11 +38,6 @@ module.exports = {
     locales: {
       '/': { nav, sidebar },
     },
-
-    algolia: {
-      apiKey: 'rejected',
-      indexName: 'blog',
-    },
   },
   markdown: {
     lineNumbers: true,

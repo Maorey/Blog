@@ -7,13 +7,13 @@ index: 1
 
 ## 前言
 
-这次咱来聊聊迭代器相关ES语法, 因为也不是特别新的语法(`ES2015-2018`), 标题就酱紫吧:rofl:, 现代浏览器都支持 (IE: 啥? 村里通网了么?)
+**迭代器**是js中比较基础但很重要的数据结构, 相关ES语法涉及`ES2015-2018`, 现代浏览器都支持 (IE: 啥? 村里通网了么?:rofl:)
 
 ## 迭代器 (Iterators - ES2015)
 
 迭代器[接口定义](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols)如下:
 
-```TypeScript{15-22}
+```ts
 interface IteratorYieldResult<TYield> {
   /** 是否到达结束位置 */
   done?: false
@@ -57,7 +57,7 @@ interface IterableIterator<T> extends Iterator<T> {
 
 你可以通过从上述类型的实例/字面量调用`[Symbol.iterator]`方法得到迭代器实例:
 
-```TypeScript{2}
+```ts
 const SOME_STRING = 'AB'
 const iterator: IterableIterator<string> = SOME_STRING[Symbol.iterator]()
 
@@ -80,7 +80,7 @@ iterator.next() // { value: undefined, done: true }
 
 我们来自己实现一下`Iterator`:
 
-```TypeScript{45-47,50-52,55-58,61-62,65-67}
+```ts
 const someObject = {
   id: 'someObject',
   [Symbol.iterator]() {
@@ -154,7 +154,7 @@ console.log(new Set(someObject))
 
 异步迭代器, 即调用 `next` 方法得到一个`Promise`对象, 接口签名如下:
 
-```TypeScript
+```ts
 interface AsyncIterator<T, TReturn = any, TNext = undefined> {
   next(...args: [] | [TNext]): Promise<IteratorResult<T, TReturn>>
   return?(value?: TReturn | PromiseLike<TReturn>): Promise<IteratorResult<T, TReturn>>
@@ -171,7 +171,7 @@ interface AsyncIterableIterator<T> extends AsyncIterator<T> {
 
 部署了异步迭代器的对象可以通过 `for await...of` (也可遍历**同步迭代器**)等方式遍历
 
-```TypeScript{29-35}
+```ts
 const someObject = {
   id: 'someObject',
   [Symbol.asyncIterator]() {
@@ -215,7 +215,7 @@ run() // 0, 1, 2, 3
 
 生成器函数顾名思义就是用来生成**迭代器**([Generator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator) 对象, 该对象实现了[`Iterator`](#迭代器-iterators-es2015)接口, 包括`next/return/throw`方法)的函数, 示例语法:
 
-```TypeScript{8-12}
+```ts
 interface Generator<T = unknown, TReturn = any, TNext = unknown> extends Iterator<T, TReturn, TNext> {
   next(...args: [] | [TNext]): IteratorResult<T, TReturn>
   return(value: TReturn): IteratorResult<T, TReturn>
@@ -242,7 +242,7 @@ iterator.next() // { value: undefined, done: true }
 
 如果`yield`表达式在另一个表达式中**必须**加括号:
 
-```TypeScript
+```ts
 function* foo(name: string) {
   console.log('Hello' + (yield || name)) // SyntaxError
   console.log('Hello' + (yield name || name)) // SyntaxError
@@ -253,7 +253,7 @@ function* foo(name: string) {
 
 调用生成器函数时仅创建迭代器, 调用迭代器时才执行具体逻辑, 这些逻辑以 `yield` 表达式分割, 可以理解为**每次执行完下一条`yield`表达式所在的语句后就暂停执行**
 
-```TypeScript{1-3}
+```ts
 function* lazy() {
   console.log('lazy is run')
 }
@@ -265,7 +265,7 @@ iterator.next() // { value: undefined, done: true }
 
 下面是使用`for...of`/`...`/`Array.from`等遍历的示例:
 
-```TypeScript
+```ts
 function* foo() {
   console.log('run foo')
   console.log(`foo1 ${yield 1}`)
@@ -286,7 +286,7 @@ for (const value of foo()) {
 
 可通过`next`方法向生成器函数里传递数据(将`yield`表达式替换为指定值):
 
-```TypeScript{15}
+```ts
 function* add() {
   let sum = 0
 
@@ -312,7 +312,7 @@ iterator.next() // { value: undefined, done: true }
 
 可通过`return`方法结束迭代器(将`yield`表达式替换为`return`语句)
 
-```TypeScript{5}
+```ts
 const iterator = add()
 iterator.next() // { value: 0, done: false }
 iterator.next(1) // { value: 1, done: false }
@@ -325,7 +325,7 @@ iterator.next(3) // { value: undefined, done: true }
 
 可通过`throw`方法向迭代器内部传递错误(将`yield`表达式替换为`throw`语句), 生成器函数内部可使用`try...catch`捕获错误, 若未捕获则抛出错误**并结束迭代**, 否则继续执行到**下一条`yield`表达式**
 
-```TypeScript{15}
+```ts
 function* foo() {
   console.log('run foo')
   try {
@@ -349,7 +349,7 @@ iterator.next(2) // { value: undefined, done: true }
 
 在生成器函数内部可使用 `yield*` 表达式遍历其他**可迭代数据结构** (部署了 迭代器/异步迭代器 的数据结构), 有递归的效果
 
-```TypeScript{3}
+```ts
 function* foo() {
   yield 1
   yield* [2, 3] // 或(function* bar() {yield 2; yield 3})()
@@ -359,7 +359,7 @@ function* foo() {
 
 等价于
 
-```TypeScript{3-5}
+```ts
 function* foo() {
   yield 1
   for (const value of [2, 3]) {
@@ -377,7 +377,7 @@ function* foo() {
 
 异步函数使用 `async function` 声明, 函数体内部可以使用 `await` 表达式等待异步操作结果(`thenAble`对象), 总是返回一个`Promise`对象, 它是[生成器函数](#生成器函数-generatorfunction-es2015)的语法糖(内置执行器)
 
-```TypeScript
+```ts
 async function foo(delay?: number) {
   const result = await new Promise(resolve => {
     setTimeout(() => {
@@ -423,7 +423,7 @@ function qux(args) {
 
 其中`spawn`函数返回的`Promise`对象将会在生成器函数自动执行完成后, 变更为`fulfilled`状态. 使用时注意下异步操作的**并行**(使用`Promise.all`等方式)/**串行**及**错误处理**即可
 
-```TypeScript
+```ts
 // 错误处理
 async function foo(url: string) {
   let result
@@ -449,7 +449,7 @@ async function foo(url: string) {
 
 异步生成器函数的语法上是 [异步函数](#异步函数-asyncfunction-es2017) 和 [生成器函数](#生成器函数-generatorfunction-es2015) 的结合, 用来生成一个**异步迭代器**([AsyncGenerator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects#control_abstraction_objects) 仅列出, 暂无文档)对象, 该对象实现了[异步迭代器](#异步迭代器-asynciterators-es2018)接口, 包括`next/return/throw`方法)的函数, 示例语法:
 
-```TypeScript{8-15}
+```ts
 interface AsyncGenerator<T = unknown, TReturn = any, TNext = unknown> extends AsyncIterator<T, TReturn, TNext> {
   next(...args: [] | [TNext]): Promise<IteratorResult<T, TReturn>>
   return(value: TReturn | PromiseLike<TReturn>): Promise<IteratorResult<T, TReturn>>
@@ -481,7 +481,7 @@ run() // foo: 1 \n foo: 2 \n run: done \n foo: 3
 
 异步生成器函数返回的异步迭代器, 其[next](#next) / [return](#return) / [throw](#throw) 方法的行为与上述生成器函数返回的迭代器相似, 注意下`Promise`和错误处理(`try...catch`)即可, 也可以被 [yield*](#yield-表达式) 遍历, 不可用作构造函数(即`new`)
 
-```TypeScript
+```ts
 function* foo() {
   console.log('foo: 0')
   yield 'foo: 1'

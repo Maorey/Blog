@@ -4,7 +4,7 @@
  * @license MIT
  * @copyright 2018-2021 meteorlxy */
 import Vue from 'vssue/node_modules/vue'
-import '../style/vssue.styl'
+import '../style/vssue/index.scss'
 
 export { Vue }
 

@@ -1,0 +1,21 @@
+.vssue-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: $vssue-theme-color;
+  overflow: hidden;
+}
+
+.vssue-icon-loading {
+  animation: vr 1s linear infinite;
+}
+
+@keyframes vr {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

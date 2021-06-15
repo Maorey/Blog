@@ -26,6 +26,14 @@ index: 1
 这里只讨论编程领域的应用
 :::
 
+::: warning 黄金矿工
+有**5座**储量不尽相同的金矿, 每座金矿需要的矿工人数也不尽相同(如下表), 现有矿工**10位**, 每座金矿只能挖光或不挖, 不能只投入一部分人挖走部分金矿。求利益最大化方案(挖到最多金子)
+:::
+
+::: danger
+This is a dangerous warning
+:::
+
 ## 怎么干
 
 ### 基础概念
@@ -52,7 +60,7 @@ _(做出决策 = 计算出结果)_
 
 ### 普通递归算法 :thumbsdown:
 
-```TypeScript{2}
+```ts{2}
 function fibonacci(n: number): number {
   return n < 3 ? 1 : fibonacci(n - 1) + fibonacci(n - 2)
 }
@@ -123,7 +131,7 @@ flowchart TB
 
 ### 带备忘录递归算法 :thumbsup:
 
-```TypeScript{6}
+```ts
 let DPTable: { [key: number]: number }
 
 function solve(n: number): number {
@@ -223,7 +231,7 @@ flowchart TB
 
 顺着备忘录的思路根据**状态转移方程**改为**自底向上**求解的形式:
 
-```TypeScript
+```ts
 function fibonacci(n: number) {
   const DPTable: { [key: number]: number } = { 1: 1, 2: 1 }
 
@@ -237,7 +245,7 @@ function fibonacci(n: number) {
 
 很明显备忘录是可以优化掉的, 易得:
 
-```TypeScript
+```ts
 function fibonacci(n: number) {
   let prev = 1
   let curr = 1
@@ -426,7 +434,7 @@ $$
 
 只计算最大收益数值(`getMostGold`):
 
-```TypeScript
+```ts
 /** 金矿信息 */
 interface GoldMine {
   /** 黄金储量 */
@@ -495,7 +503,7 @@ getMostGold(
 
 得到详细方案(`getMostGold`):
 
-```TypeScript
+```ts
 /** 得到黄金最多的 采矿方案 */
 interface Plan<T extends GoldMine = GoldMine> extends GoldMine {
   /** 要挖掘的金矿 */
@@ -613,7 +621,7 @@ function getMostGold<T extends GoldMine = GoldMine>(
 
 只计算最大收益数值(`getMostGold`):
 
-```TypeScript
+```ts
 function getMostGold<T extends GoldMine = GoldMine>(
   goldMines: T[],
   minerCount: number,
@@ -641,7 +649,7 @@ function getMostGold<T extends GoldMine = GoldMine>(
 
 得到详细方案(`getMostGold`):
 
-```TypeScript
+```ts
 function copyPlan<T extends GoldMine = GoldMine>(plan: Plan<T>): Plan<T> {
   return { ...plan, mines: [...plan.mines] }
 }

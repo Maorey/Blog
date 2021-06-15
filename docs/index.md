@@ -10,7 +10,7 @@ sidebar: false
 
 # 俺的博客重新上线啦！ :tired_face: :tada:
 
-```TypeScript{2}
+```ts{2}
 export default abstract class Hello {
   static me = '毛瑞'
   protected readonly uuid = 'Maorey'

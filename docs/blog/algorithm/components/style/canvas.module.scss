@@ -19,7 +19,9 @@
   input {
     width: 60px;
     padding: 3px 7px;
+    color: unset;
     border: 1px solid var(--c-brand-light);
+    background: var(--c-bg-accent);
 
     &:focus {
       border-color: var(--c-brand);

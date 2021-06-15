@@ -148,7 +148,7 @@ function initEcharts() {
 
         try {
           options = eval(`(${element.textContent})`)
-          echarts.init(element).setOption(options)
+          echarts.init(element, 'dark').setOption(options)
           element.className = 'graph'
         } catch (e) {
           element.outerHTML = `<pre class="language-jsstacktrace">图表异常: ${e.stack}</pre>`
@@ -200,12 +200,13 @@ function initMermaid() {
     mermaidBlocks.length &&
     import('./libs/mermaid').then(mermaid => {
       mermaid = mermaid.default || mermaid
+      mermaid.mermaidAPI.initialize({ theme: 'dark' })
 
       for (let i = 0, len = mermaidBlocks.length; i < len; i++) {
         mermaidBlocks[i].className = 'graph'
       }
 
-      mermaid.init(undefined, mermaidBlocks)
+      mermaid.init(mermaidBlocks)
     })
 }
 

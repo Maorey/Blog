@@ -1,6 +1,25 @@
 // 覆盖默认css变量 vitepress/dist/client/theme-default/styles/vars.css
-// 记得同步修改到 ./vssue.styl
 :root {
+  --c-white: #222;
+  --c-white-dark: #333;
+  --c-black: #fff;
+  --c-divider-light: #bbbb;
+  --c-divider-dark: #aaaa;
+  --c-text-light-1: #eee;
+  --c-text-light-2: #ccc;
+  --c-text-light-3: #aaa;
   --c-brand: #f66;
   --c-brand-light: #f99;
 }
+
+// <html class="dark"> 切换变量
+// :root.dark {
+//   --c-white: #222;
+//   --c-white-dark: #333;
+//   --c-black: #fff;
+//   --c-divider-light: #bbbb;
+//   --c-divider-dark: #aaaa;
+//   --c-text-light-1: #eee;
+//   --c-text-light-2: #ccc;
+//   --c-text-light-3: #aaa;
+// }

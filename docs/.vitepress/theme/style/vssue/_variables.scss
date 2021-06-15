@@ -1,0 +1,30 @@
+// the main color
+$vssue-theme-color: var(--c-brand);
+$vssue-theme-color-light: var(--c-brand-light);
+
+// the background color
+$vssue-bg: var(--c-bg-accent);
+
+// the text color (used for common text)
+$vssue-text-color: var(--c-text-light-1);
+
+// the text light color (used for muted text, disabled text, etc)
+$vssue-text-light-color: var(--c-text-light-2);
+
+// the border color
+$vssue-border-color: var(--c-divider-light);
+
+// the progress color
+$vssue-progress-color: $vssue-theme-color;
+
+// the font size
+$vssue-font-size: 16px;
+
+// the font family
+$vssue-font-family: var(--font-family-base);
+
+// the mobile breakpoint
+$vssue-breakpoint-mobile: 576px;
+
+// ltr-rtl direction
+$vssue-direction: ltr
