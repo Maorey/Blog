@@ -189,9 +189,7 @@ flowchart TB
         A222 --> A2221("f(1)")
         A222 --> A2222("f(2)")
   end
-style a fill:var(--c-brand),fill-opacity:0.2,stroke:var(--c-brand),stroke-dasharray:5 5
-style b fill:var(--c-brand),fill-opacity:0.2,stroke:var(--c-brand),stroke-dasharray:5 5
-style c fill:var(--c-brand),fill-opacity:0.2,stroke:var(--c-brand),stroke-dasharray:5 5
+class a,b,c mhs;
 ```
 
 - 边界: `n = 1 或 2`

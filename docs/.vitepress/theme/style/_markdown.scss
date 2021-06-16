@@ -83,6 +83,14 @@ tr:nth-child(2n) {
   overflow: auto hidden;
 }
 
+// mermaid highlight subgraph
+.mhs > rect {
+  fill: var(--c-brand) !important;
+  fill-opacity: 0.1;
+  stroke: var(--c-brand) !important;
+  stroke-dasharray: 5 5;
+}
+
 // 图片 (懒加载)
 .lazy {
   cursor: zoom-in;
