@@ -80,8 +80,9 @@
     outline: none;
     width: 100%;
     padding: 15px;
-    font-size: $vssue-font-size;
-    font-family: $vssue-font-family;
+    color: unset;
+    font-size: unset;
+    font-family: unset;
     background-color: $vssue-bg;
     border: 1px solid $vssue-border-color;
     border-radius: 5px;

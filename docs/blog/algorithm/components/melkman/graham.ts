@@ -2,6 +2,27 @@ import type { Point, Algorithm } from './types'
 
 const isPointEqual = (a: Point, b: Point) => a === b || (a.x === b.x && a.y === b.y)
 
+/** 将 point 插入到 points 的 position 下标 (最多挪动一半元素)
+ * @param points
+ * @param point
+ * @param position 整数范围: [0, points.length)
+ */
+export function insertAt(points: Point[], point: Point, position: number) {
+  let pointer = points.length
+  if (position < pointer >> 1) {
+    points.unshift(points[0])
+    pointer = 1
+    while (pointer <= position) {
+      points[pointer] = points[++pointer]
+    }
+  } else {
+    while (pointer > position) {
+      points[pointer] = points[--pointer]
+    }
+  }
+  points[position] = point
+}
+
 /** [稳定] 将 point 插入 points
  * @param point
  * @param points
@@ -25,13 +46,8 @@ function insert(
     }
   }
 
-  // 插入
   // points.splice(low, 0, point)
-  mid = points.length
-  while (mid > low) {
-    points[mid] = points[--mid]
-  }
-  points[low] = point
+  insertAt(points, point, low)
 }
 /** 将点集按与 start→x轴正向 的幅角 排序 (幅角相等按距离)
  * @param points
@@ -106,10 +122,6 @@ const graham: Algorithm = function* (points) {
   while (i) {
     point = points[i - 1]
     yield result.concat(point)
-    if (i < 2) {
-      result.push(point)
-      break
-    }
 
     startPoint = result[pointer - 1]
     endPoint = result[pointer]

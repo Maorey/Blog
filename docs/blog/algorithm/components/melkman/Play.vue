@@ -43,19 +43,19 @@ function* runAlgorithm(algorithm: Algorithm, points: Point[], speed: number) {
 }
 
 const SIZE = 320
-const drawPoint = (
+const drawPoints = (
   context: CanvasRenderingContext2D,
-  points?: Point[],
+  points: Point[],
   fillStyle: string | CanvasGradient | CanvasPattern = 'red',
   size = 4
 ) => {
-  let i = points && points.length
+  let i = points.length
   if (i) {
     context.fillStyle = fillStyle
     const half = size >> 1
     let point
     while (i--) {
-      point = points![i]
+      point = points[i]
       context.fillRect(point.x - half, point.y - half, size, size)
     }
   }
@@ -67,11 +67,11 @@ const drawLine = (
   closePath?: boolean
 ) => {
   let i = polygon.length
-  let point = polygon![--i]
+  let point = polygon[--i]
   context.beginPath()
   context.moveTo(point.x, point.y)
   while (i) {
-    point = polygon![--i]
+    point = polygon[--i]
     context.lineTo(point.x, point.y)
   }
   closePath && context.closePath()
@@ -81,7 +81,7 @@ const drawLine = (
 const draw = (context: CanvasRenderingContext2D, points?: Point[], polygon?: PolygonWithDone) => {
   context.clearRect(0, 0, SIZE, SIZE)
 
-  drawPoint(context, points)
+  points && drawPoints(context, points)
 
   let i = polygon && polygon.length
   if (i) {
@@ -89,7 +89,7 @@ const draw = (context: CanvasRenderingContext2D, points?: Point[], polygon?: Pol
 
     if (Array.isArray(pointOrLine)) {
       if (!polygon!.done) {
-        drawPoint(context, pointOrLine, 'green', 6)
+        drawPoints(context, pointOrLine, 'green', 6)
         drawLine(context, pointOrLine, 'red')
         i--
       }
@@ -98,7 +98,7 @@ const draw = (context: CanvasRenderingContext2D, points?: Point[], polygon?: Pol
       }
     } else {
       if (!polygon!.done) {
-        drawPoint(context, [pointOrLine], 'green', 6)
+        drawPoints(context, [pointOrLine], 'green', 6)
 
         --i && drawLine(context, [pointOrLine, (polygon as PointsWithDone)[i - 1]], 'red')
         polygon = (polygon as PointsWithDone).slice(0, i)
