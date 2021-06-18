@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import STYLE from '../style/canvas.module.scss'
-import melkman from './melkman'
+import graham from './graham'
 import type { Point } from './types'
 
 const SIZE = 320
@@ -47,11 +47,6 @@ const draw = (context: CanvasRenderingContext2D, points?: Point[], polygon?: Poi
   polygon && drawLine(context, polygon)
 }
 
-function* runAlgorithm(context: CanvasRenderingContext2D, points: Point[]) {
-  const polygon = yield* melkman(points)
-  draw(context, points, polygon as Point[])
-}
-
 export default {
   setup() {
     const points: Point[] = []
@@ -75,7 +70,7 @@ export default {
       },
       run() {
         if (context && points) {
-          const iterator = melkman(points)
+          const iterator = graham(points)
           let result
           while (!(result = iterator.next()).done) {}
           draw(context, points, result.value as Point[])
