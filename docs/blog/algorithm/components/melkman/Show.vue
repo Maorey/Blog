@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import STYLE from '../style/canvas.module.scss'
-import graham from './graham'
+import divide from './divide'
 import type { Point } from './types'
 
 const SIZE = 320
@@ -59,7 +59,7 @@ export default {
         // 咱就不用 ref 昂 (`へ´*)ノ
         let index =
           +(event.target as any).previousSibling.value ||
-          +(Math.random() + '').slice(8, 9 + ((Math.random() * 3) | 0)) + 1
+          +(Math.random() + '').slice(8, 9 + ((Math.random() * 2) | 0)) + 1
         points.splice(index)
         while (index) {
           points[--index] = { x: (Math.random() * SIZE) | 0, y: (Math.random() * SIZE) | 0 }
@@ -70,7 +70,7 @@ export default {
       },
       run() {
         if (context && points) {
-          const iterator = graham(points)
+          const iterator = divide(points)
           let result
           while (!(result = iterator.next()).done) {}
           draw(context, points, result.value as Point[])

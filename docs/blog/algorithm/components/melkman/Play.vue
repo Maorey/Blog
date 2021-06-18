@@ -140,7 +140,7 @@ export default {
         // 咱就不用 ref 昂 (`へ´*)ノ
         let index =
           +(event.target as any).previousSibling.value ||
-          +(Math.random() + '').slice(8, 9 + ((Math.random() * 3) | 0)) + 1
+          +(Math.random() + '').slice(8, 9 + ((Math.random() * 2) | 0)) + 1
         points.splice(index)
         while (index) {
           points[--index] = { x: (Math.random() * SIZE) | 0, y: (Math.random() * SIZE) | 0 }
