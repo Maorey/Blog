@@ -8,7 +8,7 @@ index: 2
 ## 问题描述
 
 ::: warning 求点是否在多边形内
-平面上有一个任意多边形, 指定任意平面点, 求该点是否在该多边形内
+平面上有一个多边形, 求指定点是否在该多边形内
 :::
 
 ## 演示
@@ -40,18 +40,20 @@ index: 2
 
 有三种定义, 与凸多边形相对, 不再赘述, **凹多边形总是可以分解为若干个凸多边形**
 
-延伸: **凹多边形与任意直线最多相交次数大于两次**
+延伸: **凹多边形与任意直线最大相交次数大于两次**
 
 ### 多边形演示
 
 <Polygon />
 
-这里使用向量法来判断多边形的凹凸, 即: **若多边形的边始终朝一个方向旋转则是凸多边形**
+这里使用**向量叉积**来判断多边形的凹凸, 即: **若多边形的边始终朝一个方向旋转则是凸多边形**
 
 <details>
 <summary>推导及代码实现</summary>
 
-设多边形上的三个顶点分别为: $p_0$, $p_1$ 和 $p_2$, 则两条边为 $\overline{p_0p_1}$ 和 $\overline{p_1p_2}$. 若 $\overrightarrow{p_0p_1} \times \overrightarrow{p_0p_2}$ 为正则 $\overrightarrow{p_0p_2}$ 在 $\overrightarrow{p_0p_1}$ 的顺时针方向, 反之则为逆时针. 代入三点坐标可得叉积为:
+> 向量$\overrightarrow{a}$与$\overrightarrow{b}$的叉积$\overrightarrow{a} \times \overrightarrow{b}$表示的是同时垂直于$\overrightarrow{a}$和$\overrightarrow{b}$且符合右手定则的单位向量
+
+设多边形上的三个顶点分别为: $p_0$, $p_1$ 和 $p_2$, 则两条边为 $\overline{p_0p_1}$ 和 $\overline{p_1p_2}$. 若叉积 $\overrightarrow{p_0p_1} \times \overrightarrow{p_0p_2}$ 为正则 $\overrightarrow{p_0p_2}$ 在 $\overrightarrow{p_0p_1}$ 的顺时针方向, 反之则为逆时针. 代入三点坐标可得:
 
 $$
 (p_{2_x} - p_{0_x}) \times (p_{1_y} - p_{0_y}) - (p_{1_x} - p_{0_x}) \times (p_{2_y} - p_{0_y})

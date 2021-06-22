@@ -52,11 +52,7 @@ _(做出决策 = 计算出结果)_
 
 ### 普通递归算法 :thumbsdown:
 
-```ts{2}
-function fibonacci(n: number): number {
-  return n < 3 ? 1 : fibonacci(n - 1) + fibonacci(n - 2)
-}
-```
+<<< @/blog/algorithm/components/dynamicProgramming/fibonacci/recursion.ts
 
 求解过程如下:
 
@@ -123,24 +119,7 @@ flowchart TB
 
 ### 带备忘录递归算法 :thumbsup:
 
-```ts
-let DPTable: { [key: number]: number }
-
-function solve(n: number): number {
-  return (
-    DPTable[n] ||
-    (DPTable[n] = n < 3 ? 1 : solve(n - 1) + solve(n - 2))
-  )
-}
-
-function fibonacci(n: number): number {
-  DPTable = {}
-  const result = solve(n)
-  DPTable = null! // 睁一只眼闭一只眼
-
-  return result
-}
-```
+<<< @/blog/algorithm/components/dynamicProgramming/fibonacci/cache.ts
 
 ### 动态规划算法 :heart_eyes::call_me_hand:
 
@@ -221,34 +200,11 @@ flowchart TB
 
 顺着备忘录的思路根据**状态转移方程**改为**自底向上**求解的形式:
 
-```ts
-function fibonacci(n: number) {
-  const DPTable: { [key: number]: number } = { 1: 1, 2: 1 }
-
-  for (let i = 3; i <= n; i++) {
-    DPTable[i] = DPTable[i - 1] + DPTable[i - 2]
-  }
-
-  return DPTable[n]
-}
-```
+<<< @/blog/algorithm/components/dynamicProgramming/fibonacci/DPTable.ts
 
 很明显备忘录是可以优化掉的, 易得:
 
-```ts
-function fibonacci(n: number) {
-  let prev = 1
-  let curr = 1
-  let next
-  while (n-- > 2) {
-    next = prev + curr
-    prev = curr
-    curr = next
-  }
-
-  return curr
-}
-```
+<<< @/blog/algorithm/components/dynamicProgramming/fibonacci/DP.ts
 
 ### 对比
 
@@ -325,7 +281,7 @@ flowchart TB
 
 ### 问题分析
 
-穷举: 每座矿只有挖或不挖两种情况, 故挖矿方案共有 `@sum_(n=1)^5 C_5^n@` 种, 从中找出投入不超过10位矿工并且获得金矿最多的方案即可, 算法实现的时间复杂度为 `@O(2^n)@` (空间复杂度`@O(n)@`, 金矿全都挖的时候)
+穷举: 每座矿只有挖或不挖两种情况, 故挖矿方案共有 <!-- `@sum_(n=1)^5 C_5^n@` = $\textstyle\sum_{n=1}^5{C_5^n}$ -->$\displaystyle\sum_{n=1}^5{C_5^n}$ 种, 从中找出投入不超过10位矿工并且获得金矿最多的方案即可, 算法实现的时间复杂度为 `@O(2^n)@` (空间复杂度`@O(n)@`, 金矿全都挖的时候)
 
 尝试DP (以下 "x位矿工挖n座矿的最优方案" 简称 "x人n矿")
 
@@ -416,265 +372,39 @@ $$
 
 </details>
 
-::: tip 提示
-后文中将省略已出现过的代码
-:::
+<details>
+<summary>类型声明</summary>
+
+<<< @/blog/algorithm/components/dynamicProgramming/knapsack/types.ts
+
+</details>
+
+<details>
+<summary>planUtils</summary>
+
+<<< @/blog/algorithm/components/dynamicProgramming/knapsack/planUtils.ts
+
+</details>
 
 ### 带备忘录递归算法 :thumbsup:
 
-只计算最大收益数值(`getMostGold`):
+只计算最大收益数值:
 
-```ts
-/** 金矿信息 */
-interface GoldMine {
-  /** 黄金储量 */
-  gold: number
-  /** 需要矿工数 */
-  cost: number
-}
+<<< @/blog/algorithm/components/dynamicProgramming/knapsack/DPTable_gold.ts
 
-let DPTable: { [key: string]: number }
+得到详细方案:
 
-function solve<T extends GoldMine = GoldMine>(
-  goldMines: T[],
-  minerCount: number,
-  goldMineCount: number
-): number {
-  const key = minerCount + '.' + goldMineCount
-  const result = DPTable[key]
-  if (result !== undefined) {
-    return result
-  }
-
-  if (goldMineCount < 2) {
-    const goldMine = goldMines[0]
-
-    return (DPTable[key] = minerCount < goldMine.cost ? 0 : goldMine.gold)
-  }
-
-  const goldMine = goldMines[--goldMineCount]
-  const right =
-    minerCount < goldMine.cost
-      ? 0
-      : minerCount === goldMine.cost
-        ? goldMine.gold
-        : goldMine.gold + solve(goldMines, minerCount - goldMine.cost, goldMineCount)
-
-  const left = solve(goldMines, minerCount, goldMineCount)
-
-  return (DPTable[key] = left > right ? left : right)
-}
-
-function getMostGold<T extends GoldMine = GoldMine>(
-  goldMines: T[],
-  minerCount: number,
-  goldMineCount = goldMines.length
-): number {
-  DPTable = {}
-  const result = solve(goldMines, minerCount, goldMineCount)
-  DPTable = null! // 睁一只眼闭一只眼
-
-  return result
-}
-
-/* 验证
-getMostGold(
-  [
-    { id: '1', gold: 400, cost: 5 },
-    { id: '2', gold: 500, cost: 5 },
-    { id: '3', gold: 200, cost: 3 },
-    { id: '4', gold: 300, cost: 4 },
-    { id: '5', gold: 350, cost: 3 },
-  ],
-  10
-)
-*/
-```
-
-得到详细方案(`getMostGold`):
-
-```ts
-/** 得到黄金最多的 采矿方案 */
-interface Plan<T extends GoldMine = GoldMine> extends GoldMine {
-  /** 要挖掘的金矿 */
-  mines: T[]
-}
-
-function addTo<T extends GoldMine = GoldMine>(
-  goldMine: T,
-  plans: Plan<T>[]
-): Plan<T>[] {
-  const { gold, cost } = goldMine
-
-  let i = plans.length
-  let plan: Plan<T>
-  while (i--) {
-    plan = plans[i]
-
-    plan.gold += gold
-    plan.cost += cost
-    plan.mines.push(goldMine)
-  }
-
-  return plans
-}
-function merge<T extends GoldMine = GoldMine, R extends GoldMine = T>(
-  leftPlans: Plan<T>[],
-  rightPlans: Plan<R>[]
-): Plan<T | R>[] {
-  let leftGold = leftPlans[0].gold
-  let rightGold = rightPlans[0].gold
-
-  if (leftGold === rightGold) {
-    // 归并
-    const mergedPlans: Array<Plan<T | R>> = []
-
-    let l = leftPlans.length
-    let r = rightPlans.length
-    while (l && r) {
-      mergedPlans.unshift(
-        leftPlans[l - 1].cost > rightPlans[r - 1].cost
-          ? leftPlans[--l]
-          : rightPlans[--r]
-      )
-    }
-    while (l) {
-      mergedPlans.unshift(leftPlans[--l])
-    }
-    while (r) {
-      mergedPlans.unshift(rightPlans[--r])
-    }
-
-    return mergedPlans
-  }
-
-  return leftGold > rightGold ? leftPlans : rightPlans
-}
-
-let DPTable: { [key: string]: any }
-
-function solve<T extends GoldMine = GoldMine>(
-  goldMines: T[],
-  minerCount: number,
-  goldMineCount: number
-): Plan<T>[] {
-  const key = minerCount + '.' + goldMineCount
-  const result = DPTable[key]
-  if (result !== undefined) {
-    return result
-  }
-
-  let goldMine
-  let cost
-
-  if (goldMineCount < 2) {
-    goldMine = goldMines[0]
-    cost = goldMine.cost
-
-    return (DPTable[key] =
-      minerCount < cost
-        ? [{ gold: 0, cost: 0, mines: [] }]
-        : [{ gold: goldMine.gold, cost, mines: [goldMine] }])
-  }
-
-  goldMine = goldMines[--goldMineCount]
-  cost = goldMine.cost
-
-  if (minerCount < cost) {
-    return (DPTable[key] = solve(goldMines, minerCount, goldMineCount))
-  }
-
-  let right
-  if (minerCount === cost) {
-    right = [{ gold: goldMine.gold, cost, mines: [goldMine] }]
-  } else {
-    right = addTo(goldMine, solve(goldMines, minerCount - cost, goldMineCount))
-  }
-
-  return (DPTable[key] = merge(solve(goldMines, minerCount, goldMineCount), right))
-}
-
-function getMostGold<T extends GoldMine = GoldMine>(
-  goldMines: T[],
-  minerCount: number,
-  goldMineCount = goldMines.length
-): Plan<T>[] {
-  DPTable = {}
-  const result = solve(goldMines, minerCount, goldMineCount)
-  DPTable = null! // 睁一只眼闭一只眼
-
-  return result
-}
-```
+<<< @/blog/algorithm/components/dynamicProgramming/knapsack/DPTable_plan.ts
 
 ### 动态规划算法 :heart_eyes::call_me_hand:
 
-只计算最大收益数值(`getMostGold`):
+只计算最大收益数值:
 
-```ts
-function getMostGold<T extends GoldMine = GoldMine>(
-  goldMines: T[],
-  minerCount: number,
-  goldMineCount = goldMines.length
-): number {
-  const DPTable: { [goldMineCount: number]: number } = {}
+<<< @/blog/algorithm/components/dynamicProgramming/knapsack/DP_gold.ts
 
-  let goldMine: T
-  let gold: number
-  let cost: number
-  let j: number
-  while (goldMineCount--) {
-    goldMine = goldMines[goldMineCount]
-    gold = goldMine.gold
-    cost = goldMine.cost
+得到详细方案:
 
-    for (j = minerCount; j >= cost; j--) {
-      DPTable[j] = Math.max(DPTable[j] || 0, (DPTable[j - cost] || 0) + gold)
-    }
-  }
-
-  return DPTable[minerCount]
-}
-```
-
-得到详细方案(`getMostGold`):
-
-```ts
-function copyPlan<T extends GoldMine = GoldMine>(plan: Plan<T>): Plan<T> {
-  return { ...plan, mines: [...plan.mines] }
-}
-
-function getMostGold<T extends GoldMine = GoldMine>(
-  goldMines: T[],
-  minerCount: number,
-  goldMineCount = goldMines.length
-): Plan<T>[] {
-  const DPTable: { [goldMineCount: number]: Plan<T>[] } = {}
-
-  let goldMine: T
-  let gold: number
-  let cost: number
-  let j: number
-  let leftPlans: Plan<T>[]
-  let rightPlans: Plan<T>[]
-  while (goldMineCount--) {
-    goldMine = goldMines[goldMineCount]
-    gold = goldMine.gold
-    cost = goldMine.cost
-
-    for (j = minerCount; j >= cost; j--) {
-      leftPlans = DPTable[j - cost]
-      leftPlans = leftPlans
-        ? addTo(goldMine, leftPlans.map(copyPlan))
-        : [{ gold, cost, mines: [goldMine] }]
-      rightPlans = DPTable[j]
-      DPTable[j] = rightPlans ? merge(leftPlans, rightPlans) : leftPlans
-    }
-  }
-
-  return DPTable[minerCount]
-}
-```
+<<< @/blog/algorithm/components/dynamicProgramming/knapsack/DP_plan.ts
 
 ## 留作业
 

@@ -6,8 +6,15 @@ audio,
   max-width: 100%;
 }
 
+// > 引用
+blockquote {
+  color: unset;
+  background: var(--c-bg-accent);
+}
+
 // 折叠
 summary {
+  margin: 10px 0;
   color: var(--c-text-light);
   cursor: pointer;
 
