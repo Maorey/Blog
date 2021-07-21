@@ -78,9 +78,10 @@ tr:nth-child(2n) {
     height: 100%;
     top: 0;
     left: 0;
-    z-index: val(--z-index-sidebar);
-    background: url('./assets/loading.jpg') center center no-repeat #f1f1f1;
+    z-index: var(--z-index-sidebar);
+    background: url('../assets/loading.jpg') center center no-repeat #f1f1f1;
     background-size: contain;
+    filter: invert(0.85);
   }
 }
 // 图表

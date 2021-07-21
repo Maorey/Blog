@@ -52,6 +52,7 @@ export default {
       display: block;
       object-fit: cover;
       object-position: 0 -76px;
+      filter: invert(0.87);
     }
     @media screen and (max-width: 426px) {
       .f {
