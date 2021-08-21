@@ -9,12 +9,13 @@
     <div id="t" />
     <sub class="t">试试 摸摸小恐龙 或 按按空格/上/下键 呗 (｡◕ˇ∀ˇ◕)</sub>
 
-    <a class="a" :href="$site.base">回首页</a>
+    <a class="a" :href="home">回首页</a>
   </div>
 </template>
 
 <script>
 import { onMounted } from 'vue'
+import { useData } from 'vitepress'
 
 export default {
   setup() {
@@ -26,6 +27,10 @@ export default {
         initRunner('#t')
       })
     })
+
+    return {
+      home: useData().site.value.base,
+    }
   },
 }
 </script>

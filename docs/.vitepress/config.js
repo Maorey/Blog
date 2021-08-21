@@ -17,14 +17,8 @@ module.exports = {
   title: '玉书',
   description: '毛瑞的博客',
   head: [['link', { rel: 'icon', href: '/logo.jpg' }]],
-  locales: {
-    '/': {
-      lang: 'zh-CN',
-      title: '玉书',
-      description: '毛瑞的博客',
-    },
-  },
   serviceWorker: true,
+
   themeConfig: {
     repo: 'Maorey/Blog',
     docsDir: 'docs',
@@ -35,10 +29,10 @@ module.exports = {
     editLinkText: '编辑本文',
     lastUpdated: '上次更新',
 
-    locales: {
-      '/': { nav, sidebar },
-    },
+    nav,
+    sidebar,
   },
+
   markdown: {
     lineNumbers: true,
     config: md => {

@@ -21,27 +21,8 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { useSiteData } from 'vitepress'
+import { useData } from 'vitepress'
 
-const REG_TRIM_END = /\/index\.html$/
-function resolveRootPathByLang(locales, lang) {
-  for (let rootPath in locales) {
-    if (lang === locales[rootPath].lang) {
-      return rootPath
-    }
-  }
-}
-function resolveRootPathData({ nav, sidebar }) {
-  const children = []
-
-  for (let i = 0, len = nav.length, item; i < len; i++) {
-    item = { ...nav[i] }
-    item.l && (item.children = sidebar[item.l])
-    children.push(item)
-  }
-
-  return { children }
-}
 function resolveSidebarSubData(sidebarDatas, pathname, deep) {
   const len = sidebarDatas && sidebarDatas.length
   if (!len) {
@@ -91,39 +72,36 @@ function resolveSidebarData(sidebar, pathname) {
     }
   }
 }
-function resolveSiteData({ lang, locales, themeConfig: { locales: themeLocales } }) {
-  const rootPath = resolveRootPathByLang(locales, lang)
+function resolveRootPathData({ nav, sidebar }) {
+  const children = []
 
-  if (rootPath) {
-    const config = themeLocales[rootPath]
+  for (let i = 0, len = nav.length, item; i < len; i++) {
+    item = { ...nav[i] }
+    item.l && (item.children = sidebar[item.l])
+    children.push(item)
+  }
 
-    if (config) {
-      let pathname
-      try {
-        // 避免生成时服务端渲染报错 location 未定义
-        pathname = location.pathname.replace(REG_TRIM_END, '/')
-      } catch (error) {
-        return
-      }
+  return { children }
+}
+function resolveSiteData() {
+  const data = useData()
+  const pathname = ('/' + data.page.value.relativePath).replace(/\/index?\.md$/, '/')
+  const { base, themeConfig } = data.site.value
 
-      if (pathname === rootPath) {
-        return resolveRootPathData(config)
-      }
+  if (pathname === base) {
+    return resolveRootPathData(themeConfig)
+  }
 
-      if (pathname.startsWith(rootPath) && config.sidebar) {
-        return resolveSidebarData(config.sidebar, pathname)
-      }
-    }
+  if (pathname.startsWith(base) && themeConfig.sidebar) {
+    return resolveSidebarData(themeConfig.sidebar, pathname)
   }
 }
 
 export default {
   name: 'Menu', // for 递归
   props: { menu: Object },
-  setup(props) {
-    return {
-      data: props.menu || resolveSiteData(useSiteData().value),
-    }
-  },
+  setup: props => ({
+    data: props.menu || resolveSiteData(),
+  }),
 }
 </script>

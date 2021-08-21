@@ -11,73 +11,12 @@
 <script lang="ts">
 // @ts-nocheck
 import { nextTick, onMounted, onUnmounted, watch } from 'vue'
-import { useSiteData, usePageData, inBrowser } from 'vitepress'
+import { useData, inBrowser } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import lozad from 'lozad'
 
 import Layout = DefaultTheme.Layout
 import Comment from './components/Comment.vue'
-
-let siteData
-let pageData
-
-function resolveRootPathByLang(locales, lang) {
-  for (let rootPath in locales) {
-    if (lang === locales[rootPath].lang) {
-      return rootPath
-    }
-  }
-}
-function resolveSidebarData(sidebarDatas, relativePath) {
-  for (let i = 0, len = sidebarDatas.length, sidebarData; i < len; i++) {
-    sidebarData = sidebarDatas[i]
-
-    if (relativePath === sidebarData.link) {
-      return sidebarData.text
-    }
-
-    if (relativePath.startsWith(sidebarData.link)) {
-      return sidebarData.children
-        ? resolveSidebarData(sidebarData.children, relativePath)
-        : sidebarData.text
-    }
-  }
-}
-function getTitle({ lang, locales, themeConfig: { locales: themeLocales } }, relativePath) {
-  let title
-
-  const rootPath = resolveRootPathByLang(locales, lang)
-
-  if (rootPath) {
-    const config = themeLocales[rootPath]
-
-    if (config) {
-      relativePath.startsWith(rootPath) || (relativePath = rootPath + relativePath)
-
-      title = resolveSidebarData(config.nav, relativePath)
-      if (!title) {
-        const sidebar = config.sidebar
-
-        for (let path in sidebar) {
-          if (relativePath.startsWith(path)) {
-            title = resolveSidebarData(sidebar[path], relativePath)
-            break
-          }
-        }
-      }
-    }
-  }
-
-  return title || relativePath
-}
-function setTitle() {
-  const page = pageData.value
-  page.title ||
-    (page.title = getTitle(
-      (siteData || (siteData = useSiteData())).value,
-      page.relativePath.replace(/(?:(\/)index)?\.md$/, '$1')
-    ))
-}
 
 const getContentDom = query => document.querySelectorAll('.content ' + (query || ''))
 
@@ -225,8 +164,6 @@ function reLayout() {
 }
 
 function initPage() {
-  setTitle()
-
   lazyLoadImages()
 
   setTimeout(initImageViewer, 99) // 让请求往后排
@@ -246,10 +183,10 @@ export default {
       imageViewer && imageViewer.destroy()
       window.removeEventListener('resize', resizeECharts)
 
-      imageViewer = resizeECharts = pageData = siteData = null
+      imageViewer = resizeECharts = null
     })
 
-    watch(pageData || (pageData = usePageData()), () => {
+    watch(useData().page, () => {
       nextTick(initPage)
     })
 

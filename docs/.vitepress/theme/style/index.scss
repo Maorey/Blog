@@ -2,7 +2,7 @@
 
 @import './theme'; // 主题css变量
 
-@import 'katex/dist/katex.css';
+@import 'katex/dist/katex.min.css';
 @import './scrollBar';
 @import './layout';
 @import './markdown';

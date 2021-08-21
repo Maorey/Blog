@@ -5,7 +5,7 @@
 <script lang="ts">
 // @ts-nocheck
 import { onMounted, watchEffect } from 'vue'
-import { usePageData } from 'vitepress'
+import { useData } from 'vitepress'
 import type { VssueAPI } from 'vssue'
 
 const options: VssueAPI.Options = {
@@ -24,7 +24,7 @@ const options: VssueAPI.Options = {
 export default {
   props: { title: String, class: String, style: String },
   setup(props) {
-    const pageData = usePageData()
+    const pageData = useData().page
     onMounted(() => {
       import('../libs/vssue').then(Vue2 => {
         Vue2 = Vue2.Vue || Vue2
