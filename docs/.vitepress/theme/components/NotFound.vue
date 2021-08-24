@@ -9,7 +9,7 @@
     <div id="t" />
     <sub class="t">试试 摸摸小恐龙 或 按按空格/上/下键 呗 (｡◕ˇ∀ˇ◕)</sub>
 
-    <a class="a" :href="home">回首页</a>
+    <a :href="home">回首页</a>
   </div>
 </template>
 
@@ -40,14 +40,12 @@ export default {
   width: 100%;
   text-align: center;
   user-select: none;
-  pointer-events: none;
 
   :global {
     #t {
       width: 100%;
       height: 150px;
       max-width: 600px;
-      pointer-events: all;
     }
 
     .f {
@@ -58,6 +56,7 @@ export default {
       object-fit: cover;
       object-position: 0 -76px;
       filter: invert(0.87);
+      pointer-events: none;
     }
     @media screen and (max-width: 426px) {
       .f {
@@ -68,14 +67,11 @@ export default {
     .c {
       width: 440px;
       height: 330px;
+      pointer-events: none;
     }
 
     .t {
       display: block;
-    }
-
-    .a {
-      pointer-events: all;
     }
   }
 }
