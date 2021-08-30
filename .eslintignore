@@ -1,6 +1,8 @@
-# 不执行代码检查文件列表
+node_modules
+.vscode
 public
 coverage
 compile
 dist
 libs/*.js
+*.md
