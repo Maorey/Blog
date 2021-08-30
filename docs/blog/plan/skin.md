@@ -69,7 +69,7 @@ index: 1
 3. 配置 + css vars 或 编译保存皮肤
 4. `<link rel="preload/prefetch"` / runtime
 
-看看示例: <a href="/vue-tpl/other" target="_blank">示例2</a> | <a href="/vue-tpl" target="_blank">示例1</a> | <a href="/vue-tpl/report" target="_blank">打包分析</a> | [repo](https://github.com/Maorey/vue-tpl)
+看看示例: [示例2](/vue-tpl/other) | [示例1](/vue-tpl/) | [打包分析](/vue-tpl/report) | [repo](https://github.com/Maorey/vue-tpl)
 
 ## 具体实现
 
