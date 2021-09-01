@@ -34,7 +34,7 @@ index: 1
 | 方案 | 实现方式 | 优点 | 缺点
 |--|--|--|--
 | 配置文件 | 应用内根据配置项<ins title="可以与下面的方案结合">实现对应内容</ins> | 1. 样式和布局等都可配置<br>2. 允许用户自定义<br>3. 配置数据有移植潜力 | 1. 配置与应用强耦合, 配置项变更和管理成本较高
-| [CSS变量](https://developer.mozilla.org/en-US/docs/Web/CSS/var())<sup><a href="#fn1">[1]</a></sup> | 通过修改CSS变量值实现换肤 | 1. 实现简单快速<br>2. 样式变量代码集中 | 1. 难以修改布局、动画等, 无法修改<ins title="canvas">js控制的样式</ins><br>2. 不兼容IE
+| [CSS变量](https://developer.mozilla.org/en-US/docs/Web/CSS/var())<sup><a href="#fn1">[1]</a></sup> | 通过修改CSS变量值实现换肤 | 1. 实现简单快速<br>2. 设计变量代码集中 | 1. 难以修改布局、动画等, 无法修改<ins title="canvas">js控制的样式</ins><br>2. 不兼容IE
 | 样式覆盖 | <ins title="一般在根元素上增加class, 对应的样式都在这个class选择器下">利用CSS样式优先级覆盖默认样式</ins> | 1. 实现简单快速<br>2. 样式代码集中 | 1. 修改布局不够优雅, <ins title="略有影响性能">代码冗余</ins>, 无法修改<ins title="canvas">js控制的样式</ins><br>2. 需要良好的规范及代码组织, 否则<ins title="比如滥用!important内联样式等">维护成本高</ins><br>3. 难以<ins title="需要设计规范、保存用户的css">允许用户自定义</ins>
 | [可替换样式表](https://developer.mozilla.org/docs/Web/CSS/Alternative_style_sheets)<sup><a href="#fn2">[2]</a></sup> | 通过可替换样式表来切换对应的样式文件 | 1. 样式<ins title="css可以完全不一样, 包括背景图、动画等等">自由度高</ins><br>2. 没有冗余代码, 整体<ins title="由浏览器来完整整个样式的切换">性能高</ins> | 1. 需要样式规范, 且无法修改<ins title="canvas">js控制的样式</ins><br>2. 难以<ins title="保存用户的css">允许用户自定义</ins><br>3. 增加打包时间和<ins title="但对浏览器的性能影响忽略不计, 因为可以先不加载或预加载, 切换的时候才会应用">体积</ins>
 | [Vanilla JS](https://segmentfault.com/a/1190000000355277) | Vanilla JS :smirk: | 1. 自由度最高<br>2. 可配置且支持自定义<br>3. 支持canvas | 1. 开发维护成本高<br>2. 性能开销高 |
@@ -69,7 +69,7 @@ index: 1
 3. 配置 + css vars 或 编译保存皮肤
 4. `<link rel="preload/prefetch"` / runtime
 
-看看示例: [示例2](/vue-tpl/other) | [示例1](/vue-tpl/) | [打包分析](/vue-tpl/report) | [repo](https://github.com/Maorey/vue-tpl)
+看看示例: <a href="/vue-tpl/other" target="_blank" rel="noopener noreferrer">示例2</a> | <a href="/vue-tpl" target="_blank" rel="noopener noreferrer">示例1</a> | <a href="/vue-tpl/report" target="_blank" rel="noopener noreferrer">打包分析</a> | [repo](https://github.com/Maorey/vue-tpl)
 
 ## 具体实现
 
@@ -189,7 +189,11 @@ echarts.init(el).setOption(
 <!-- 皮肤样式 -->
 <style lang="scss" module>
 .foo {
-  color: $red;
+  @if $skin == light {
+    color: $red;
+  } @else {
+    color: $blue;
+  }
 }
 </style>
 <!-- 指定皮肤样式【不支持CSS Module】 -->
@@ -252,16 +256,16 @@ on(process.env.SKIN_FIELD, skin => {
   for (id in idMap) {
     if ((instance = (echarts as any).getInstanceById(id))) {
       args = idMap[id]
+      opts = (instance as any).$
+      instance.dispose()
+
+      instance = echarts.init(instance.getDom(), skin, opts)
       newIdMap[(instance as any).id] = args
       if (isFn(args[0])) {
-        opts = (instance as any).$
-        instance.dispose()
-
-        instance = echarts.init(instance.getDom(), skin, opts)
         args = [...args]
         args[0] = args[0]()
-        originSetOption.apply(instance, args)
       }
+      originSetOption.apply(instance, args)
     }
   }
 
@@ -283,9 +287,7 @@ window.addEventListener(
 
 </details>
 
-即: 劫持 `init` 函数, 收集相关实例初始化信息, 当皮肤改变时, 对所有使用函数作为option的(使用了响应式对象)图表进行更新
-
-实际上, 按照前面对css object的处理, 在vue组件里"正确"使用echarts是不需要劫持的, 但是改动会略大
+即: 劫持 `init` 函数, 收集相关实例初始化信息, 当皮肤改变时, <ins title="这里提前准备了对应的eCharts主题">对所有图表进行更新</ins>, 并解决[js使用设计变量随皮肤更新问题](#js引用-及-css-module)
 
 ### 其他
 
